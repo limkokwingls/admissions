@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout';
 import { LinkCard } from '@/components/LinkCard';
 import {
   Button,
@@ -12,13 +13,12 @@ import Link from 'next/link';
 
 export default function Home() {
   const links: Link[] = [
-    { title: 'Diploma Programs', href: '/diploma-programs' },
-    { title: 'Degree Programs', href: '/degree-programs' },
+    { title: 'Diploma Programs', href: '/programs?type=diploma' },
+    { title: 'Degree Programs', href: '/programs?type=degree' },
   ];
 
   return (
-    <>
-      <Title ta='center'>Admission List</Title>
+    <Layout>
       <Container mt='sm'>
         <TextInput placeholder='Your name' label='Search' />
       </Container>
@@ -36,6 +36,6 @@ export default function Home() {
           ))}
         </SimpleGrid>
       </Container>
-    </>
+    </Layout>
   );
 }
