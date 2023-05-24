@@ -40,7 +40,10 @@ export default function ImporterPage() {
           if (!admission) {
             admission = {
               program: currentProg,
-              level: currentProg.split(' ').at(0),
+              level: currentProg
+                .split(' ')
+                .filter((it) => it)
+                .at(0),
             };
           }
         }
