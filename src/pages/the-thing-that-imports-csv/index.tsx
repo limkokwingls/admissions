@@ -7,6 +7,7 @@ interface Admission {
   level?: string;
   status?: 'admitted' | 'waiting';
   total?: number;
+  students?: Student[];
 }
 
 interface Student {
@@ -22,20 +23,23 @@ export default function ImporterPage() {
     const data: any = results.data;
 
     let currentProg = '';
-
     const map = new Map<string, Admission>();
-
     let admission: Admission | undefined = { program: '' };
-
     for (const row of data) {
-      const col1 = row[0] as string;
-      const surname = row[1] as string;
-      const names = row[2] as string;
-      const candidateNum = row[3] as string;
+      const col1 = formatName(row[0]);
+      const surname = formatName(row[1]);
+      const names = formatName(row[2]);
+      const candidateNum = formatName(row[3]);
 
-      if (col1 && !/^\d+$/.test(col1)) {
+      if (col1 && /^\d+$/.test(col1)) {
+        map.get(currentProg)?.students?.push({
+          surname,
+          names,
+          candidateNum,
+        });
+      } else if (col1) {
         if (col1.toLocaleUpperCase().includes('COURSE')) {
-          currentProg = col1.split(':').at(-1) as string;
+          currentProg = col1.split(':').at(-1)?.trim() as string;
           admission = map.get(currentProg);
           if (!admission) {
             admission = {
@@ -44,7 +48,9 @@ export default function ImporterPage() {
                 .split(' ')
                 .filter((it) => it)
                 .at(0),
+              students: [],
             };
+            map.set(currentProg, admission);
           }
         }
         if (col1.toLocaleUpperCase().includes('TOTAL')) {
@@ -52,9 +58,9 @@ export default function ImporterPage() {
         } else if (col1.toLocaleUpperCase().includes('STATUS')) {
           admission.status = col1.split(' ').at(-1) as 'admitted' | 'waiting';
         }
-        console.log(admission);
       }
     }
+    console.log(map);
   };
   return (
     <>
@@ -79,3 +85,16 @@ function readFileContent(file: File): Promise<string> {
     reader.readAsText(file);
   });
 }
+
+const formatName = (str: any) => {
+  if (!str) return str;
+  let newStr = str as string;
+
+  newStr = newStr.trim().toLocaleLowerCase();
+  const sentenceCaseWords = newStr.split(' ').map((word: string) => {
+    const firstLetter = word.charAt(0).toUpperCase();
+    const restOfWord = word.slice(1);
+    return firstLetter + restOfWord;
+  });
+  return sentenceCaseWords.join(' ');
+};
