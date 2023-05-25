@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileInput } from '@mantine/core';
 import { parse } from 'papaparse';
+import { savePrograms, saveStudentList } from '@/lib/service';
 
 interface Admission {
   program: string;
@@ -62,8 +63,15 @@ export default function ImporterPage() {
     }
 
     const studentList = [];
+    const programList = [];
     for (const item of Array.from(map.values())) {
       const { program, level, status, total, students } = item;
+      programList.push({
+        program,
+        level,
+        status,
+        total,
+      });
       for (const it of students ?? []) {
         const { candidateNum, names, surname } = it;
         studentList.push({
@@ -76,6 +84,9 @@ export default function ImporterPage() {
         });
       }
     }
+    await saveStudentList(studentList);
+    await savePrograms(programList);
+    console.log('Done!');
   };
   return (
     <>
