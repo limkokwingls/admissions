@@ -19,6 +19,7 @@ export default function AdmissionsPage() {
       const q = query(
         collection(db, 'students'),
         where('programName', '==', program),
+        orderBy('status'),
         orderBy('names')
       );
       const querySnapshot = await getDocs(q);
