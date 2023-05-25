@@ -69,7 +69,7 @@ export default function AdmissionsPage() {
             <Loader />
           </Center>
         ) : (
-          <Table striped>
+          <Table striped withBorder={!isMobile}>
             <thead>
               <tr>
                 <th>No</th>
