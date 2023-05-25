@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout';
 import { db } from '@/lib/firebase';
-import { Badge, Container, Table, Title } from '@mantine/core';
+import { Badge, Center, Container, Loader, Table, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
@@ -11,6 +11,7 @@ export default function AdmissionsPage() {
   const { program } = router.query;
   const [students, setStudents] = React.useState<Student[]>([]);
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -28,7 +29,8 @@ export default function AdmissionsPage() {
       setStudents(items);
     };
     if (program) {
-      getData();
+      setLoading(true);
+      getData().finally(() => setLoading(false));
     }
   }, [program]);
 
@@ -57,18 +59,24 @@ export default function AdmissionsPage() {
         <Title align='center' order={2} fw={500} mb='xl'>
           {program}
         </Title>
-        <Table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Names</th>
-              <th>Surname</th>
-              {!isMobile && <th>Candidate No.</th>}
-              <th>Admission</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
+        {loading ? (
+          <Center mt='xl'>
+            <Loader />
+          </Center>
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Names</th>
+                <th>Surname</th>
+                {!isMobile && <th>Candidate No.</th>}
+                <th>Admission</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        )}
       </Container>
     </Layout>
   );

@@ -4,12 +4,13 @@ import React, { useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import LinkGrid from '@/components/LinkGrid';
-import { Container } from '@mantine/core';
+import { Container, SimpleGrid, Skeleton } from '@mantine/core';
 
 export default function ProgramsPage() {
   const router = useRouter();
   const { level } = router.query;
   const [programs, setPrograms] = React.useState<Program[]>([]);
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,20 +24,40 @@ export default function ProgramsPage() {
       setPrograms(items);
     };
     if (level) {
-      getData();
+      setLoading(true);
+      getData().finally(() => setLoading(false));
     }
   }, [level]);
 
   return (
     <Layout>
       <Container>
-        <LinkGrid
-          links={programs.map((it) => ({
-            title: it.name,
-            href: `/admissions?program=${it.name}`,
-          }))}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <LinkGrid
+            links={programs.map((it) => ({
+              title: it.name,
+              href: `/admissions?program=${it.name}`,
+            }))}
+          />
+        )}
       </Container>
     </Layout>
   );
 }
+
+const Loading = () => {
+  return (
+    <SimpleGrid
+      mt='md'
+      breakpoints={[
+        { cols: 2, spacing: 'sm' },
+        { cols: 1, spacing: 'xs' },
+      ]}
+    >
+      <Skeleton h={100} />
+      <Skeleton h={100} />
+    </SimpleGrid>
+  );
+};

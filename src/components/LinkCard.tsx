@@ -7,9 +7,7 @@ export function LinkCard({ link }: { link: Link }) {
     <Link href={link.href} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Card styles={classes.card} h={100} shadow='md'>
         <Flex justify='center' align='center' h='100%'>
-          <Text size='lg' align='center'>
-            {link.title}
-          </Text>
+          <Text align='center'>{link.title}</Text>
         </Flex>
       </Card>
     </Link>
