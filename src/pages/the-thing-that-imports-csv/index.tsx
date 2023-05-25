@@ -60,7 +60,22 @@ export default function ImporterPage() {
         }
       }
     }
-    console.log(map);
+
+    const studentList = [];
+    for (const item of Array.from(map.values())) {
+      const { program, level, status, total, students } = item;
+      for (const it of students ?? []) {
+        const { candidateNum, names, surname } = it;
+        studentList.push({
+          surname,
+          names,
+          candidateNum,
+          program,
+          level,
+          status,
+        });
+      }
+    }
   };
   return (
     <>
