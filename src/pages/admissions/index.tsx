@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout';
 import { db } from '@/lib/firebase';
-import { Container, Table } from '@mantine/core';
+import { Chip, Container, Table } from '@mantine/core';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -35,6 +35,11 @@ export default function AdmissionsPage() {
       <td>{it.names}</td>
       <td>{it.surname}</td>
       <td>{it.candidateNum}</td>
+      <td>
+        <Chip checked={true} color={it.status == 'Admitted' ? 'green' : 'red'}>
+          {it.status}
+        </Chip>
+      </td>
     </tr>
   ));
 
@@ -47,6 +52,7 @@ export default function AdmissionsPage() {
               <th>Names</th>
               <th>Surname</th>
               <th>Candidate No.</th>
+              <th>Admission</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
