@@ -34,11 +34,16 @@ export default function AdmissionsPage() {
     }
   }, [program]);
 
+  function formatName(student: Student) {
+    if (!student.names) return '';
+    return isMobile ? student.names.split(' ')[0] : student.names;
+  }
+
   let count = 0;
   const rows = students.map((it) => (
     <tr key={it.id}>
       <td>{++count}</td>
-      <td>{it.names}</td>
+      <td>{formatName(it)}</td>
       <td>{it.surname}</td>
       {!isMobile && <td>{it.candidateNum}</td>}
       <td>
@@ -64,7 +69,7 @@ export default function AdmissionsPage() {
             <Loader />
           </Center>
         ) : (
-          <Table>
+          <Table striped>
             <thead>
               <tr>
                 <th>No</th>
