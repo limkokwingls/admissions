@@ -10,7 +10,9 @@ import { db } from './firebase';
 export async function saveStudentList(studentList: any[]) {
   for (let i = 0; i < studentList.length; i++) {
     const std = studentList[i];
-    console.log(`${i + 1}/${studentList.length}) ${std.names}...`);
+    console.log(
+      `${i + 1}/${studentList.length}) ${std.names} (${std.status})...`
+    );
     await addDoc(collection(db, 'students'), std);
   }
 }
