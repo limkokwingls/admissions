@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout';
 import { db } from '@/lib/firebase';
-import { Chip, Container, Table } from '@mantine/core';
+import { Badge, Container, Table, Title } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -9,6 +10,7 @@ export default function AdmissionsPage() {
   const router = useRouter();
   const { program } = router.query;
   const [students, setStudents] = React.useState<Student[]>([]);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     const getData = async () => {
@@ -30,15 +32,21 @@ export default function AdmissionsPage() {
     }
   }, [program]);
 
+  let count = 0;
   const rows = students.map((it) => (
     <tr key={it.id}>
+      <td>{++count}</td>
       <td>{it.names}</td>
       <td>{it.surname}</td>
-      <td>{it.candidateNum}</td>
+      {!isMobile && <td>{it.candidateNum}</td>}
       <td>
-        <Chip checked={true} color={it.status == 'Admitted' ? 'green' : 'red'}>
+        <Badge
+          size='sm'
+          variant='outline'
+          color={it.status != 'Admitted' ? 'red' : ''}
+        >
           {it.status}
-        </Chip>
+        </Badge>
       </td>
     </tr>
   ));
@@ -46,12 +54,16 @@ export default function AdmissionsPage() {
   return (
     <Layout>
       <Container>
+        <Title align='center' order={2} fw={500} mb='xl'>
+          {program}
+        </Title>
         <Table>
           <thead>
             <tr>
+              <th>No</th>
               <th>Names</th>
               <th>Surname</th>
-              <th>Candidate No.</th>
+              {!isMobile && <th>Candidate No.</th>}
               <th>Admission</th>
             </tr>
           </thead>
