@@ -38,7 +38,7 @@ export default function ProgramsPage() {
           <LinkGrid
             links={programs.map((it) => ({
               title: it.name,
-              href: `/admissions?program=${it.name}`,
+              href: `/admissions?program=${encodeURIComponent(it.name)}`,
             }))}
           />
         )}

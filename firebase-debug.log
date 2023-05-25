@@ -1,0 +1,19 @@
+[debug] [2023-05-25T17:40:47.264Z] ----------------------------------------------------------------------
+[debug] [2023-05-25T17:40:47.267Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting:admitted
+[debug] [2023-05-25T17:40:47.268Z] CLI Version:   12.2.1
+[debug] [2023-05-25T17:40:47.268Z] Platform:      win32
+[debug] [2023-05-25T17:40:47.269Z] Node Version:  v16.20.0
+[debug] [2023-05-25T17:40:47.270Z] Time:          Thu May 25 2023 19:40:47 GMT+0200 (South Africa Standard Time)
+[debug] [2023-05-25T17:40:47.270Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-05-25T17:40:47.471Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-05-25T17:40:47.473Z] > authorizing via signed-in user (ntholi.nkhatho@limkokwing.ac.ls)
+[debug] [2023-05-25T17:40:47.473Z] [iam] checking project limkokwing-admissions for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-05-25T17:40:47.477Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/limkokwing-admissions:testIamPermissions [none]
+[debug] [2023-05-25T17:40:47.477Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/limkokwing-admissions:testIamPermissions x-goog-quota-user=projects/limkokwing-admissions
+[debug] [2023-05-25T17:40:47.478Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/limkokwing-admissions:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-05-25T17:40:50.190Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/limkokwing-admissions:testIamPermissions 200
+[debug] [2023-05-25T17:40:50.191Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/limkokwing-admissions:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-05-25T17:40:50.194Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/limkokwing-admissions [none]
+[debug] [2023-05-25T17:40:52.290Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/limkokwing-admissions 200
+[debug] [2023-05-25T17:40:52.291Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/limkokwing-admissions {"projectId":"limkokwing-admissions","projectNumber":"334208919178","displayName":"admissions","name":"projects/limkokwing-admissions","resources":{"hostingSite":"limkokwing-admissions"},"state":"ACTIVE","etag":"1_9a72f0c2-e3f0-4a72-970b-8d1524582517"}

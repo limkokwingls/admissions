@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "admitted",
     "source": ".",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "frameworksBackend": {
