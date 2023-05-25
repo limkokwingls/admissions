@@ -17,7 +17,7 @@ export default function Layout({ children }: any) {
             <Button color='dark'>Home</Button>
           </Link>
         )}
-        <Paper withBorder p='sm'>
+        <Paper withBorder p={5}>
           <Image src='/logo.png' width='250px' alt='logo' />
         </Paper>
       </Stack>
