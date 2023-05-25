@@ -19,6 +19,6 @@ export async function savePrograms(programs: any[]) {
   for (let i = 0; i < programs.length; i++) {
     const item = programs[i];
     console.log(`${i + 1}/${programs.length}) ${item.name}...`);
-    await addDoc(collection(db, 'students'), item);
+    await addDoc(collection(db, 'programs'), item);
   }
 }
