@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout';
 import { LinkCard } from '@/components/LinkCard';
+import LinkGrid from '@/components/LinkGrid';
 import {
   Button,
   Card,
@@ -13,8 +14,8 @@ import Link from 'next/link';
 
 export default function Home() {
   const links: Link[] = [
-    { title: 'Diploma Programs', href: '/programs?type=diploma' },
-    { title: 'Degree Programs', href: '/programs?type=degree' },
+    { title: 'Diploma Programs', href: '/programs?level=Diploma' },
+    { title: 'Degree Programs', href: '/programs?level=Degree' },
   ];
 
   return (
@@ -24,17 +25,7 @@ export default function Home() {
       </Container>
 
       <Container mt='sm'>
-        <SimpleGrid
-          mt='md'
-          breakpoints={[
-            { cols: 2, spacing: 'sm' },
-            { cols: 1, spacing: 'xs' },
-          ]}
-        >
-          {links.map((link) => (
-            <LinkCard key={link.href} link={link} />
-          ))}
-        </SimpleGrid>
+        <LinkGrid links={links} />
       </Container>
     </Layout>
   );

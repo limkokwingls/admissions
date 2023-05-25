@@ -1,10 +1,39 @@
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import LinkGrid from '@/components/LinkGrid';
 
 export default function ProgramsPage() {
   const router = useRouter();
-  const { type } = router.query;
+  const { level } = router.query;
+  const [programs, setPrograms] = React.useState<Program[]>([]);
 
-  return <Layout>{type}</Layout>;
+  useEffect(() => {
+    const getData = async () => {
+      console.log('level', '==', level);
+      const q = query(collection(db, 'programs'), where('level', '==', level));
+      const querySnapshot = await getDocs(q);
+      const items: Program[] = [];
+      querySnapshot.forEach((doc) => {
+        items.push({ ...doc.data(), id: doc.id } as Program);
+      });
+      setPrograms(items);
+    };
+    if (level) {
+      getData();
+    }
+  }, [level]);
+
+  return (
+    <Layout>
+      <LinkGrid
+        links={programs.map((it) => ({
+          title: it.name,
+          href: `/programs/${it.name}`,
+        }))}
+      />
+    </Layout>
+  );
 }

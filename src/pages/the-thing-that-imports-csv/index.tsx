@@ -3,18 +3,9 @@ import { FileInput } from '@mantine/core';
 import { parse } from 'papaparse';
 import { savePrograms, saveStudentList } from '@/lib/service';
 
-interface Admission {
-  program: string;
-  level?: string;
-  status?: 'admitted' | 'waiting';
-  total?: number;
+interface Record {
+  program: Program;
   students?: Student[];
-}
-
-interface Student {
-  surname: string;
-  names: string;
-  candidateNum: string;
 }
 
 export default function ImporterPage() {
@@ -24,8 +15,8 @@ export default function ImporterPage() {
     const data: any = results.data;
 
     let currentProg = '';
-    const map = new Map<string, Admission>();
-    let admission: Admission | undefined = { program: '' };
+    const map = new Map<string, Record>();
+    let admission: Record | undefined = { program: { name: '' } };
     for (const row of data) {
       const col1 = formatName(row[0]);
       const surname = formatName(row[1]);
@@ -44,20 +35,24 @@ export default function ImporterPage() {
           admission = map.get(currentProg);
           if (!admission) {
             admission = {
-              program: currentProg,
-              level: currentProg
-                .split(' ')
-                .filter((it) => it)
-                .at(0),
+              program: {
+                name: currentProg,
+                level: currentProg
+                  .split(' ')
+                  .filter((it) => it)
+                  .at(0),
+              },
               students: [],
             };
             map.set(currentProg, admission);
           }
         }
         if (col1.toLocaleUpperCase().includes('TOTAL')) {
-          admission.total = Number(col1.split(' ').at(-1));
+          admission.program.total = Number(col1.split(' ').at(-1));
         } else if (col1.toLocaleUpperCase().includes('STATUS')) {
-          admission.status = col1.split(' ').at(-1) as 'admitted' | 'waiting';
+          admission.program.status = col1.split(' ').at(-1) as
+            | 'admitted'
+            | 'waiting';
         }
       }
     }
@@ -65,20 +60,20 @@ export default function ImporterPage() {
     const studentList = [];
     const programList = [];
     for (const item of Array.from(map.values())) {
-      const { program, level, status, total, students } = item;
+      const { name, level, status, total } = item.program;
       programList.push({
-        program,
+        name,
         level,
         status,
         total,
       });
-      for (const it of students ?? []) {
+      for (const it of item.students ?? []) {
         const { candidateNum, names, surname } = it;
         studentList.push({
           surname,
           names,
           candidateNum,
-          program,
+          programName: name,
           level,
           status,
         });
