@@ -8,23 +8,17 @@ import {
 import { db } from './firebase';
 
 export async function saveStudentList(studentList: any[]) {
-  const batch = writeBatch(db);
-  const collectionRef = collection(db, 'students');
-  for (const std of studentList) {
-    const docRef = doc(collectionRef);
-    batch.set(docRef, std);
+  for (let i = 0; i < studentList.length; i++) {
+    const std = studentList[i];
+    console.log(`${i + 1}/${studentList.length}) ${std.names}...`);
+    await addDoc(collection(db, 'students'), std);
   }
-  console.log(`Saving ${studentList.length} student records...`);
-  await batch.commit();
 }
 
 export async function savePrograms(programs: any[]) {
-  const batch = writeBatch(db);
-  const collectionRef = collection(db, 'programs');
-  for (const std of programs) {
-    const docRef = doc(collectionRef);
-    batch.set(docRef, std);
+  for (let i = 0; i < programs.length; i++) {
+    const item = programs[i];
+    console.log(`${i + 1}/${programs.length}) ${item.name}...`);
+    await addDoc(collection(db, 'students'), item);
   }
-  console.log(`Saving ${programs.length} program records...`);
-  await batch.commit();
 }
