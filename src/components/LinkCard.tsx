@@ -1,4 +1,4 @@
-import { Card, Text, createStyles } from '@mantine/core';
+import { Card, Text, createStyles, Flex } from '@mantine/core';
 import Link from 'next/link';
 
 export function LinkCard({ link }: { link: Link }) {
@@ -6,7 +6,11 @@ export function LinkCard({ link }: { link: Link }) {
   return (
     <Link href={link.href} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Card styles={classes.card} h={100} shadow='md'>
-        <Text>{link.title}</Text>
+        <Flex justify='center' align='center' h='100%'>
+          <Text size='lg' align='center'>
+            {link.title}
+          </Text>
+        </Flex>
       </Card>
     </Link>
   );

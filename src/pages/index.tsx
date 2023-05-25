@@ -20,9 +20,9 @@ export default function Home() {
 
   return (
     <Layout>
-      <Container mt='sm'>
+      {/* <Container mt='sm'>
         <TextInput placeholder='Your name' label='Search' />
-      </Container>
+      </Container> */}
 
       <Container mt='sm'>
         <LinkGrid links={links} />
