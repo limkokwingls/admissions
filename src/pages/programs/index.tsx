@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import LinkGrid from '@/components/LinkGrid';
+import { Container } from '@mantine/core';
 
 export default function ProgramsPage() {
   const router = useRouter();
@@ -28,12 +29,14 @@ export default function ProgramsPage() {
 
   return (
     <Layout>
-      <LinkGrid
-        links={programs.map((it) => ({
-          title: it.name,
-          href: `/programs/${it.name}`,
-        }))}
-      />
+      <Container>
+        <LinkGrid
+          links={programs.map((it) => ({
+            title: it.name,
+            href: `/admissions?program=${it.name}`,
+          }))}
+        />
+      </Container>
     </Layout>
   );
 }
