@@ -21,7 +21,7 @@ export default function ImporterPage() {
       const col1 = formatName(row[0]);
       const surname = formatName(row[1]);
       const names = formatName(row[2]);
-      const candidateNum = formatName(row[3]);
+      const candidateNum = row[3];
 
       if (col1 && /^\d+$/.test(col1)) {
         map.get(currentProg)?.students?.push({
