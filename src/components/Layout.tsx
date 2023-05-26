@@ -18,7 +18,7 @@ export default function Layout({ children }: any) {
           </Link>
         )}
         <Paper withBorder p={5}>
-          <Image src='/logo.png' width='250px' alt='logo' />
+          <Image placeholder src='/logo.png' width='250px' alt='logo' />
         </Paper>
       </Stack>
       {children}
