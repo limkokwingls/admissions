@@ -1,5 +1,4 @@
 import { Button, Input } from '@nextui-org/react';
-import Image from 'next/image';
 import { MdSearch } from 'react-icons/md';
 
 export default function Home() {
