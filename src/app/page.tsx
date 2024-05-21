@@ -1,5 +1,5 @@
 import { Button, Input } from '@nextui-org/react';
-import { MdArrowRight, MdSearch } from 'react-icons/md';
+import { MdArrowRight, MdPerson, MdSearch } from 'react-icons/md';
 
 export default function Home() {
   return (
@@ -10,9 +10,11 @@ export default function Home() {
           placeholder='Your names'
           variant='bordered'
           className='sm:w-96'
-          startContent={<MdSearch className='text-xl' />}
+          startContent={<MdPerson className='text-lg' />}
         />
-        <Button color='primary'>Lookup</Button>
+        <Button color='primary' startContent={<MdSearch className='text-xl' />}>
+          Lookup
+        </Button>
       </div>
       <section className='mt-10 flex sm:justify-center flex-col sm:flex-row gap-3 sm:gap-8 w-full'>
         <Button
