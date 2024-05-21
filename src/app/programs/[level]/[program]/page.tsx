@@ -1,9 +1,9 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { Suspense } from 'react';
-import StudentsTable from './StudentsTable';
 import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { MdArrowBack } from 'react-icons/md';
+import StudentsTable from './StudentsTable';
 
 type Props = {
   params: {

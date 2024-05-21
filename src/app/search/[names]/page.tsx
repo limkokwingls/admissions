@@ -1,8 +1,8 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import React from 'react';
-import StudentsTable from './StudentsTable';
-import { Button, Card, CardFooter, Link } from '@nextui-org/react';
+import React, { Suspense } from 'react';
+import StudentsTable from '../../programs/[level]/[program]/StudentsTable';
+import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { MdArrowBack } from 'react-icons/md';
 
 type Props = {
@@ -74,11 +74,19 @@ export default async function Programs({ params: { names } }: Props) {
         </CardFooter>
       </Card>
       <section className='mt-10'>
-        {students && students.length ? (
-          <StudentsTable students={students} />
-        ) : (
-          <h1 className='text-center'>No Found</h1>
-        )}
+        <Suspense
+          fallback={
+            <div className='flex justify-center'>
+              <Spinner />
+            </div>
+          }
+        >
+          {students && students.length ? (
+            <StudentsTable students={students} showProgram />
+          ) : (
+            <h1 className='text-center'>No Found</h1>
+          )}
+        </Suspense>
       </section>
     </main>
   );

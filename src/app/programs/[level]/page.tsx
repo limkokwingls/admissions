@@ -1,4 +1,5 @@
 import { db } from '@/lib/firebase';
+import { formatProgramName } from '@/lib/format';
 import { Button, Card, CardFooter, Link, Skeleton } from '@nextui-org/react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Suspense } from 'react';
@@ -60,17 +61,4 @@ async function Display({ level }: { level: string }) {
       {formatProgramName(program.name)}
     </Button>
   ));
-}
-
-function formatProgramName(name: string) {
-  const parts = name.split(' ');
-  const str = parts
-    .map((part, index) => {
-      if (index === 0) {
-        return part.toUpperCase();
-      }
-      return part.charAt(0) + part.slice(1).toLowerCase();
-    })
-    .join(' ');
-  return str.replace('BSC', 'BSc');
 }
