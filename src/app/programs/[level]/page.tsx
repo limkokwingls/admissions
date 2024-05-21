@@ -1,8 +1,7 @@
 import { db } from '@/lib/firebase';
-import { Button, Card, CardBody, CardFooter, Link } from '@nextui-org/react';
+import { Button, Card, CardFooter, Link, Skeleton } from '@nextui-org/react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { notFound } from 'next/navigation';
-import React from 'react';
+import { Suspense } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
 type Props = {
@@ -22,11 +21,6 @@ async function getPrograms(level: string) {
 }
 
 export default async function ProgramLevel({ params: { level } }: Props) {
-  const programs = await getPrograms(level);
-  if (!programs.length) {
-    return notFound();
-  }
-
   return (
     <main>
       <Card>
@@ -38,20 +32,34 @@ export default async function ProgramLevel({ params: { level } }: Props) {
         </CardFooter>
       </Card>
       <section className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-10'>
-        {programs.map((program) => (
-          <Button
-            key={program.id}
-            as={Link}
-            className='py-8'
-            variant='faded'
-            href={`/programs/${level}/${formatProgramName(program.name)}`}
-          >
-            {formatProgramName(program.name)}
-          </Button>
-        ))}
+        <Suspense fallback={<Loading />}>
+          <Display level={level} />
+        </Suspense>
       </section>
     </main>
   );
+}
+
+function Loading() {
+  return Array.from({ length: 4 }).map((_, index) => (
+    <Skeleton key={index} className='py-8 rounded-lg' />
+  ));
+}
+
+async function Display({ level }: { level: string }) {
+  const programs = await getPrograms(level);
+
+  return programs.map((program) => (
+    <Button
+      key={program.id}
+      as={Link}
+      className='py-8'
+      variant='faded'
+      href={`/programs/${level}/${formatProgramName(program.name)}`}
+    >
+      {formatProgramName(program.name)}
+    </Button>
+  ));
 }
 
 function formatProgramName(name: string) {
