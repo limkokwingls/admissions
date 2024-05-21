@@ -1,12 +1,5 @@
 import { db } from '@/lib/firebase';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  QueryDocumentSnapshot,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React from 'react';
 import StudentsTable from './StudentsTable';
 import { Button, Card, CardFooter, Link } from '@nextui-org/react';
@@ -84,7 +77,7 @@ export default async function Programs({ params: { names } }: Props) {
         {students && students.length ? (
           <StudentsTable students={students} />
         ) : (
-          <h1>No student found</h1>
+          <h1 className='text-center'>No Found</h1>
         )}
       </section>
     </main>
