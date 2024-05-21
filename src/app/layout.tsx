@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from './providers';
 import Link from 'next/link';
 import Image from 'next/image';
+import Container from './core/Container';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,12 +24,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <header className='flex flex-col items-center'>
-            <Link href='/'>
+            <Link href='/' className='mt-5'>
               <Image alt='Logo' src='/logo.png' width={280} height={125} />
-              <h1 className='text-center text-lg'>Student Admissions</h1>
             </Link>
           </header>
-          <div className='mt-10'>{children}</div>
+          <Container className='mt-5 sm:mt-10'>{children}</Container>
         </Providers>
       </body>
     </html>
