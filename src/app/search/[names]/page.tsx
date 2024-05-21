@@ -56,7 +56,11 @@ async function getStudents(fullName: string): Promise<Student[]> {
     });
   }
 
-  return results;
+  // remove duplicates
+  return results.filter(
+    (student, index, self) =>
+      index === self.findIndex((s) => s.id === student.id)
+  );
 }
 
 export default async function Programs({ params: { names } }: Props) {
