@@ -18,14 +18,12 @@ type Props = {
 };
 
 export default function StudentsTable({ students, showProgram }: Props) {
-  const items = students
-    .map((student) => ({
-      no: Number(student.position),
-      names: formatNames(student.names, student.surname),
-      status: student.status,
-      program: formatProgramName(student.programName),
-    }))
-    .sort((a, b) => a.no - b.no);
+  const items = students.map((student) => ({
+    no: Number(student.position),
+    names: formatNames(student.names, student.surname),
+    status: student.status,
+    program: formatProgramName(student.programName),
+  }));
 
   return (
     <Table aria-label='Example table with dynamic content'>

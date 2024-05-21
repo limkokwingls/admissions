@@ -16,9 +16,18 @@ async function getStudents(program: string) {
     collection(db, 'students'),
     where('programName', '==', program.toUpperCase())
   );
-  return (await getDocs(q)).docs.map((doc) =>
+  let data = (await getDocs(q)).docs.map((doc) =>
     doc.data()
   ) as unknown as Student[];
+
+  const admitted = data
+    .filter((student) => student.status.toLocaleLowerCase() === 'admitted')
+    .sort((a, b) => Number(a.position) - Number(b.position));
+  const notAdmitted = data
+    .filter((student) => student.status.toLocaleLowerCase() !== 'admitted')
+    .sort((a, b) => Number(a.position) - Number(b.position));
+
+  return [...admitted, ...notAdmitted];
 }
 
 export default async function Programs({ params: { program } }: Props) {
