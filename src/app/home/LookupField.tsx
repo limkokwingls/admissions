@@ -3,12 +3,15 @@ import { Button, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { MdPerson, MdSearch } from 'react-icons/md';
+import { twMerge } from 'tailwind-merge';
 
 export default function LookupField() {
   const [names, setNames] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
   function handleLookup() {
+    setLoading(true);
     if (names.trim()) {
       router.push(`/search/${encodeURIComponent(names)}`);
     }
@@ -29,10 +32,12 @@ export default function LookupField() {
       <Button
         color='primary'
         variant='shadow'
-        startContent={<MdSearch className='text-xl sm:w-36' />}
+        size='lg'
+        isDisabled={!names.trim()}
+        isLoading={loading}
         onClick={handleLookup}
       >
-        Lookup
+        Search
       </Button>
     </div>
   );
