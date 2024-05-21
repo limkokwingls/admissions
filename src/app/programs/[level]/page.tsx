@@ -30,18 +30,20 @@ export default async function ProgramLevel({ params: { level } }: Props) {
   return (
     <main>
       <Card>
-        <CardFooter className='flex gap-20 sm:gap-0 items-center justify-between sm:justify-center'>
+        <CardFooter className='flex gap-20 sm:gap-0 items-center justify-between'>
           <Button isIconOnly variant='bordered' as={Link} href='..'>
             <MdArrowBack />
           </Button>
           <h1 className='capitalize'>{level} Programs</h1>
         </CardFooter>
       </Card>
-      <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10'>
+      <section className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-10'>
         {programs.map((program) => (
           <Button
             key={program.id}
             as={Link}
+            className='py-8'
+            variant='faded'
             href={`/programs/${level}/${formatProgramName(program.name)}`}
           >
             {formatProgramName(program.name)}

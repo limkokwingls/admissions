@@ -27,7 +27,7 @@ export default async function Programs({ params: { program } }: Props) {
 
   return (
     <main>
-      <header className='flex gap-20 sm:gap-0 items-center justify-between sm:justify-center'>
+      <header className='flex gap-20 sm:gap-0 items-center justify-between'>
         <Button isIconOnly variant='bordered' as={Link} href='.'>
           <MdArrowBack />
         </Button>

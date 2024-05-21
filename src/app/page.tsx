@@ -19,19 +19,19 @@ export default function Home() {
       </div>
       <section className='mt-10 flex sm:justify-center flex-col sm:flex-row gap-3 sm:gap-8 w-full'>
         <Button
-          variant='flat'
+          className='py-8'
+          variant='faded'
           as={Link}
           href='/programs/degree'
-          className='py-6 px-10'
           endContent={<MdArrowRight className='text-xl' />}
         >
           Diploma Programs
         </Button>
         <Button
-          variant='flat'
+          className='py-8'
+          variant='faded'
           as={Link}
           href='/programs/diploma'
-          className='py-6 px-10'
           endContent={<MdArrowRight className='text-xl' />}
         >
           Diploma Programs
