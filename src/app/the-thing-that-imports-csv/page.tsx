@@ -34,10 +34,10 @@ export default function ImporterPage() {
       studentList.push(student);
     }
 
-    console.log(programMap);
+    console.log(Array.from(programMap.values()));
 
     // await saveStudentList(studentList);
-    await savePrograms(Array.from(programMap.values()));
+    // await savePrograms(Array.from(programMap.values()));
   };
   return (
     <>
