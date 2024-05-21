@@ -1,5 +1,6 @@
 'use client';
 import { Button, Input } from '@nextui-org/react';
+import { tree } from 'next/dist/build/templates/app-page';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { MdPerson, MdSearch } from 'react-icons/md';
@@ -23,10 +24,15 @@ export default function LookupField() {
         type='text'
         placeholder='Your names'
         variant='bordered'
-        className='sm:w-96'
+        className={twMerge(loading ? 'sm:w-[21rem]' : 'sm:w-96')}
         size='lg'
         value={names}
         onChange={(e) => setNames(e.target.value)}
+        onKeyPress={(event) => {
+          if (event.key === 'Enter') {
+            handleLookup();
+          }
+        }}
         startContent={<MdPerson className='text-lg' />}
       />
       <Button
