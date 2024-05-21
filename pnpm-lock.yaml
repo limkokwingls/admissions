@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@netlify/plugin-nextjs':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@nextui-org/react':
         specifier: ^2.3.6
         version: 2.3.6(@types/react@18.3.2)(framer-motion@11.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwind-variants@0.1.20(tailwindcss@3.4.3))(tailwindcss@3.4.3)
@@ -356,6 +359,10 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@netlify/plugin-nextjs@5.3.0':
+    resolution: {integrity: sha512-fWsbejUsgsm/y7poir9/Fh/ZYPibPmHMGvuC8Jm6+oBnxt6QPCkir4yVs+A9Q2lFgER4bow1E/53P79dEPwVBQ==}
+    engines: {node: '>=18.0.0'}
 
   '@next/env@14.2.3':
     resolution: {integrity: sha512-W7fd7IbkfmeeY2gXrzJYDx8D2lWKbVoTIj1o1ScPHNzvp30s1AuoEFSdr39bC5sjxJaxTtq3OTCZboNp0lNWHA==}
@@ -3354,6 +3361,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  '@netlify/plugin-nextjs@5.3.0': {}
 
   '@next/env@14.2.3': {}
 
