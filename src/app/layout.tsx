@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Limkokwing Admissions',
   description:
-    'List of students who have been admitted to Limkokwing University',
+    'Student Admissions, Limkokwing University of Creative Technology Lesotho',
 };
 
 export default function RootLayout({
