@@ -10,10 +10,6 @@ export default function ImporterPage() {
     results.data.shift();
     const data: any = results.data;
 
-    let currentProg = '';
-    let currentStatus = '';
-    let currentLevel: string | undefined = '';
-
     const studentList: Student[] = [];
     const programMap = new Map<string, Program>();
 
@@ -31,6 +27,9 @@ export default function ImporterPage() {
         name: row[6],
         level: row[7],
       };
+      if (program.level) {
+        program.level = program.level.toUpperCase();
+      }
       programMap.set(program.name, program);
       studentList.push(student);
     }

@@ -1,4 +1,5 @@
 import { Button, Input } from '@nextui-org/react';
+import Link from 'next/link';
 import { MdArrowRight, MdPerson, MdSearch } from 'react-icons/md';
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
       <section className='mt-10 flex sm:justify-center flex-col sm:flex-row gap-3 sm:gap-8 w-full'>
         <Button
           variant='flat'
+          as={Link}
+          href='/programs/degree'
           className='py-6 px-10'
           endContent={<MdArrowRight className='text-xl' />}
         >
@@ -26,6 +29,8 @@ export default function Home() {
         </Button>
         <Button
           variant='flat'
+          as={Link}
+          href='/programs/diploma'
           className='py-6 px-10'
           endContent={<MdArrowRight className='text-xl' />}
         >
