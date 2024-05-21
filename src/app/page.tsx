@@ -1,5 +1,6 @@
 import { Button, Input } from '@nextui-org/react';
 import Image from 'next/image';
+import { MdSearch } from 'react-icons/md';
 
 export default function Home() {
   return (
@@ -9,7 +10,8 @@ export default function Home() {
           type='text'
           placeholder='Your names'
           variant='bordered'
-          className='sm:w-72'
+          className='sm:w-80'
+          startContent={<MdSearch className='text-xl' />}
         />
         <Button color='primary'>Lookup</Button>
       </div>
