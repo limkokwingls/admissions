@@ -18,15 +18,11 @@ type Props = {
   };
 };
 
-// student in the database have firstName and lastName, but we are passing names which
-// might be the firstName or lastName or both, so we need to search for students with
-// either the firstName or lastName or both matching the names
 async function getStudents(fullName: string): Promise<Student[]> {
   const names = fullName.trim().toLocaleUpperCase().split(' ');
   let queries = [];
 
   if (names.length === 1) {
-    // If there's only one name, search in both firstName and lastName fields
     queries.push(
       query(collection(db, 'students'), where('names', '==', names[0]))
     );
@@ -34,11 +30,9 @@ async function getStudents(fullName: string): Promise<Student[]> {
       query(collection(db, 'students'), where('surname', '==', names[0]))
     );
   } else if (names.length >= 2) {
-    // If there are two or more names, we will consider the first part as firstName and the last part as lastName
     const firstName = names[0];
     const lastName = names[names.length - 1];
 
-    // Search by firstName and lastName combinations
     queries.push(
       query(
         collection(db, 'students'),
@@ -61,7 +55,6 @@ async function getStudents(fullName: string): Promise<Student[]> {
     );
   }
 
-  // Execute all queries and combine results
   const results: Student[] = [];
   for (let q of queries) {
     const querySnapshot = await getDocs(q);
