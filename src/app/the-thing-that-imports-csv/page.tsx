@@ -1,3 +1,4 @@
+'use client';
 import { parse } from 'papaparse';
 import { savePrograms, saveStudentList } from '@/lib/service';
 
@@ -5,61 +6,39 @@ export default function ImporterPage() {
   const handleFileSelect = async (files: File[]) => {
     const text = await readFileContent(files[0]);
     const results = parse(text);
+    // skip the first row
+    results.data.shift();
     const data: any = results.data;
 
     let currentProg = '';
     let currentStatus = '';
     let currentLevel: string | undefined = '';
 
-    const studentList = [];
-    const map = new Map<string, Program>();
+    const studentList: Student[] = [];
+    const programMap = new Map<string, Program>();
 
     for (const row of data) {
-      const col1 = formatName(row[0]);
-      const surname = formatName(row[1]);
-      const names = formatName(row[2]);
-      const candidateNum = row[3];
+      const student: Student = {
+        position: row[0],
+        surname: row[1],
+        names: row[2],
+        candidateNum: row[3],
+        programName: row[6],
+        status: row[8],
+      };
 
-      let program: Program | undefined;
-
-      if (col1 && /^\d+$/.test(col1)) {
-        studentList.push({
-          surname,
-          names,
-          candidateNum,
-          programName: currentProg,
-          level: currentLevel,
-          status: currentStatus,
-        });
-      } else if (col1) {
-        if (col1.toLocaleUpperCase().includes('COURSE')) {
-          currentProg = col1.split(':').at(-1)?.trim() as string;
-          program = map.get(currentProg);
-          if (!program) {
-            program = {
-              name: currentProg,
-            };
-            currentLevel = currentProg
-              .split(' ')
-              .filter((it) => it)
-              .at(0);
-            if (currentLevel?.toLocaleUpperCase().startsWith('B')) {
-              currentLevel = 'Degree';
-            }
-            program.level = currentLevel;
-            map.set(currentProg, program);
-          }
-        }
-        if (program && col1.toUpperCase().includes('TOTAL')) {
-          program.total = Number(col1.split(' ').at(-1));
-        } else if (col1.toUpperCase().includes('STATUS')) {
-          currentStatus = col1.split(' ').at(-1);
-        }
-      }
+      const program: Program = {
+        name: row[6],
+        level: row[7],
+      };
+      programMap.set(program.name, program);
+      studentList.push(student);
     }
 
-    await saveStudentList(studentList);
-    await savePrograms(Array.from(map.values()));
+    console.log(programMap);
+
+    // await saveStudentList(studentList);
+    await savePrograms(Array.from(programMap.values()));
   };
   return (
     <>
@@ -92,15 +71,15 @@ function readFileContent(file: File): Promise<string> {
   });
 }
 
-const formatName = (str: any) => {
-  if (!str) return str;
-  let newStr = str as string;
+// const formatName = (str: any) => {
+//   if (!str) return str;
+//   let newStr = str as string;
 
-  newStr = newStr.trim().toLocaleLowerCase();
-  const sentenceCaseWords = newStr.split(' ').map((word: string) => {
-    const firstLetter = word.charAt(0).toUpperCase();
-    const restOfWord = word.slice(1);
-    return firstLetter + restOfWord;
-  });
-  return sentenceCaseWords.join(' ');
-};
+//   newStr = newStr.trim().toLocaleLowerCase();
+//   const sentenceCaseWords = newStr.split(' ').map((word: string) => {
+//     const firstLetter = word.charAt(0).toUpperCase();
+//     const restOfWord = word.slice(1);
+//     return firstLetter + restOfWord;
+//   });
+//   return sentenceCaseWords.join(' ');
+// };
