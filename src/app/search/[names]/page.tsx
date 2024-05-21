@@ -21,37 +21,56 @@ type Props = {
 // student in the database have firstName and lastName, but we are passing names which
 // might be the firstName or lastName or both, so we need to search for students with
 // either the firstName or lastName or both matching the names
-async function getStudents(fullName: string) {
-  const names = fullName.toUpperCase().trim().split(/\s+/);
-  const firstName = names[0];
-  const lastName = names.length > 1 ? names[names.length - 1] : '';
+async function getStudents(fullName: string): Promise<Student[]> {
+  const names = fullName.trim().toLocaleUpperCase().split(' ');
+  let queries = [];
 
-  const studentsCollection = collection(db, 'students');
-  const queryConstraints = [];
+  if (names.length === 1) {
+    // If there's only one name, search in both firstName and lastName fields
+    queries.push(
+      query(collection(db, 'students'), where('names', '==', names[0]))
+    );
+    queries.push(
+      query(collection(db, 'students'), where('surname', '==', names[0]))
+    );
+  } else if (names.length >= 2) {
+    // If there are two or more names, we will consider the first part as firstName and the last part as lastName
+    const firstName = names[0];
+    const lastName = names[names.length - 1];
 
-  if (firstName) {
-    queryConstraints.push(where('names', '==', firstName));
+    // Search by firstName and lastName combinations
+    queries.push(
+      query(
+        collection(db, 'students'),
+        where('names', '==', firstName),
+        where('surname', '==', lastName)
+      )
+    );
+    queries.push(
+      query(
+        collection(db, 'students'),
+        where('names', '==', lastName),
+        where('surname', '==', firstName)
+      )
+    );
+    queries.push(
+      query(collection(db, 'students'), where('names', '==', firstName))
+    );
+    queries.push(
+      query(collection(db, 'students'), where('surname', '==', lastName))
+    );
   }
 
-  if (lastName) {
-    queryConstraints.push(where('surname', '==', lastName));
+  // Execute all queries and combine results
+  const results: Student[] = [];
+  for (let q of queries) {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      results.push(doc.data() as Student);
+    });
   }
 
-  const q = query(
-    studentsCollection,
-    ...queryConstraints,
-    orderBy('names'),
-    orderBy('surname')
-  );
-
-  const querySnapshot = await getDocs(q);
-  const students: Student[] = [];
-
-  querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
-    students.push(doc.data() as Student);
-  });
-
-  return students;
+  return results;
 }
 
 export default async function Programs({ params: { names } }: Props) {
@@ -69,7 +88,11 @@ export default async function Programs({ params: { names } }: Props) {
         </CardFooter>
       </Card>
       <section className='mt-10'>
-        <StudentsTable students={students} />
+        {students && students.length ? (
+          <StudentsTable students={students} />
+        ) : (
+          <h1>No student found</h1>
+        )}
       </section>
     </main>
   );
