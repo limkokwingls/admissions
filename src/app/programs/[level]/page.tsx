@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { Button } from '@nextui-org/react';
+import { Button, Link } from '@nextui-org/react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 import React from 'react';
@@ -16,7 +16,9 @@ async function getPrograms(level: string) {
     collection(db, 'programs'),
     where('level', '==', level.toUpperCase())
   );
-  return (await getDocs(q)).docs.map((doc) => doc.data());
+  return (await getDocs(q)).docs.map((doc) =>
+    doc.data()
+  ) as unknown as Program[];
 }
 
 export default async function ProgramLevel({ params: { level } }: Props) {
@@ -35,7 +37,13 @@ export default async function ProgramLevel({ params: { level } }: Props) {
       </header>
       <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10'>
         {programs.map((program) => (
-          <Button key={program.id}>{formatProgramName(program.name)}</Button>
+          <Button
+            key={program.id}
+            as={Link}
+            href={`/programs/${level}/${program.name}`}
+          >
+            {formatProgramName(program.name)}
+          </Button>
         ))}
       </section>
     </main>
