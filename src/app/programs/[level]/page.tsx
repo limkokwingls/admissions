@@ -35,9 +35,7 @@ export default async function ProgramLevel({ params: { level } }: Props) {
       </header>
       <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10'>
         {programs.map((program) => (
-          <div key={program.id}>
-            <h2>{formatProgramName(program.name)}</h2>
-          </div>
+          <Button key={program.id}>{formatProgramName(program.name)}</Button>
         ))}
       </section>
     </main>
