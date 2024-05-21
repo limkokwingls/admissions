@@ -29,7 +29,7 @@ export default function LookupField() {
       <Button
         color='primary'
         variant='shadow'
-        startContent={<MdSearch className='text-xl' />}
+        startContent={<MdSearch className='text-xl sm:w-36' />}
         onClick={handleLookup}
       >
         Lookup

@@ -1,6 +1,6 @@
-import { Button, Input } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import Link from 'next/link';
-import { MdArrowRight, MdPerson, MdSearch } from 'react-icons/md';
+import { MdArrowRight } from 'react-icons/md';
 import LookupField from './home/LookupField';
 
 export default function Home() {
