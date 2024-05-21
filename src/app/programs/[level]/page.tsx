@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { Button, Link } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, Link } from '@nextui-org/react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 import React from 'react';
@@ -29,18 +29,20 @@ export default async function ProgramLevel({ params: { level } }: Props) {
 
   return (
     <main>
-      <header className='flex gap-20 sm:gap-0 items-center sm:justify-center'>
-        <Button isIconOnly variant='faded' aria-label='Take a photo'>
-          <MdArrowBack />
-        </Button>
-        <h1 className='font-bold uppercase'>{level} Programs</h1>
-      </header>
+      <Card>
+        <CardFooter className='flex gap-20 sm:gap-0 items-center justify-between sm:justify-center'>
+          <Button isIconOnly variant='bordered' as={Link} href='..'>
+            <MdArrowBack />
+          </Button>
+          <h1 className='capitalize'>{level} Programs</h1>
+        </CardFooter>
+      </Card>
       <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10'>
         {programs.map((program) => (
           <Button
             key={program.id}
             as={Link}
-            href={`/programs/${level}/${program.name}`}
+            href={`/programs/${level}/${formatProgramName(program.name)}`}
           >
             {formatProgramName(program.name)}
           </Button>
