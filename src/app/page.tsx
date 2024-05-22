@@ -15,7 +15,7 @@ export default function Home() {
           href='/programs/degree'
           endContent={<MdArrowRight className='text-xl' />}
         >
-          Diploma Programs
+          Degree Programs
         </Button>
         <Button
           className='py-8 sm:px-11'
