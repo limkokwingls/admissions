@@ -8,19 +8,11 @@ export function formatProgramName(name: string): string {
     }
     return word.charAt(0).toUpperCase() + word.slice(1);
   });
-  const formattedName = capitalizedWords.join(' ');
+  const formattedName = capitalizedWords
+    .join(' ')
+    .replace('Ba ', 'BA ')
+    .replace('Bsc ', 'BSc ')
+    .replace(' Tv', ' TV');
 
-  const abbreviations: { [key: string]: string } = {
-    bsc: 'BSc',
-    ba: 'BA',
-    'b bus admin': 'B Bus Admin',
-  };
-
-  for (const [abbreviation, replacement] of Object.entries(abbreviations)) {
-    if (formattedName.toLowerCase() === abbreviation) {
-      return replacement;
-    }
-  }
-
-  return formattedName.replace(' Tv', ' TV');
+  return formattedName;
 }
