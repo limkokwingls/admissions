@@ -1,5 +1,15 @@
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import {
+  CollectionReference,
+  collection,
+  getDocs,
+  query,
+  or,
+  and,
+  where,
+  limit,
+  DocumentData,
+} from 'firebase/firestore';
 import React, { Suspense } from 'react';
 import StudentsTable from '../../programs/[level]/[program]/StudentsTable';
 import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
@@ -11,50 +21,37 @@ type Props = {
   };
 };
 
-async function getStudents(fullName: string): Promise<Student[]> {
-  const names = fullName.trim().toLocaleUpperCase().split(' ');
-  let queries = [];
+async function getStudents(_fullName: string): Promise<Student[]> {
+  const fullName = _fullName.trim().toLocaleUpperCase().split(' ');
+  let q = query(collection(db, 'students'), limit(1));
 
-  if (names.length === 1) {
-    queries.push(
-      query(collection(db, 'students'), where('names', '==', names[0]))
+  if (fullName.length === 1) {
+    const name = fullName[0];
+    q = query(
+      collection(db, 'students'),
+      or(where('names', '==', name), where('surname', '==', name))
     );
-    queries.push(
-      query(collection(db, 'students'), where('surname', '==', names[0]))
-    );
-  } else if (names.length >= 2) {
-    const firstName = names[0];
-    const lastName = names[names.length - 1];
+  } else if (fullName.length >= 2) {
+    const names = fullName.pop();
+    const surname = fullName.join(' ');
 
-    queries.push(
-      query(
-        collection(db, 'students'),
-        where('names', '==', firstName),
-        where('surname', '==', lastName)
+    console.log(names, surname);
+
+    q = query(
+      collection(db, 'students'),
+      or(
+        and(where('names', '==', surname), where('surname', '==', names)),
+        and(where('names', '==', names), where('surname', '==', surname))
       )
-    );
-    queries.push(
-      query(
-        collection(db, 'students'),
-        where('names', '==', lastName),
-        where('surname', '==', firstName)
-      )
-    );
-    queries.push(
-      query(collection(db, 'students'), where('names', '==', firstName))
-    );
-    queries.push(
-      query(collection(db, 'students'), where('surname', '==', lastName))
     );
   }
 
   const results: Student[] = [];
-  for (let q of queries) {
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      results.push({ id: doc.id, ...doc.data() } as Student);
-    });
-  }
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    results.push({ id: doc.id, ...doc.data() } as Student);
+  });
 
   // remove duplicates
   return results.filter(
