@@ -28,7 +28,7 @@ export default function Home() {
         </Button>
       </section>
 
-      <Card className='mt-10 sm:w-[33rem] sm:mx-auto bg-default/30'>
+      <Card className='mt-10 sm:w-[33rem] sm:mx-auto bg-default/30 lg:hidden'>
         <CardBody className='p-6 sm:p-8'>
           <p className='text-sm'>
             Admitted students must collect their acceptance letters from the
