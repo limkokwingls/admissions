@@ -52,7 +52,7 @@ async function getStudents(fullName: string): Promise<Student[]> {
   for (let q of queries) {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      results.push(doc.data() as Student);
+      results.push({ id: doc.id, ...doc.data() } as Student);
     });
   }
 
