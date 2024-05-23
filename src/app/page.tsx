@@ -32,7 +32,7 @@ export default function Home() {
         <CardBody className='p-6 sm:p-8'>
           <p className='text-sm'>
             Admitted students must collect their acceptance letters from the
-            Limkokwing Registry Department and submit the completed forms by
+            Limkokwing Registry Department and submit the completed forms by{' '}
             <span className='font-bold'>June 7, 2024</span>. Failure to do so
             will result in losing your slot.
           </p>

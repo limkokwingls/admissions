@@ -34,7 +34,7 @@ export default function ImporterPage() {
       studentList.push(student);
     }
 
-    console.log(Array.from(programMap.values()));
+    // console.log(Array.from(programMap.values()));
 
     // await saveStudentList(studentList);
     // await savePrograms(Array.from(programMap.values()));
