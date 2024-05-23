@@ -1,7 +1,5 @@
-import { db } from '@/lib/firebase';
 import { formatProgramName } from '@/lib/format';
 import { Button, Card, CardFooter, Link, Skeleton } from '@nextui-org/react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Suspense } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
@@ -12,16 +10,12 @@ type Props = {
 };
 
 async function getPrograms(level: string) {
-  const q = query(
-    collection(db, 'programs'),
-    where('level', '==', level.toUpperCase())
-  );
-  return (await getDocs(q)).docs.map((doc) =>
-    doc.data()
-  ) as unknown as Program[];
+  const programs = await fetch(`${process.env.API_URL}/api/programs/${level}`);
+  return (await programs.json()) as Program[];
 }
 
 export default async function ProgramLevel({ params: { level } }: Props) {
+  const programs = await getPrograms(level);
   return (
     <main>
       <Card>

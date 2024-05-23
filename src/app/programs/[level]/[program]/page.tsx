@@ -1,5 +1,3 @@
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { Suspense } from 'react';
 import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { MdArrowBack } from 'react-icons/md';
@@ -12,22 +10,8 @@ type Props = {
 };
 
 async function getStudents(program: string) {
-  const q = query(
-    collection(db, 'students'),
-    where('programName', '==', program.toUpperCase())
-  );
-  let data = (await getDocs(q)).docs.map((doc) =>
-    doc.data()
-  ) as unknown as Student[];
-
-  const admitted = data
-    .filter((student) => student.status.toLocaleLowerCase() === 'admitted')
-    .sort((a, b) => Number(a.position) - Number(b.position));
-  const notAdmitted = data
-    .filter((student) => student.status.toLocaleLowerCase() !== 'admitted')
-    .sort((a, b) => Number(a.position) - Number(b.position));
-
-  return [...admitted, ...notAdmitted];
+  const res = await fetch(`${process.env.API_URL}/api/students/${program}`);
+  return await res.json();
 }
 
 export default async function Programs({ params: { program } }: Props) {

@@ -1,6 +1,6 @@
 'use client';
+import { saveStudentList } from '@/lib/service';
 import { parse } from 'papaparse';
-import { savePrograms, saveStudentList } from '@/lib/service';
 
 export default function ImporterPage() {
   const handleFileSelect = async (files: File[]) => {
@@ -36,7 +36,7 @@ export default function ImporterPage() {
 
     // console.log(Array.from(programMap.values()));
 
-    // await saveStudentList(studentList);
+    await saveStudentList(studentList);
     // await savePrograms(Array.from(programMap.values()));
   };
   return (
