@@ -64,5 +64,5 @@ export default async function Programs({ params: { program } }: Props) {
 
 async function Display({ program }: { program: string }) {
   const students = await getStudents(program);
-  return <StudentsTable students={students} />;
+  return <StudentsTable students={students} showCandidateNo />;
 }

@@ -15,14 +15,20 @@ import { formatProgramName } from '@/lib/format';
 type Props = {
   students: Student[];
   showProgram?: boolean;
+  showCandidateNo?: boolean;
 };
 
-export default function StudentsTable({ students, showProgram }: Props) {
+export default function StudentsTable({
+  students,
+  showProgram,
+  showCandidateNo,
+}: Props) {
   const items = students.map((student) => ({
     no: Number(student.position),
     names: formatNames(student.names, student.surname),
     status: student.status,
     program: formatProgramName(student.programName),
+    candidateNum: student.candidateNum,
   }));
 
   return (
@@ -33,37 +39,46 @@ export default function StudentsTable({ students, showProgram }: Props) {
         <TableColumn key='status'>Status</TableColumn>
       </TableHeader>
       <TableBody>
-        {items.map((item) => (
-          <TableRow key={getKeyValue(item, 'no')}>
-            <TableCell>{item.no}</TableCell>
-            <TableCell>
-              {showProgram ? (
-                <div className='flex flex-col'>
-                  <p className='text-bold text-sm capitalize'>{item.names}</p>
-                  <p className='text-bold text-sm capitalize text-default-400'>
-                    {item.program}
-                  </p>
-                </div>
-              ) : (
-                item.names
-              )}
-            </TableCell>
-            <TableCell>
-              <Chip
-                className='capitalize'
-                color={
-                  item.status.toLowerCase() === 'admitted'
-                    ? 'success'
-                    : 'danger'
-                }
-                size='sm'
-                variant='flat'
-              >
-                {item.status.toLowerCase()}
-              </Chip>
-            </TableCell>
-          </TableRow>
-        ))}
+        {items.map((item) => {
+          let description = undefined;
+          if (showCandidateNo) {
+            description = item.candidateNum;
+          }
+          if (showProgram) {
+            description = item.program;
+          }
+          return (
+            <TableRow key={getKeyValue(item, 'no')}>
+              <TableCell>{item.no}</TableCell>
+              <TableCell>
+                {description ? (
+                  <div className='flex flex-col'>
+                    <p className='text-bold text-sm capitalize'>{item.names}</p>
+                    <p className='text-bold text-sm capitalize text-default-400'>
+                      {description}
+                    </p>
+                  </div>
+                ) : (
+                  item.names
+                )}
+              </TableCell>
+              <TableCell>
+                <Chip
+                  className='capitalize'
+                  color={
+                    item.status.toLowerCase() === 'admitted'
+                      ? 'success'
+                      : 'danger'
+                  }
+                  size='sm'
+                  variant='flat'
+                >
+                  {item.status.toLowerCase()}
+                </Chip>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
