@@ -1,6 +1,5 @@
 import { db } from '@/lib/firebase';
 import {
-  CollectionReference,
   collection,
   getDocs,
   query,
@@ -8,7 +7,6 @@ import {
   and,
   where,
   limit,
-  DocumentData,
 } from 'firebase/firestore';
 import React, { Suspense } from 'react';
 import StudentsTable from '../../programs/[level]/[program]/StudentsTable';
@@ -29,7 +27,8 @@ async function getStudents(_fullName: string): Promise<Student[]> {
     const name = fullName[0];
     q = query(
       collection(db, 'students'),
-      or(where('names', '==', name), where('surname', '==', name))
+      or(where('names', '==', name), where('surname', '==', name)),
+      limit(7)
     );
   } else if (fullName.length >= 2) {
     const names = fullName.pop();

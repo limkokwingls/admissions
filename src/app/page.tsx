@@ -1,11 +1,12 @@
 import { Button, Card, CardBody } from '@nextui-org/react';
 import Link from 'next/link';
 import { MdArrowRight } from 'react-icons/md';
+import LookupField from './home/LookupField';
 
 export default function Home() {
   return (
     <main>
-      {/* <LookupField /> */}
+      <LookupField />
       <section className='mt-10 flex sm:justify-center flex-col sm:flex-row gap-3 sm:gap-8 w-full'>
         <Button
           className='py-8 sm:px-11'
