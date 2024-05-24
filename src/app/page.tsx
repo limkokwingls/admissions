@@ -38,7 +38,7 @@ export default function Home() {
         </CardBody>
       </Card>
 
-      <Card className='mt-10 sm:mx-auto bg-default/30 lg:hidden'>
+      <Card className='mt-5 lg:mt-10 sm:mx-auto bg-default/30'>
         <CardBody className='p-6 sm:p-8'>
           <p className='text-sm'>
             Please note that if you are on the waiting list, you have been
