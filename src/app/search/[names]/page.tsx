@@ -28,7 +28,7 @@ async function getStudents(_fullName: string): Promise<Student[]> {
     q = query(
       collection(db, 'students'),
       or(where('names', '==', name), where('surname', '==', name)),
-      limit(7)
+      limit(12)
     );
   } else if (fullName.length >= 2) {
     const names = fullName.pop();
