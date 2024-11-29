@@ -27,7 +27,7 @@ export default function StudentsTable({
     no: Number(student.position),
     names: formatNames(student.names, student.surname),
     status: student.status,
-    program: formatProgramName(student.programName),
+    program: formatProgramName(student.program),
     candidateNum: student.candidateNum,
   }));
 

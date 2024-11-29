@@ -3,19 +3,13 @@ import { Button, Card, CardFooter, Link, Skeleton } from '@nextui-org/react';
 import { Suspense } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
-type Props = {
-  params: {
-    level: string;
-  };
-};
-
-async function getPrograms(level: string) {
-  const programs = await fetch(`${process.env.API_URL}/api/programs/${level}`);
+async function getPrograms() {
+  const programs = await fetch(`${process.env.API_URL}/api/programs`);
   return (await programs.json()) as Program[];
 }
 
-export default async function ProgramLevel({ params: { level } }: Props) {
-  const programs = await getPrograms(level);
+export default async function ProgramPage() {
+  const programs = await getPrograms();
   return (
     <main>
       <Card>
@@ -23,12 +17,12 @@ export default async function ProgramLevel({ params: { level } }: Props) {
           <Button isIconOnly variant='bordered' as={Link} href='..'>
             <MdArrowBack />
           </Button>
-          <h1 className='capitalize'>{level} Programs</h1>
+          <h1 className='capitalize'>Programs</h1>
         </CardFooter>
       </Card>
       <section className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-10'>
         <Suspense fallback={<Loading />}>
-          <Display level={level} />
+          <Display />
         </Suspense>
       </section>
     </main>
@@ -41,8 +35,8 @@ function Loading() {
   ));
 }
 
-async function Display({ level }: { level: string }) {
-  const programs = await getPrograms(level);
+async function Display() {
+  const programs = await getPrograms();
 
   return programs.map((program) => (
     <Button
@@ -50,7 +44,7 @@ async function Display({ level }: { level: string }) {
       as={Link}
       className='py-8'
       variant='faded'
-      href={`/programs/${level}/${formatProgramName(program.name)}`}
+      href={`/programs/${formatProgramName(program.name)}`}
     >
       {formatProgramName(program.name)}
     </Button>

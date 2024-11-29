@@ -1,54 +1,41 @@
-import { Button, Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from '@nextui-org/react';
 import Link from 'next/link';
 import { MdArrowRight } from 'react-icons/md';
-import LookupField from './home/LookupField';
+
+const programs = [
+  'Certificate In Architecture Technology',
+  'Certificate In Business Information Technology',
+  'Certificate In Graphic Design',
+  'Certificate In Innovation Travel And Tourism',
+  'Certificate In Marketing',
+  'Certificate In Performing Arts',
+];
 
 export default function Home() {
   return (
     <main>
-      <LookupField />
-      <section className='mt-10 flex sm:justify-center flex-col sm:flex-row gap-3 sm:gap-8 w-full'>
-        <Button
-          className='py-8 sm:px-11'
-          variant='faded'
-          as={Link}
-          href='/programs/degree'
-          endContent={<MdArrowRight className='text-xl' />}
-        >
-          Degree Programs
-        </Button>
-        <Button
-          className='py-8 sm:px-11'
-          variant='faded'
-          as={Link}
-          href='/programs/diploma'
-          endContent={<MdArrowRight className='text-xl' />}
-        >
-          Diploma Programs
-        </Button>
+      <h1 className='text-center font-extralight text-3xl'>
+        TVET Admissions 2025
+      </h1>
+      <section className='mt-10 grid sm:grid-cols-2 gap-4 max-w-6xl mx-auto px-4'>
+        {programs.map((it) => (
+          <Link key={it} href={`/programs/${it}`} className='group'>
+            <Card className='border border-transparent hover:border-foreground-300 transition-colors duration-200'>
+              <CardBody className='p-6 flex flex-row items-center justify-between'>
+                <span className='text-sm text-center sm:text-left'>{it}</span>
+                <MdArrowRight className='text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200' />
+              </CardBody>
+            </Card>
+          </Link>
+        ))}
       </section>
 
       <Card className='mt-10 sm:w-[33rem] sm:mx-auto bg-default/30 lg:hidden'>
         <CardBody className='p-6 sm:p-8'>
           <p className='text-sm'>
             Admitted students must collect their acceptance letters from the
-            Limkokwing Registry Department and submit the completed forms by{' '}
-            <span className='font-bold'>June 7, 2024</span>. Failure to do so
-            will result in losing your slot.
-          </p>
-        </CardBody>
-      </Card>
-
-      <Card className='mt-5 lg:mt-10 sm:mx-auto bg-default/30'>
-        <CardBody className='p-6 sm:p-8'>
-          <p className='text-sm'>
-            Please note that if you are on the waiting list, you have been
-            admitted to the university but have been waitlisted for NMDS
-            sponsorship. You may choose to sponsor yourself and join the
-            university. In the event that some admitted students fail to collect
-            their acceptance letters, waitlisted students will be given the
-            opportunity to move from the waiting list to the NMDS admitted
-            students&apos; sponsorship list.
+            Limkokwing Registry Department on/after{' '}
+            <span className='font-bold'>December 2, 2024</span>
           </p>
         </CardBody>
       </Card>

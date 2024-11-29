@@ -9,7 +9,7 @@ import {
   limit,
 } from 'firebase/firestore';
 import React, { Suspense } from 'react';
-import StudentsTable from '../../programs/[level]/[program]/StudentsTable';
+import StudentsTable from '../../programs/[program]/StudentsTable';
 import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { MdArrowBack } from 'react-icons/md';
 

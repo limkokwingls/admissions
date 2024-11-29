@@ -5,5 +5,5 @@ interface Student {
   names: string;
   candidateNum: string;
   status: string;
-  programName: string;
+  program: string;
 }

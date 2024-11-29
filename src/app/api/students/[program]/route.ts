@@ -2,6 +2,8 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
+export const revalidate = 30;
+
 type Props = {
   params: {
     program: string;
@@ -11,7 +13,7 @@ type Props = {
 async function getStudents(program: string) {
   const q = query(
     collection(db, 'students'),
-    where('programName', '==', program.toUpperCase())
+    where('program', '==', program.toUpperCase())
   );
   let data = (await getDocs(q)).docs.map((doc) =>
     doc.data()
