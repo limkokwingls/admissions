@@ -19,7 +19,11 @@ export default function Home() {
       </h1>
       <section className='mt-10 grid sm:grid-cols-2 gap-4 max-w-6xl mx-auto px-4'>
         {programs.map((it) => (
-          <Link key={it} href={`/programs/${it}`} className='group'>
+          <Link
+            key={it}
+            href={`/programs/${correctLink(it)}`}
+            className='group'
+          >
             <Card className='border border-transparent hover:border-foreground-300 transition-colors duration-200'>
               <CardBody className='p-6 flex flex-row items-center justify-between'>
                 <span className='text-sm text-center sm:text-left'>{it}</span>
@@ -40,5 +44,12 @@ export default function Home() {
         </CardBody>
       </Card>
     </main>
+  );
+}
+
+function correctLink(name: string) {
+  return name.replace(
+    'Certificate In Innovation Travel And Tourism',
+    'Certificate In Inovation Travel And Tourism'
   );
 }
