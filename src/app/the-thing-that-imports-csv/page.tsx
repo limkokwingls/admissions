@@ -99,7 +99,6 @@ export default function ImporterPage() {
     };
   };
 
-  // Helper function to map column indices to header names
   const getHeaderForColumn = (colIndex: number): string | null => {
     const headers: { [key: number]: string } = {
       0: 'NO',
