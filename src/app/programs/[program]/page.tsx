@@ -28,7 +28,7 @@ export default async function Programs({ params: { program } }: Props) {
           <Button isIconOnly variant='bordered' as={Link} href='/'>
             <MdArrowBack />
           </Button>
-          <h1 className='text-sm'>{correctName(program)}</h1>
+          <h1 className='text-sm'>{program}</h1>
         </CardFooter>
       </Card>
       <section className='mt-10'>
@@ -49,11 +49,4 @@ export default async function Programs({ params: { program } }: Props) {
 async function Display({ program }: { program: string }) {
   const students = await getStudents(program);
   return <StudentsTable students={students} showCandidateNo />;
-}
-
-function correctName(name: string) {
-  return name.replace(
-    'Certificate In Inovation Travel And Tourism',
-    'Certificate In Innovation Travel And Tourism'
-  );
 }
