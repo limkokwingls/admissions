@@ -2,7 +2,6 @@ import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { Suspense } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import StudentsTable from './StudentsTable';
-import { revalidate } from '@/app/api/students/[program]/route';
 
 type Props = {
   params: {

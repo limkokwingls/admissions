@@ -2,7 +2,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
-export const revalidate = 30;
+export const dynamic = 'force-dynamic';
 
 type Props = {
   params: {
