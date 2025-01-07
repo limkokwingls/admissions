@@ -153,7 +153,7 @@ export default function ImporterPage() {
         ...student,
         program: program.name,
         institution: program.institution,
-        status: 'admitted', // required by saveStudentList
+        status: 'admitted',
         createdAt: new Date().toISOString(),
       }))
     );
