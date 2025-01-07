@@ -2,6 +2,7 @@ import { Button, Card, CardFooter, Link, Spinner } from '@nextui-org/react';
 import { Suspense } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import StudentsTable from './StudentsTable';
+import { revalidate } from '@/app/api/students/[program]/route';
 
 type Props = {
   params: {
@@ -10,7 +11,11 @@ type Props = {
 };
 
 async function getStudents(program: string) {
-  const res = await fetch(`${process.env.API_URL}/api/students/${program}`);
+  const res = await fetch(`${process.env.API_URL}/api/students/${program}`, {
+    next: {
+      revalidate: 60,
+    },
+  });
   return await res.json();
 }
 
