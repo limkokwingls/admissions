@@ -1,10 +1,21 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Limkokwing Admissions',
   description: '2025/2026 Fist Year Limkokwing Admissions',
+  icons: {
+    icon: '/images/logo.png',
+  },
+  openGraph: {
+    images: [
+      {
+        url: '/images/logo.png',
+        width: 1371,
+        height: 691,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -17,14 +28,7 @@ export default function RootLayout({
       <html lang='en' suppressHydrationWarning>
         <head />
         <body>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='dark'
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <>{children}</>
         </body>
       </html>
     </html>
