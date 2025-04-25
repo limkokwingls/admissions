@@ -8,6 +8,8 @@ import { nanoid } from 'nanoid';
 import { sql } from 'drizzle-orm';
 import { AdapterAccountType } from 'next-auth/adapters';
 
+export type UserRole = (typeof users.$inferSelect)['role'];
+
 export const users = sqliteTable('users', {
   id: text({ length: 21 })
     .$defaultFn(() => nanoid())
