@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import { users } from '@/db/schema/auth';
+import { users } from '@/db/schema';
 import { Session } from 'next-auth';
 import { forbidden, unauthorized } from 'next/navigation';
 
