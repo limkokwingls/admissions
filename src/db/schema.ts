@@ -11,14 +11,14 @@ import { AdapterAccountType } from 'next-auth/adapters';
 export type UserRole = (typeof users.$inferSelect)['role'];
 
 export const users = sqliteTable('users', {
-  id: text({ length: 21 })
+  id: text()
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  name: text('name'),
-  email: text('email').unique(),
-  emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
-  image: text('image'),
-  role: text('role').notNull().default('user'),
+  name: text(),
+  email: text().unique(),
+  emailVerified: integer({ mode: 'timestamp_ms' }),
+  image: text(),
+  role: text().notNull().default('user'),
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer({ mode: 'timestamp' }),
 });
@@ -26,19 +26,19 @@ export const users = sqliteTable('users', {
 export const accounts = sqliteTable(
   'account',
   {
-    userId: text('userId')
+    userId: text()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    type: text('type').$type<AdapterAccountType>().notNull(),
-    provider: text('provider').notNull(),
-    providerAccountId: text('providerAccountId').notNull(),
-    refresh_token: text('refresh_token'),
-    access_token: text('access_token'),
-    expires_at: integer('expires_at'),
-    token_type: text('token_type'),
-    scope: text('scope'),
-    id_token: text('id_token'),
-    session_state: text('session_state'),
+    type: text().$type<AdapterAccountType>().notNull(),
+    provider: text().notNull(),
+    providerAccountId: text().notNull(),
+    refresh_token: text(),
+    access_token: text(),
+    expires_at: integer(),
+    token_type: text(),
+    scope: text(),
+    id_token: text(),
+    session_state: text(),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -48,9 +48,9 @@ export const accounts = sqliteTable(
 );
 
 export const sessions = sqliteTable('session', {
-  sessionToken: text('sessionToken').primaryKey(),
-  userId: text('userId')
+  sessionToken: text().primaryKey(),
+  userId: text()
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
+  expires: integer({ mode: 'timestamp_ms' }).notNull(),
 });
