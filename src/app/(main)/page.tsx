@@ -10,28 +10,21 @@ export default function Page() {
           <Image
             src='/images/logo-dark.png'
             alt='Limkokwing University Logo'
-            width={180}
-            height={90}
+            width={270}
+            height={135}
             priority
           />
         </div>
-        <h2 className='text-2xl font-semibold mb-2'>
-          Student Admissions Portal
+        <h2 className='text-3xl sm:text-4xl font-extralight mb-2'>
+          2025 Student Admissions
         </h2>
-        <p className='text-lg max-w-md mx-auto'>
-          Enter a student's name or phone number to search for their admission
-          details
+        <p className='text-sm max-w-md mx-auto text-background/50'>
+          Enter your full names or phone number to find your admission details
         </p>
       </div>
 
       <div className='w-full max-w-2xl'>
         <SearchForm />
-      </div>
-
-      <div className='mt-16 text-center'>
-        <p className='text-sm'>
-          For assistance, please contact the admissions office
-        </p>
       </div>
     </div>
   );
