@@ -2,6 +2,8 @@ import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';
 
+const statusEnum = ['Admitted', 'Wait Listed', 'DQ'] as const;
+
 export const students = sqliteTable('students', {
   id: text()
     .$defaultFn(() => nanoid())
@@ -11,7 +13,7 @@ export const students = sqliteTable('students', {
   names: text().notNull(),
   contact: text().notNull(),
   candidateNo: text().notNull(),
-  status: text().notNull(),
+  status: text({ enum: statusEnum }).notNull(),
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer({ mode: 'timestamp' }),
 });
