@@ -11,7 +11,6 @@ export const students = sqliteTable('students', {
   no: integer().notNull(),
   surname: text().notNull(),
   names: text().notNull(),
-  contact: text().notNull(),
   candidateNo: text().notNull(),
   status: text({ enum: statusEnum }).notNull(),
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
