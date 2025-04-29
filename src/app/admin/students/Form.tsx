@@ -1,13 +1,12 @@
 'use client';
 
-import { students } from '@/db/schema';
+import { statusEnum, students } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { NumberInput, TextInput } from '@mantine/core';
+import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 
 type Student = typeof students.$inferInsert;
-
 
 type Props = {
   onSubmit: (values: Student) => Promise<Student>;
@@ -21,13 +20,13 @@ type Props = {
 
 export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  
+
   return (
-    <Form 
+    <Form
       title={title}
-      action={onSubmit} 
+      action={onSubmit}
       queryKey={['students']}
-      schema={createInsertSchema(students)} 
+      schema={createInsertSchema(students)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/students/${id}`);
@@ -36,11 +35,20 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => (
         <>
           <NumberInput label='No' {...form.getInputProps('no')} />
-          <TextInput label='Surname' {...form.getInputProps('surname')} />
-          <TextInput label='Names' {...form.getInputProps('names')} />
+          <Group grow>
+            <TextInput label='Surname' {...form.getInputProps('surname')} />
+            <TextInput label='Names' {...form.getInputProps('names')} />
+          </Group>
           <TextInput label='Contact' {...form.getInputProps('contact')} />
-          <TextInput label='Candidate No' {...form.getInputProps('candidateNo')} />
-          <TextInput label='Status' {...form.getInputProps('status')} />
+          <TextInput
+            label='Candidate No'
+            {...form.getInputProps('candidateNo')}
+          />
+          <Select
+            label='Status'
+            {...form.getInputProps('status')}
+            data={statusEnum}
+          />
         </>
       )}
     </Form>
