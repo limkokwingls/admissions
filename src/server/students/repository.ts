@@ -1,7 +1,7 @@
-import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
-import { students } from '@/db/schema';
 import { db } from '@/db';
-import { and, eq, like, or, sql } from 'drizzle-orm';
+import { students } from '@/db/schema';
+import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
+import { and, or, sql } from 'drizzle-orm';
 
 export default class StudentRepository extends BaseRepository<
   typeof students,
@@ -18,12 +18,27 @@ export default class StudentRepository extends BaseRepository<
       const searchTerms = params.search.trim().split(/\s+/);
 
       const conditions = searchTerms.map((term) => {
-        const fuzzyTerm = term.split('').join('%');
+        const interleaved = term.split('').join('%');
 
-        return or(
-          sql`LOWER(${students.surname}) LIKE LOWER(${'%' + fuzzyTerm + '%'})`,
-          sql`LOWER(${students.names}) LIKE LOWER(${'%' + fuzzyTerm + '%'})`
-        );
+        const wildcardTerm = '%' + term + '%';
+
+        const substitutionPatterns = [
+          wildcardTerm,
+          '%' + interleaved + '%',
+          ...this.generateVowelSubstitutions(term),
+          ...this.generateConsonantSubstitutions(term),
+        ];
+
+        const fieldConditions = [
+          ...substitutionPatterns.map(
+            (pattern) => sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`
+          ),
+          ...substitutionPatterns.map(
+            (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`
+          ),
+        ];
+
+        return or(...fieldConditions);
       });
 
       if (conditions.length > 0) {
@@ -41,6 +56,92 @@ export default class StudentRepository extends BaseRepository<
     });
 
     return this.createPaginatedResult(data, criteria);
+  }
+
+  /**
+   * Generates patterns for common vowel substitutions
+   * Helps match names where vowels might be mistyped
+   */
+  private generateVowelSubstitutions(term: string): string[] {
+    const patterns: string[] = [];
+    const vowelMap: Record<string, string[]> = {
+      a: ['e', 'o'],
+      e: ['a', 'i'],
+      i: ['e', 'y'],
+      o: ['a', 'u'],
+      u: ['o'],
+    };
+
+    for (let i = 0; i < term.length; i++) {
+      const char = term[i].toLowerCase();
+      // If it's a vowel, create patterns with substitutions
+      if (vowelMap[char]) {
+        for (const substitute of vowelMap[char]) {
+          const pattern =
+            '%' +
+            term.substring(0, i) +
+            substitute +
+            term.substring(i + 1) +
+            '%';
+          patterns.push(pattern);
+        }
+      }
+    }
+
+    return patterns;
+  }
+
+  /**
+   * Generates patterns for common consonant substitutions
+   * Helps match names where similar sounding consonants might be mistyped
+   */
+  private generateConsonantSubstitutions(term: string): string[] {
+    const patterns: string[] = [];
+    const consonantMap: Record<string, string[]> = {
+      c: ['k', 's'],
+      k: ['c', 'q'],
+      ph: ['f'],
+      f: ['ph'],
+      th: ['t'],
+      g: ['j'],
+      j: ['g'],
+      n: ['m'],
+      m: ['n'],
+    };
+
+    // Check for two-character consonants first
+    for (let i = 0; i < term.length - 1; i++) {
+      const twoChars = term.substring(i, i + 2).toLowerCase();
+      if (consonantMap[twoChars]) {
+        for (const substitute of consonantMap[twoChars]) {
+          const pattern =
+            '%' +
+            term.substring(0, i) +
+            substitute +
+            term.substring(i + 2) +
+            '%';
+          patterns.push(pattern);
+        }
+      }
+    }
+
+    // Then check single consonants
+    for (let i = 0; i < term.length; i++) {
+      const char = term[i].toLowerCase();
+      if (consonantMap[char]) {
+        for (const substitute of consonantMap[char]) {
+          const pattern =
+            '%' +
+            term.substring(0, i) +
+            substitute +
+            term.substring(i + 1) +
+            '%';
+          patterns.push(pattern);
+        }
+      }
+    }
+
+    return patterns;
   }
 }
 
