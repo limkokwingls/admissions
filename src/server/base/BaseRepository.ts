@@ -9,6 +9,8 @@ import {
 type ModelInsert<T extends Table> = T['$inferInsert'];
 type ModelSelect<T extends Table> = T['$inferSelect'];
 
+const DEFAULT_PAGE_SIZE = 15;
+
 export interface SortOptions<T extends Table> {
   column: keyof ModelSelect<T>;
   order?: 'asc' | 'desc';
@@ -27,7 +29,7 @@ class BaseRepository<
   T extends Table,
   PK extends keyof T & keyof ModelSelect<T>
 > {
-  constructor(private table: T, private primaryKey: PK) {}
+  constructor(protected table: T, private primaryKey: PK) {}
 
   async findFirst(): Promise<ModelSelect<T> | undefined> {
     return await db
@@ -53,10 +55,10 @@ class BaseRepository<
     return await db.select().from(this.table);
   }
 
-  protected async buildQueryCriteria(options: QueryOptions<T>) {
+  protected buildQueryCriteria(options: QueryOptions<T>) {
     const {
       page = 1,
-      size = 15,
+      size = DEFAULT_PAGE_SIZE,
       search,
       searchColumns = [],
       sort = [],
@@ -65,18 +67,18 @@ class BaseRepository<
 
     const offset = (page - 1) * size;
 
-    let sortExpressions = sort.map((sortOption) => {
+    let orderBy = sort.map((sortOption) => {
       const column = this.table[sortOption.column] as Column;
       return sql`${column} ${
         sortOption.order === 'desc' ? sql`DESC` : sql`ASC`
       }`;
     });
 
-    if (sortExpressions.length === 0 && 'createdAt' in this.table) {
-      sortExpressions = [sql`${this.table.createdAt} DESC`];
+    if (orderBy.length === 0 && 'createdAt' in this.table) {
+      orderBy = [sql`${this.table.createdAt} DESC`];
     }
 
-    let filterCondition: SQL | undefined;
+    let where: SQL | undefined;
 
     if (search && searchColumns.length > 0) {
       const searchCondition = or(
@@ -85,53 +87,50 @@ class BaseRepository<
         )
       );
 
-      filterCondition = filter
-        ? sql`${searchCondition} AND ${filter}`
-        : searchCondition;
+      where = filter ? sql`${searchCondition} AND ${filter}` : searchCondition;
     } else {
-      filterCondition = filter;
+      where = filter;
     }
 
     return {
-      sortExpressions,
-      filterCondition,
+      orderBy,
+      where,
       offset,
-      size,
+      limit: size,
     };
   }
 
   protected async createPaginatedResult<E extends ModelSelect<T>>(
     items: E[],
-    filterCondition: SQL | undefined,
-    size: number
+    criteria: {
+      where?: SQL;
+      limit?: number;
+    }
   ) {
-    const totalItems = await this.count(filterCondition);
+    const totalItems = await this.count(criteria.where);
     return {
       items,
-      totalPages: Math.ceil(totalItems / size),
+      totalPages: Math.ceil(totalItems / (criteria.limit || DEFAULT_PAGE_SIZE)),
       totalItems,
     };
   }
 
-  async query(
-    options: QueryOptions<T>
-  ): Promise<{
+  async query(options: QueryOptions<T>): Promise<{
     items: ModelSelect<T>[];
     totalPages: number;
     totalItems: number;
   }> {
-    const { sortExpressions, filterCondition, offset, size } =
-      await this.buildQueryCriteria(options);
+    const { orderBy, where, offset, limit } = this.buildQueryCriteria(options);
 
     const items = await db
       .select()
       .from(this.table)
-      .orderBy(...sortExpressions)
-      .where(filterCondition)
-      .limit(size)
+      .orderBy(...orderBy)
+      .where(where)
+      .limit(limit)
       .offset(offset);
 
-    return await this.createPaginatedResult(items, filterCondition, size);
+    return await this.createPaginatedResult(items, { where, limit });
   }
 
   async exists(id: ModelSelect<T>[PK]): Promise<boolean> {
