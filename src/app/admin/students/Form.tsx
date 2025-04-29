@@ -32,25 +32,31 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
         router.push(`/admin/students/${id}`);
       }}
     >
-      {(form) => (
-        <>
-          <NumberInput label='No' {...form.getInputProps('no')} />
-          <Group grow>
-            <TextInput label='Surname' {...form.getInputProps('surname')} />
-            <TextInput label='Names' {...form.getInputProps('names')} />
-          </Group>
-          <TextInput label='Contact' {...form.getInputProps('contact')} />
-          <TextInput
-            label='Candidate No'
-            {...form.getInputProps('candidateNo')}
-          />
-          <Select
-            label='Status'
-            {...form.getInputProps('status')}
-            data={statusEnum}
-          />
-        </>
-      )}
+      {(form) => {
+        return (
+          <>
+            <NumberInput label='No' {...form.getInputProps('no')} />
+            <Group grow>
+              <TextInput label='Surname' {...form.getInputProps('surname')} />
+              <TextInput label='Names' {...form.getInputProps('names')} />
+            </Group>
+            <TextInput
+              label='Candidate No'
+              {...form.getInputProps('candidateNo')}
+            />
+            <TextInput
+              label='Phone Numbers'
+              description='Comma Separated'
+              {...form.getInputProps('phoneNumber')}
+            />
+            <Select
+              label='Status'
+              {...form.getInputProps('status')}
+              data={statusEnum}
+            />
+          </>
+        );
+      }}
     </Form>
   );
 }

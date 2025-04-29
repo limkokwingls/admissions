@@ -1,0 +1,1 @@
+ALTER TABLE `students` ADD `phone_number` text NOT NULL;

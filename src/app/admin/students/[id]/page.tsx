@@ -14,15 +14,15 @@ type Props = {
 export default async function StudentDetails({ params }: Props) {
   const { id } = await params;
   const student = await getStudent(id);
-  
+
   if (!student) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Student'} 
+      <DetailsViewHeader
+        title={'Student'}
         queryKey={['students']}
         handleDelete={async () => {
           'use server';
@@ -33,7 +33,7 @@ export default async function StudentDetails({ params }: Props) {
         <FieldView label='No'>{student.no}</FieldView>
         <FieldView label='Surname'>{student.surname}</FieldView>
         <FieldView label='Names'>{student.names}</FieldView>
-        <FieldView label='Contact'>{student.contact}</FieldView>
+        <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
         <FieldView label='Candidate No'>{student.candidateNo}</FieldView>
         <FieldView label='Status'>{student.status}</FieldView>
       </DetailsViewBody>
