@@ -4,7 +4,7 @@ import { Search } from 'lucide-react';
 
 export default function SearchForm() {
   return (
-    <form action='/students' className='mx-auto w-full max-w-xl'>
+    <form action='/students' className='mx-auto w-full'>
       <div className='relative'>
         <Input
           type='text'
