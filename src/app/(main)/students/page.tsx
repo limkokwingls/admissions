@@ -89,7 +89,8 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
           </span>
           <span className='font-semibold italic'>"{searchQuery}"</span>{' '}
           <span className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Click on any student card below to view detailed information.
+            Click on {results.items.length > 1 ? 'any' : 'the'} student card
+            below to view detailed information.
           </span>
         </p>
       </div>
