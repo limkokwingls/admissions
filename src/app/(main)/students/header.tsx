@@ -15,7 +15,7 @@ export default function header({ searchQuery }: Props) {
   return (
     <Container
       width='xl'
-      className='flex flex-col items-center justify-between gap-5 pt-8 sm:flex-row'
+      className='flex flex-col items-center justify-between gap-5 pt-8 sm:flex-row sm:gap-10'
     >
       <Link href={'/'}>
         <Image

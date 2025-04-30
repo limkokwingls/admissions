@@ -26,7 +26,7 @@ export default async function StudentsPage({ searchParams }: Props) {
           <Suspense
             fallback={
               <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
-                <Loader2 className='h-8 w-8 animate-spin text-blue-600 dark:text-blue-400' />
+                <Loader2 className='h-8 w-8 animate-spin text-emerald-600 dark:text-emerald-400' />
                 <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
                   Checking admission status...
                 </span>
@@ -79,7 +79,7 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between border-b border-neutral-200 pb-2 dark:border-neutral-800'>
+      <div className='border-b border-neutral-200 pb-2 dark:border-neutral-800'>
         <p className='text-sm font-medium'>
           <span className='text-neutral-500 dark:text-neutral-400'>Found </span>
           <span className='font-semibold'>{results.items.length}</span>
@@ -87,7 +87,10 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
             {' '}
             result{results.items.length !== 1 ? 's' : ''} for{' '}
           </span>
-          <span className='font-semibold italic'>"{searchQuery}"</span>
+          <span className='font-semibold italic'>"{searchQuery}"</span>{' '}
+          <span className='text-sm text-neutral-500 dark:text-neutral-400'>
+            Click on any student card below to view detailed information.
+          </span>
         </p>
       </div>
 
