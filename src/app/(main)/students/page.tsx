@@ -7,6 +7,7 @@ import { searchStudent } from '@/server/students/actions';
 import { Calendar, Loader2, Search, User } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import Header from './header';
 
 type SearchParams = {
   q?: string;
@@ -106,53 +107,24 @@ export default function StudentsPage({
   const searchQuery = searchParams.q || '';
 
   return (
-    <Container width='xl' className='py-8'>
-      <div className='mb-8 space-y-2'>
-        <div className='mb-6 flex flex-col items-center text-center'>
-          <div>
-            <h1 className='text-3xl font-bold'>Admission Status Check</h1>
-            <p className='mx-auto mt-2 max-w-2xl text-neutral-500 dark:text-neutral-400'>
-              Check if you have been admitted to Limkokwing University. Enter
-              your name or candidate number below.
-            </p>
-          </div>
+    <>
+      <Header searchQuery={searchQuery} />
+      <Container width='xl'>
+        <div className='mx-auto mt-8 max-w-4xl'>
+          <Suspense
+            fallback={
+              <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
+                <Loader2 className='h-8 w-8 animate-spin text-blue-600 dark:text-blue-400' />
+                <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
+                  Checking admission status...
+                </span>
+              </div>
+            }
+          >
+            <SearchResults searchQuery={searchQuery} />
+          </Suspense>
         </div>
-
-        <div className='mx-auto mt-6 max-w-2xl rounded-lg border border-neutral-200 bg-neutral-50 p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900'>
-          <form action='/students' className='flex flex-col gap-3 sm:flex-row'>
-            <div className='relative flex-grow'>
-              <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-neutral-500 dark:text-neutral-400' />
-              <Input
-                name='q'
-                defaultValue={searchQuery}
-                placeholder='Enter your name or candidate number...'
-                className='border-neutral-300 bg-white pl-10 dark:border-neutral-700 dark:bg-neutral-800'
-              />
-            </div>
-            <Button
-              type='submit'
-              className='bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800'
-            >
-              Check Status
-            </Button>
-          </form>
-        </div>
-      </div>
-
-      <div className='mx-auto mt-8 max-w-4xl'>
-        <Suspense
-          fallback={
-            <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
-              <Loader2 className='h-8 w-8 animate-spin text-blue-600 dark:text-blue-400' />
-              <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
-                Checking admission status...
-              </span>
-            </div>
-          }
-        >
-          <SearchResults searchQuery={searchQuery} />
-        </Suspense>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }
