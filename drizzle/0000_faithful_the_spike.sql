@@ -38,9 +38,29 @@ CREATE TABLE `students` (
 	`no` integer NOT NULL,
 	`surname` text NOT NULL,
 	`names` text NOT NULL,
-	`contact` text NOT NULL,
 	`candidate_no` text NOT NULL,
+	`phone_number` text NOT NULL,
 	`status` text NOT NULL,
+	`program_id` text NOT NULL,
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer,
+	FOREIGN KEY (`program_id`) REFERENCES `programs`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `faculties` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`code` text NOT NULL,
+	`name` text NOT NULL,
 	`created_at` integer DEFAULT (unixepoch()),
 	`updated_at` integer
+);
+--> statement-breakpoint
+CREATE TABLE `programs` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`code` text NOT NULL,
+	`name` text NOT NULL,
+	`faculty_id` integer NOT NULL,
+	`created_at` integer DEFAULT (unixepoch()),
+	`updated_at` integer,
+	FOREIGN KEY (`faculty_id`) REFERENCES `faculties`(`id`) ON UPDATE no action ON DELETE cascade
 );
