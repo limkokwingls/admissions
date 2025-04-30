@@ -1,7 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Container } from '@/components/ui/container';
-import { Input } from '@/components/ui/input';
 import { students } from '@/db/schema';
 import { searchStudent } from '@/server/students/actions';
 import { Calendar, Loader2, Search, User } from 'lucide-react';
@@ -9,18 +7,16 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import Header from './header';
 
-type SearchParams = {
-  q?: string;
-};
-
 type Student = typeof students.$inferSelect;
 
 type Props = {
-  searchParams: SearchParams;
+  searchParams: Promise<{
+    q?: string;
+  }>;
 };
 
-export default function StudentsPage({ searchParams }: Props) {
-  const searchQuery = searchParams.q || '';
+export default async function StudentsPage({ searchParams }: Props) {
+  const searchQuery = (await searchParams).q || '';
 
   return (
     <>
