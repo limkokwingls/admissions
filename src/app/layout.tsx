@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'Limkokwing Admissions',
@@ -27,7 +28,7 @@ export default function RootLayout({
       <html lang='en' suppressHydrationWarning>
         <head />
         <body>
-          <>{children}</>
+          <Providers>{children}</Providers>
         </body>
       </html>
     </html>
