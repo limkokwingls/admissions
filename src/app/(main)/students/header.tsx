@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import React from 'react';
 import { Container } from '@/components/ui/container';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = {
   searchQuery: string;
@@ -12,14 +13,16 @@ type Props = {
 export default function header({ searchQuery }: Props) {
   return (
     <Container className='flex gap-3 pt-8'>
-      <Image
-        src='/images/logo-dark.png'
-        alt='Limkokwing University Logo'
-        className='w-40'
-        width={270}
-        height={135}
-        priority
-      />
+      <Link href={'/'}>
+        <Image
+          src='/images/logo-dark.png'
+          alt='Limkokwing University Logo'
+          className='w-40'
+          width={270}
+          height={135}
+          priority
+        />
+      </Link>
       <form action='/students' className='flex flex-col gap-3 sm:flex-row'>
         <div className='relative flex-grow'>
           <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-neutral-500 dark:text-neutral-400' />
