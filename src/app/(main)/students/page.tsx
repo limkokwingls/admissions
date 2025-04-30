@@ -15,6 +15,36 @@ type SearchParams = {
 
 type Student = typeof students.$inferSelect;
 
+type Props = {
+  searchParams: SearchParams;
+};
+
+export default function StudentsPage({ searchParams }: Props) {
+  const searchQuery = searchParams.q || '';
+
+  return (
+    <>
+      <Header searchQuery={searchQuery} />
+      <Container width='xl'>
+        <div className='mx-auto mt-8 max-w-4xl'>
+          <Suspense
+            fallback={
+              <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
+                <Loader2 className='h-8 w-8 animate-spin text-blue-600 dark:text-blue-400' />
+                <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
+                  Checking admission status...
+                </span>
+              </div>
+            }
+          >
+            <SearchResults searchQuery={searchQuery} />
+          </Suspense>
+        </div>
+      </Container>
+    </>
+  );
+}
+
 async function SearchResults({ searchQuery }: { searchQuery: string }) {
   if (!searchQuery.trim()) {
     return (
@@ -67,64 +97,40 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
 
       <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2'>
         {results.items.map((student: Student) => (
-          <Link href={`/students/${student.id}`} key={student.id}>
-            <Card className='cursor-pointer overflow-hidden border border-neutral-200 bg-white transition-all duration-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900'>
-              <div className='p-5'>
-                <div className='mb-4 flex items-start justify-between'>
-                  <div className='flex items-center gap-3'>
-                    <div className='rounded-full bg-neutral-100 p-2 dark:bg-neutral-800'>
-                      <User className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
-                    </div>
-                    <div>
-                      <h2 className='text-lg font-semibold'>
-                        {student.surname} {student.names}
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='mb-4 space-y-2'>
-                  <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
-                    <Calendar className='h-4 w-4' />
-                    <span>Candidate No: </span>
-                    <span className='font-medium'>{student.candidateNo}</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Link>
+          <StudentCard key={student.id} student={student} />
         ))}
       </div>
     </div>
   );
 }
 
-export default function StudentsPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const searchQuery = searchParams.q || '';
-
+function StudentCard({ student }: { student: Student }) {
   return (
-    <>
-      <Header searchQuery={searchQuery} />
-      <Container width='xl'>
-        <div className='mx-auto mt-8 max-w-4xl'>
-          <Suspense
-            fallback={
-              <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
-                <Loader2 className='h-8 w-8 animate-spin text-blue-600 dark:text-blue-400' />
-                <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
-                  Checking admission status...
-                </span>
+    <Link href={`/students/${student.id}`}>
+      <Card className='cursor-pointer overflow-hidden border border-neutral-200 bg-white transition-all duration-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900'>
+        <div className='p-5'>
+          <div className='mb-4 flex items-start justify-between'>
+            <div className='flex items-center gap-3'>
+              <div className='rounded-full bg-neutral-100 p-2 dark:bg-neutral-800'>
+                <User className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
               </div>
-            }
-          >
-            <SearchResults searchQuery={searchQuery} />
-          </Suspense>
+              <div>
+                <h2 className='text-lg font-semibold'>
+                  {student.surname} {student.names}
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <div className='mb-4 space-y-2'>
+            <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
+              <Calendar className='h-4 w-4' />
+              <span>Candidate No: </span>
+              <span className='font-medium'>{student.candidateNo}</span>
+            </div>
+          </div>
         </div>
-      </Container>
-    </>
+      </Card>
+    </Link>
   );
 }
