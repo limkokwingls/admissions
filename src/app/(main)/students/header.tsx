@@ -1,7 +1,3 @@
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
-import React from 'react';
 import { Container } from '@/components/ui/container';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,7 +23,7 @@ export default function header({ searchQuery }: Props) {
           priority
         />
       </Link>
-      <SearchForm />
+      <SearchForm searchQuery={searchQuery} />
     </Container>
   );
 }

@@ -2,13 +2,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
-export default function SearchForm() {
+type Props = {
+  searchQuery: string;
+};
+
+export default function SearchForm({ searchQuery }: Props) {
   return (
     <form action='/students' className='mx-auto w-full'>
       <div className='relative'>
         <Input
           type='text'
           name='q'
+          defaultValue={searchQuery}
           placeholder='Search by name or phone number'
           className='h-12 rounded-full border-2 pr-12 text-base shadow-sm focus-visible:ring-offset-2'
         />
