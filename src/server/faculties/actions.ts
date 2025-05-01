@@ -1,18 +1,16 @@
 'use server';
 
-
 import { faculties } from '@/db/schema';
-import { facultiesService as service} from './service';
+import { facultiesService as service } from './service';
 
 type Faculty = typeof faculties.$inferInsert;
-
 
 export async function getFaculty(id: number) {
   return service.get(id);
 }
 
 export async function getFaculties(page: number = 1, search = '') {
-  return service.getAll({ page, search });
+  return service.findAll({ page, search });
 }
 
 export async function createFaculty(faculty: Faculty) {

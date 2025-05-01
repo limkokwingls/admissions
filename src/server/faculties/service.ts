@@ -16,7 +16,7 @@ class FacultyService {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async getAll(params: QueryOptions<typeof faculties>) {
+  async findAll(params: QueryOptions<typeof faculties>) {
     return withAuth(async () => this.repository.query(params), []);
   }
 

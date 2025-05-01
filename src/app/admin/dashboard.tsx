@@ -54,38 +54,13 @@ const navigation: NavItem[] = [
   },
   {
     label: 'Faculties',
+    href: '/admin/faculties',
     icon: IconSchool,
-    children: [],
   },
 ];
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
-  const { data: faculties = [] } = useQuery({
-    queryKey: ['faculties'],
-    queryFn: async () => {
-      const response = await fetch('/api/faculties');
-      if (!response.ok) return [];
-      return response.json();
-    },
-  });
-
-  // Update navigation with faculties
-  React.useEffect(() => {
-    if (faculties.length > 0) {
-      const facultiesNavItem = navigation.find(
-        (item) => item.label === 'Faculties',
-      );
-      if (facultiesNavItem) {
-        facultiesNavItem.children = faculties.map((faculty: any) => ({
-          label: faculty.name,
-          href: `/admin/faculties/${faculty.id}`,
-          icon: IconSchool,
-        }));
-      }
-    }
-  }, [faculties]);
-
   if (status === 'loading') {
     return (
       <Flex h='100vh' w='100vw' justify='center' align='center'>
