@@ -2,6 +2,7 @@ import { programs } from '@/db/schema';
 import ProgramRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
+import { eq } from 'drizzle-orm';
 
 type Program = typeof programs.$inferInsert;
 
@@ -18,6 +19,17 @@ class ProgramService {
 
   async getAll(params: QueryOptions<typeof programs>) {
     return withAuth(async () => this.repository.query(params), []);
+  }
+
+  async getForFaculty(facultyId: number) {
+    return withAuth(
+      async () =>
+        this.repository.query({
+          size: 50,
+          filter: eq(programs.facultyId, facultyId),
+        }),
+      [],
+    );
   }
 
   async create(data: Program) {
