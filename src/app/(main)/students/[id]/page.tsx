@@ -78,12 +78,12 @@ export default async function StudentPage({ params }: Props) {
                     (isAdmitted ? (
                       <div className='flex items-center gap-2 rounded-md bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm dark:bg-emerald-900/20 dark:text-emerald-400'>
                         <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
-                        <span>NMDS: Approved</span>
+                        <span>NMDS: Sponsored</span>
                       </div>
                     ) : (
                       <div className='flex items-center gap-2 rounded-md bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 shadow-sm dark:bg-amber-900/20 dark:text-amber-400'>
-                        <Clock className='h-4 w-4 text-amber-600 dark:text-amber-400' />
-                        <span>NMDS: Waitlisted</span>
+                        <AlertCircle className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                        <span>NMDS: Not Sponsored</span>
                       </div>
                     ))}
                 </div>
@@ -125,7 +125,7 @@ export default async function StudentPage({ params }: Props) {
                       {isAdmitted
                         ? 'Your NMDS sponsorship has also been approved.'
                         : isWaitlisted
-                          ? 'You are currently on the waiting list for NMDS sponsorship.'
+                          ? 'Unfortunately, you have not secured NMDS sponsorship at this time.'
                           : ''}
                     </p>
                   ) : (
@@ -244,7 +244,7 @@ export default async function StudentPage({ params }: Props) {
                           {isAdmitted
                             ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
                             : isWaitlisted
-                              ? 'You have been admitted to your program but your NMDS sponsorship is not yet approved. You are on the waiting list - please check back regularly for updates on your sponsorship status.'
+                              ? 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'
                               : 'Your application to the program was not successful. Please contact the Registry office for more information about your application status and alternative options.'}
                         </p>
                       </div>
