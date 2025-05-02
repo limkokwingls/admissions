@@ -15,6 +15,13 @@
       "when": 1746188147890,
       "tag": "0001_short_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1746188745344,
+      "tag": "0002_fluffy_blue_marvel",
+      "breakpoints": true
     }
   ]
 }
