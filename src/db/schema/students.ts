@@ -12,7 +12,7 @@ export const students = sqliteTable('students', {
   no: integer().notNull(),
   surname: text().notNull(),
   names: text().notNull(),
-  candidateNo: text().notNull(),
+  candidateNo: text(),
   phoneNumber: text().notNull(),
   status: text({ enum: statusEnum }).notNull(),
   programId: text()

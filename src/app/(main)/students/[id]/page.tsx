@@ -3,7 +3,6 @@ import { Container } from '@/components/ui/container';
 import { Card } from '@/components/ui/card';
 import { notFound } from 'next/navigation';
 import {
-  ArrowLeft,
   GraduationCap,
   User,
   AlertCircle,
@@ -12,6 +11,7 @@ import {
   Phone,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -27,38 +27,36 @@ export default async function StudentPage({ params }: Props) {
 
   const isAdmitted = student.status === 'Admitted';
   const isWaitlisted = student.status === 'Wait Listed';
-  const isDQ = student.status === 'DQ';
-  
-  // For program admission - both Admitted and Wait Listed statuses mean the student is admitted to the program
+
   const isProgramAdmitted = isAdmitted || isWaitlisted;
-  // For NMDS sponsorship - only Admitted status means the student is approved for NMDS
 
   return (
     <div className='min-h-screen bg-neutral-50 dark:bg-neutral-950'>
       <div className='bg-neutral-800 dark:bg-neutral-900'>
         <Container width='xl'>
-          <div className='py-8 md:py-10'>
-            <Link
-              href='/students'
-              className='inline-flex items-center gap-1 rounded-md bg-neutral-700 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-700'
-            >
-              <ArrowLeft className='h-4 w-4' />
-              Back to all students
+          <div className='flex flex-col items-center py-8 md:py-10'>
+            <Link href='/'>
+              <Image
+                src='/images/logo-dark.png'
+                alt='Limkokwing University Logo'
+                className='w-52'
+                width={270}
+                height={135}
+                priority
+              />
             </Link>
 
-            <div className='mt-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end'>
-              <div>
-                <h2 className='text-base font-medium text-neutral-300'>
-                  Student Details
-                </h2>
-                <h1 className='mt-1 text-2xl font-bold text-white md:text-3xl'>
-                  {student.surname} {student.names}
-                </h1>
-                <div className='mt-3 flex flex-wrap items-center gap-3'>
-                  <span className='inline-flex items-center gap-1.5 rounded-md bg-neutral-700 px-2 py-1 text-sm text-white dark:bg-neutral-800'>
-                    <User className='h-3.5 w-3.5' /> {student.candidateNo}
-                  </span>
-                </div>
+            <div className='mt-8 flex flex-col items-center text-center'>
+              <h2 className='text-base font-medium text-neutral-300'>
+                Student Details
+              </h2>
+              <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
+                {student.surname} {student.names}
+              </h1>
+              <div className='mt-4 flex flex-wrap items-center justify-center gap-3'>
+                <span className='inline-flex items-center gap-1.5 rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-white dark:bg-neutral-800'>
+                  <User className='h-3.5 w-3.5' /> {student.candidateNo}
+                </span>
               </div>
             </div>
           </div>
@@ -83,7 +81,9 @@ export default async function StudentPage({ params }: Props) {
                   </p>
                 </div>
 
-                <div className={`rounded-md px-3 py-1.5 ${isProgramAdmitted ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
+                <div
+                  className={`rounded-md px-3 py-1.5 ${isProgramAdmitted ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}
+                >
                   <div className='flex items-center gap-2'>
                     {isProgramAdmitted ? (
                       <>
@@ -155,8 +155,8 @@ export default async function StudentPage({ params }: Props) {
                           <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
                             Your NMDS sponsorship is currently not approved, but
                             you have been placed on the waiting list. Your
-                            sponsorship may be approved if allocated slots become
-                            available.
+                            sponsorship may be approved if allocated slots
+                            become available.
                           </p>
                           <p className='mt-2 text-sm font-medium text-amber-600 dark:text-amber-400'>
                             Waiting List Position: {student.no} of 1250
