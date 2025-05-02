@@ -13,7 +13,7 @@ class PropertyService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
   async getAll(params: QueryOptions<typeof properties>) {
