@@ -195,7 +195,7 @@ export default async function StudentPage({ params }: Props) {
                             ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
                             : isWaitlisted
                               ? 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'
-                              : 'Your application to the program was not successful. Please contact the Registry office for more information about your application status and alternative options.'}
+                              : 'Your application to the program was not successful.'}
                         </p>
                       </div>
                     </div>
@@ -225,33 +225,6 @@ export default async function StudentPage({ params }: Props) {
                 </div>
               </div>
             </Card>
-          </div>
-
-          <div className='mb-8 mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900'>
-            <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
-              <div className='text-center md:text-left'>
-                <h3 className='text-base font-bold text-neutral-900 dark:text-white'>
-                  Need Assistance?
-                </h3>
-                <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                  Contact the Registry office for any inquiries about your
-                  admission or registration.
-                </p>
-              </div>
-
-              <div className='flex flex-wrap items-center gap-3'>
-                <a
-                  href='tel:+26622315484'
-                  className='inline-flex items-center gap-2 rounded-md bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700'
-                >
-                  <Phone className='h-4 w-4' />
-                  +266 2231 5484
-                </a>
-                <span className='text-sm text-neutral-500 dark:text-neutral-400'>
-                  8:00 AM - 4:30 PM (Mon-Fri)
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </Container>
