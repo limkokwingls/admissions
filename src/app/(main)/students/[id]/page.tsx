@@ -15,6 +15,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProgramCard from '@/app/(main)/students/[id]/program-card';
 import Header from './header';
+import AcceptanceLetterButton from './AcceptanceLetter';
+import { Suspense } from 'react';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -112,6 +114,14 @@ export default async function StudentPage({ params }: Props) {
                               ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
                               : 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'}
                           </p>
+                          
+                          {isAdmitted && (
+                            <div className='mt-4'>
+                              <Suspense fallback={<div className='text-sm'>Loading acceptance letter...</div>}>
+                                <AcceptanceLetterButton student={student} />
+                              </Suspense>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
