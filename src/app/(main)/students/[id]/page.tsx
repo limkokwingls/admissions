@@ -13,15 +13,16 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function StudentDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const student = await getStudent(params.id);
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function StudentPage({ params }: Props) {
+  const { id } = await params;
+  const student = await getStudent(id);
 
   if (!student) {
-    notFound();
+    return notFound();
   }
 
   const isAdmitted = student.status === 'Admitted';
@@ -30,7 +31,6 @@ export default async function StudentDetailsPage({
 
   return (
     <div className='min-h-screen bg-neutral-50 dark:bg-neutral-950'>
-      {/* Header Section with Student Info */}
       <div className='bg-neutral-800 dark:bg-neutral-900'>
         <Container width='xl'>
           <div className='py-8 md:py-10'>
