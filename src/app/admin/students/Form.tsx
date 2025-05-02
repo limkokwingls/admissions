@@ -5,6 +5,8 @@ import { Form } from '@/components/adease';
 import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { getAllPrograms, getPrograms } from '@/server/programs/actions';
 
 type Student = typeof students.$inferInsert;
 
@@ -13,13 +15,17 @@ type Props = {
   defaultValues?: Student;
   onSuccess?: (value: Student) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
 
 export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
+  const { data: programs } = useQuery({
+    queryKey: ['programs'],
+    queryFn: () => getAllPrograms(),
+  });
 
   return (
     <Form
@@ -35,15 +41,29 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => {
         return (
           <>
-            <NumberInput label='No' {...form.getInputProps('no')} />
+            <Group grow>
+              <NumberInput label='No' {...form.getInputProps('no')} />
+              <TextInput
+                label='Candidate No'
+                {...form.getInputProps('candidateNo')}
+              />
+            </Group>
             <Group grow>
               <TextInput label='Surname' {...form.getInputProps('surname')} />
               <TextInput label='Names' {...form.getInputProps('names')} />
             </Group>
-            <TextInput
-              label='Candidate No'
-              {...form.getInputProps('candidateNo')}
+
+            <Select
+              label='Program'
+              {...form.getInputProps('programId')}
+              searchable
+              clearable
+              data={programs?.items.map((program) => ({
+                value: program.id.toString(),
+                label: program.name,
+              }))}
             />
+
             <TextInput
               label='Phone Numbers'
               description='Comma Separated'

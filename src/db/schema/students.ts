@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';
 import { programs } from './programs';
@@ -21,3 +21,10 @@ export const students = sqliteTable('students', {
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer({ mode: 'timestamp' }),
 });
+
+export const studentsRelations = relations(students, ({ one }) => ({
+  program: one(programs, {
+    fields: [students.programId],
+    references: [programs.id],
+  }),
+}));

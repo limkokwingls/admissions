@@ -13,6 +13,10 @@ export async function getPrograms(page: number = 1, search = '') {
   return service.getAll({ page, search });
 }
 
+export async function getAllPrograms() {
+  return service.getAll({ size: 300 });
+}
+
 export async function getProgramsForFaculty(facultyId: number) {
   return service.getForFaculty(facultyId);
 }

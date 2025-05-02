@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { students } from '@/db/schema';
 import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
-import { and, or, sql } from 'drizzle-orm';
+import { and, eq, or, sql } from 'drizzle-orm';
 
 export default class StudentRepository extends BaseRepository<
   typeof students,
@@ -9,6 +9,13 @@ export default class StudentRepository extends BaseRepository<
 > {
   constructor() {
     super(students, 'id');
+  }
+
+  override async findById(id: string) {
+    return db.query.students.findFirst({
+      where: eq(students.id, id),
+      with: { program: true },
+    });
   }
 
   override async query(params: QueryOptions<typeof students>) {
@@ -31,10 +38,10 @@ export default class StudentRepository extends BaseRepository<
 
         const fieldConditions = [
           ...substitutionPatterns.map(
-            (pattern) => sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`
+            (pattern) => sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`,
           ),
           ...substitutionPatterns.map(
-            (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`
+            (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
           ),
         ];
 
