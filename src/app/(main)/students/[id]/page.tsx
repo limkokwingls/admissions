@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ProgramCard from '@/app/(main)/students/[id]/program-card';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -95,55 +96,7 @@ export default async function StudentPage({ params }: Props) {
 
       <Container width='xl'>
         <div className='mx-auto max-w-4xl py-8'>
-          <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
-            <div className='p-6'>
-              <div className='flex flex-col gap-4'>
-                <div className='flex items-center gap-6'>
-                  <div className='flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800'>
-                    <GraduationCap className='h-6 w-6 text-neutral-700 dark:text-neutral-300' />
-                  </div>
-
-                  <div className='flex-1'>
-                    <h2 className='text-lg font-bold text-neutral-900 dark:text-white'>
-                      {student.program?.name ||
-                        'Program information unavailable'}
-                    </h2>
-                    <p className='mt-1 text-neutral-600 dark:text-neutral-400'>
-                      {student.program?.faculty?.name}
-                    </p>
-                  </div>
-                </div>
-
-                <div className='border-t border-neutral-100 pt-3 dark:border-neutral-800'>
-                  {isProgramAdmitted ? (
-                    <p className='text-sm text-neutral-700 dark:text-neutral-300'>
-                      <span className='font-medium text-emerald-600 dark:text-emerald-400'>
-                        Congratulations!
-                      </span>{' '}
-                      You have been admitted to this program at Limkokwing
-                      University of Creative Technology Lesotho.{' '}
-                      {isAdmitted
-                        ? 'Your NMDS sponsorship has also been approved.'
-                        : isWaitlisted
-                          ? 'Unfortunately, you have not secured NMDS sponsorship at this time.'
-                          : ''}
-                    </p>
-                  ) : (
-                    <p className='text-sm text-neutral-700 dark:text-neutral-300'>
-                      <span className='font-medium text-red-600 dark:text-red-400'>
-                        Notice:
-                      </span>{' '}
-                      We regret to inform you that your application to this
-                      program was not successful. Please contact the Registry
-                      office for more information or to explore alternative
-                      programs.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </Card>
-
+          <ProgramCard student={student} />
           <div className='mt-6 grid gap-6 md:grid-cols-2'>
             {isProgramAdmitted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
