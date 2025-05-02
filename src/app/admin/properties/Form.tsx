@@ -2,7 +2,7 @@
 
 import { properties } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { TextInput, NumberInput } from '@mantine/core';
+import { NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { DateInput, YearPickerInput } from '@mantine/dates';
@@ -39,7 +39,17 @@ export default function PropertyForm({
     >
       {(form) => (
         <>
-          <YearPickerInput label='Id' {...form.getInputProps('id')} />
+          <YearPickerInput
+            label='Id'
+            {...form.getInputProps('id', { type: 'input' })}
+            value={form.values.id ? new Date(form.values.id) : null}
+            onChange={(value) =>
+              form.setFieldValue(
+                'id',
+                value ? value.getFullYear().toString() : '',
+              )
+            }
+          />
           <NumberInput
             label='Acceptance Fee'
             {...form.getInputProps('acceptanceFee')}
