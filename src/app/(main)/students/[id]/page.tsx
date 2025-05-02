@@ -46,23 +46,11 @@ export default async function StudentPage({ params }: Props) {
                     <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
                       NMDS Sponsorship
                     </h3>
-                    {isAdmitted ? (
-                      <span className='rounded-md bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'>
-                        Sponsored
-                      </span>
-                    ) : (
-                      <span className='rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-400'>
-                        Not Sponsored
-                      </span>
-                    )}
                   </div>
 
                   <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
                     {isAdmitted ? (
                       <div className='flex items-start gap-3'>
-                        <div className='mt-0.5 rounded-full bg-emerald-100 p-1 dark:bg-emerald-900/50'>
-                          <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
-                        </div>
                         <div>
                           <p className='font-medium text-neutral-900 dark:text-white'>
                             Congratulations!
@@ -74,13 +62,10 @@ export default async function StudentPage({ params }: Props) {
                           </p>
                         </div>
                       </div>
-                    ) : isWaitlisted ? (
+                    ) : (
                       <div className='flex items-start gap-3'>
-                        <div className='mt-0.5 rounded-full bg-amber-100 p-1 dark:bg-amber-900/50'>
-                          <Clock className='h-4 w-4 text-amber-600 dark:text-amber-400' />
-                        </div>
                         <div>
-                          <p className='font-medium text-neutral-900 dark:text-white'>
+                          <p className='font-medium text-red-900 dark:text-red-400'>
                             Not Sponsored
                           </p>
                           <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
@@ -88,22 +73,6 @@ export default async function StudentPage({ params }: Props) {
                             you have been placed on the waiting list. Your
                             sponsorship may be approved if allocated slots
                             become available.
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className='flex items-start gap-3'>
-                        <div className='mt-0.5 rounded-full bg-red-100 p-1 dark:bg-red-900/50'>
-                          <AlertCircle className='h-4 w-4 text-red-600 dark:text-red-400' />
-                        </div>
-                        <div>
-                          <p className='font-medium text-neutral-900 dark:text-white'>
-                            Not Approved
-                          </p>
-                          <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                            Unfortunately, your application for NMDS sponsorship
-                            was not approved at this time. Please contact the
-                            Registry office for alternative funding options.
                           </p>
                         </div>
                       </div>
