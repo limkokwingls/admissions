@@ -6,6 +6,7 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getProperty, deleteProperty } from '@/server/properties/actions';
+import { format } from 'date-fns';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,15 +15,15 @@ type Props = {
 export default async function PropertyDetails({ params }: Props) {
   const { id } = await params;
   const property = await getProperty(id);
-  
+
   if (!property) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Property'} 
+      <DetailsViewHeader
+        title={'Property'}
         queryKey={['properties']}
         handleDelete={async () => {
           'use server';
@@ -32,9 +33,15 @@ export default async function PropertyDetails({ params }: Props) {
       <DetailsViewBody>
         <FieldView label='Id'>{property.id}</FieldView>
         <FieldView label='Acceptance Fee'>{property.acceptanceFee}</FieldView>
-        <FieldView label='Acceptance Deadline'>{property.acceptanceDeadline}</FieldView>
-        <FieldView label='Registration Date'>{property.registrationDate}</FieldView>
-        <FieldView label='Orientation Date'>{property.orientationDate}</FieldView>
+        <FieldView label='Acceptance Deadline'>
+          {format(new Date(property.acceptanceDeadline), 'dd MMM yyyy')}
+        </FieldView>
+        <FieldView label='Registration Date'>
+          {format(new Date(property.registrationDate), 'dd MMM yyyy')}
+        </FieldView>
+        <FieldView label='Orientation Date'>
+          {format(new Date(property.orientationDate), 'dd MMM yyyy')}
+        </FieldView>
       </DetailsViewBody>
     </DetailsView>
   );
