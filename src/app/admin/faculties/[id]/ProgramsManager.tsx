@@ -13,6 +13,7 @@ import {
   Button,
   Group,
   Modal,
+  NumberInput,
   Stack,
   Table,
   Text,
@@ -45,7 +46,7 @@ export default function ProgramsManager({ facultyId }: Props) {
 
   const form = useForm({
     initialValues: {
-      id: undefined,
+      id: 0,
       code: '',
       name: '',
       facultyId: facultyId,
@@ -121,10 +122,11 @@ export default function ProgramsManager({ facultyId }: Props) {
           Programs
         </Text>
         <Button
+          variant='light'
           leftSection={<IconPlus size={16} />}
           onClick={() => handleOpenModal()}
         >
-          Add Program
+          Program
         </Button>
       </Group>
 
@@ -188,10 +190,13 @@ export default function ProgramsManager({ facultyId }: Props) {
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
-            <TextInput
+            <NumberInput
               label='ID'
-              placeholder='Auto-generated'
+              placeholder='Enter program ID'
+              required
               {...form.getInputProps('id')}
+              readOnly={!!editingProgram}
+              disabled={!!editingProgram}
             />
             <TextInput
               label='Code'
