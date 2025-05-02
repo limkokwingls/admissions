@@ -32,7 +32,7 @@ export default function header({ student }: Props) {
 
           <div className='mt-8 flex flex-col items-center text-center'>
             <h2 className='text-base font-medium text-neutral-300'>
-              Student Details
+              Admission Details
             </h2>
             <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
               {student.surname} {student.names}
