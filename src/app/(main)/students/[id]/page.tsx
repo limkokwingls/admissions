@@ -78,12 +78,12 @@ export default async function StudentPage({ params }: Props) {
                     (isAdmitted ? (
                       <div className='flex items-center gap-2 rounded-md bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm dark:bg-emerald-900/20 dark:text-emerald-400'>
                         <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
-                        <span>NMDS: Sponsored</span>
+                        <span>Sponsored</span>
                       </div>
                     ) : (
-                      <div className='flex items-center gap-2 rounded-md bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 shadow-sm dark:bg-amber-900/20 dark:text-amber-400'>
-                        <AlertCircle className='h-4 w-4 text-amber-600 dark:text-amber-400' />
-                        <span>NMDS: Not Sponsored</span>
+                      <div className='flex items-center gap-2 rounded-md bg-red-50 px-4 py-2 text-sm font-medium text-red-700 shadow-sm dark:bg-red-900/20 dark:text-red-400'>
+                        <AlertCircle className='h-4 w-4 text-red-600 dark:text-red-400' />
+                        <span>Not Sponsored</span>
                       </div>
                     ))}
                 </div>
