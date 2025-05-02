@@ -1,4 +1,5 @@
 import { getStudent } from '@/server/students/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
 import { Container } from '@/components/ui/container';
 import { Card } from '@/components/ui/card';
 import { notFound } from 'next/navigation';
@@ -22,6 +23,7 @@ type Props = {
 export default async function StudentPage({ params }: Props) {
   const { id } = await params;
   const student = await getStudent(id);
+  const properties = await getCurrentProperties();
 
   if (!student) {
     return notFound();
@@ -109,25 +111,60 @@ export default async function StudentPage({ params }: Props) {
                       </div>
                     </div>
 
-                    <div className='rounded-lg border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
-                      <h4 className='font-medium text-neutral-900 dark:text-white'>
-                        Important Dates
-                      </h4>
-                      <ul className='mt-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300'>
-                        <li className='flex items-start gap-2'>
-                          <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
-                          <span>Registration: May 15 - 30, 2025</span>
-                        </li>
-                        <li className='flex items-start gap-2'>
-                          <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
-                          <span>Orientation: June 1 - 5, 2025</span>
-                        </li>
-                        <li className='flex items-start gap-2'>
-                          <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
-                          <span>Classes Begin: June 8, 2025</span>
-                        </li>
-                      </ul>
-                    </div>
+                    {properties && (
+                      <div className='rounded-lg border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
+                        <h4 className='font-medium text-neutral-900 dark:text-white'>
+                          Important Dates
+                        </h4>
+                        <ul className='mt-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300'>
+                          <li className='flex items-start gap-2'>
+                            <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
+                            <span>
+                              Registration:{' '}
+                              {properties
+                                ? new Date(
+                                    properties.registrationDate,
+                                  ).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                  })
+                                : 'TBD'}
+                            </span>
+                          </li>
+                          <li className='flex items-start gap-2'>
+                            <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
+                            <span>
+                              Orientation:{' '}
+                              {properties
+                                ? new Date(
+                                    properties.orientationDate,
+                                  ).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                  })
+                                : 'TBD'}
+                            </span>
+                          </li>
+                          <li className='flex items-start gap-2'>
+                            <span className='mt-1 h-1 w-1 rounded-full bg-neutral-500 dark:bg-neutral-400'></span>
+                            <span>
+                              Acceptance Deadline:{' '}
+                              {properties
+                                ? new Date(
+                                    properties.acceptanceDeadline,
+                                  ).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                  })
+                                : 'TBD'}
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Card>

@@ -5,7 +5,7 @@ import { propertiesService as service } from './service';
 
 type Property = typeof properties.$inferInsert;
 
-export async function getCurrentProperty() {
+export async function getCurrentProperties() {
   return service.get(new Date().getFullYear().toString());
 }
 
