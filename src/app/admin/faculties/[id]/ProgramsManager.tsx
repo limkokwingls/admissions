@@ -1,41 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { programs as programsTable } from '@/db/schema';
 import {
-  Table,
-  Button,
-  Group,
-  Text,
-  Modal,
-  TextInput,
-  Stack,
+  createProgram,
+  deleteProgram,
+  getProgramsForFaculty,
+  updateProgram,
+} from '@/server/programs/actions';
+import {
   ActionIcon,
   Box,
+  Button,
+  Group,
+  Modal,
+  Stack,
+  Table,
+  Text,
+  TextInput,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { z } from 'zod';
-import { IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
-import {
-  getProgramsForFaculty,
-  createProgram,
-  updateProgram,
-  deleteProgram,
-} from '@/server/programs/actions';
+import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createInsertSchema } from 'drizzle-zod';
+import { useState } from 'react';
 
-const programSchema = z.object({
-  code: z.string().min(1, 'Code is required'),
-  name: z.string().min(1, 'Name is required'),
-  facultyId: z.number(),
-});
+type Program = typeof programsTable.$inferInsert;
 
-type Program = z.infer<typeof programSchema> & { id?: number };
-
-type ProgramsManagerProps = {
+type Props = {
   facultyId: number;
 };
 
-export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
+export default function ProgramsManager({ facultyId }: Props) {
   const [modalOpened, setModalOpened] = useState(false);
   const [editingProgram, setEditingProgram] = useState<Program | null>(null);
 
@@ -50,11 +45,12 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
 
   const form = useForm({
     initialValues: {
+      id: undefined,
       code: '',
       name: '',
       facultyId: facultyId,
     },
-    validate: zodResolver(programSchema),
+    validate: zodResolver(createInsertSchema(programsTable)),
   });
 
   const createMutation = useMutation({
@@ -85,6 +81,7 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
     if (program) {
       setEditingProgram(program);
       form.setValues({
+        id: program.id,
         code: program.code,
         name: program.name,
         facultyId: program.facultyId,
@@ -134,6 +131,7 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
       <Table striped highlightOnHover withTableBorder>
         <Table.Thead>
           <Table.Tr>
+            <Table.Th>ID</Table.Th>
             <Table.Th>Code</Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th style={{ width: 120 }}>Actions</Table.Th>
@@ -142,7 +140,7 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
         <Table.Tbody>
           {programs.length === 0 ? (
             <Table.Tr>
-              <Table.Td colSpan={3} align='center'>
+              <Table.Td colSpan={4} align='center'>
                 <Text c='dimmed'>No programs found</Text>
               </Table.Td>
             </Table.Tr>
@@ -155,6 +153,7 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
                 facultyId: number;
               }) => (
                 <Table.Tr key={program.id}>
+                  <Table.Td>{program.id}</Table.Td>
                   <Table.Td>{program.code}</Table.Td>
                   <Table.Td>{program.name}</Table.Td>
                   <Table.Td>
@@ -189,6 +188,11 @@ export default function ProgramsManager({ facultyId }: ProgramsManagerProps) {
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
+            <TextInput
+              label='ID'
+              placeholder='Auto-generated'
+              {...form.getInputProps('id')}
+            />
             <TextInput
               label='Code'
               placeholder='Enter program code'
