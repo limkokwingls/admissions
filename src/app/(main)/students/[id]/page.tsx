@@ -97,7 +97,7 @@ export default async function StudentPage({ params }: Props) {
       <Container width='xl'>
         <div className='mx-auto max-w-4xl py-8'>
           <ProgramCard student={student} />
-          <div className='mt-6 grid gap-6 md:grid-cols-2'>
+          <div className='mt-6 flex flex-col gap-2'>
             {isProgramAdmitted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
                 <div className='p-6'>
@@ -171,37 +171,34 @@ export default async function StudentPage({ params }: Props) {
                 </div>
               </Card>
             )}
-
-            <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
-              <div className='p-6'>
-                <div className='mb-4'>
-                  <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
-                    What's Next?
-                  </h3>
-                </div>
-
-                <div className='space-y-4'>
-                  <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
-                    <div className='flex items-start gap-3'>
-                      <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-1 dark:bg-neutral-700 md:block'>
-                        <GraduationCap className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
-                      </div>
-                      <div>
-                        <p className='font-medium text-neutral-900 dark:text-white'>
-                          Registration Information
-                        </p>
-                        <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                          {isAdmitted
-                            ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
-                            : isWaitlisted
-                              ? 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'
-                              : 'Your application to the program was not successful.'}
-                        </p>
-                      </div>
-                    </div>
+            {isProgramAdmitted && (
+              <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+                <div className='p-6'>
+                  <div className='mb-4'>
+                    <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
+                      What's Next?
+                    </h3>
                   </div>
 
-                  {isProgramAdmitted && (
+                  <div className='space-y-4'>
+                    <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
+                      <div className='flex items-start gap-3'>
+                        <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-1 dark:bg-neutral-700 md:block'>
+                          <GraduationCap className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                        </div>
+                        <div>
+                          <p className='font-medium text-neutral-900 dark:text-white'>
+                            Registration Information
+                          </p>
+                          <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
+                            {isAdmitted
+                              ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
+                              : 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className='rounded-lg border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
                       <h4 className='font-medium text-neutral-900 dark:text-white'>
                         Important Dates
@@ -221,10 +218,10 @@ export default async function StudentPage({ params }: Props) {
                         </li>
                       </ul>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            )}
           </div>
         </div>
       </Container>

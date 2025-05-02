@@ -31,7 +31,7 @@ export default function ProgramCard({ student }: Props) {
           </div>
         </div>
 
-        <div className='border-t border-neutral-100 pt-3 dark:border-neutral-800'>
+        <div className='mt-4 border-t border-neutral-100 pt-3 dark:border-neutral-800'>
           {isProgramAdmitted ? (
             <p className='text-sm text-neutral-700 dark:text-neutral-300'>
               <span className='font-medium text-emerald-600 dark:text-emerald-400'>
@@ -51,8 +51,7 @@ export default function ProgramCard({ student }: Props) {
                 Notice:
               </span>{' '}
               We regret to inform you that your application to this program was
-              not successful. Please contact the Registry office for more
-              information or to explore alternative programs.
+              not successful.
             </p>
           )}
         </div>
