@@ -14,7 +14,11 @@ export default class StudentRepository extends BaseRepository<
   override async findById(id: string) {
     return db.query.students.findFirst({
       where: eq(students.id, id),
-      with: { program: true },
+      with: {
+        program: {
+          with: { faculty: true },
+        },
+      },
     });
   }
 
