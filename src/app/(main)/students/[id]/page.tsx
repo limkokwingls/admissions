@@ -71,7 +71,7 @@ export default async function StudentPage({ params }: Props) {
                   ) : (
                     <div className='flex items-center gap-2 rounded-md bg-red-50 px-4 py-2 text-sm font-medium text-red-700 shadow-sm dark:bg-red-900/20 dark:text-red-400'>
                       <AlertCircle className='h-4 w-4 text-red-600 dark:text-red-400' />
-                      <span>Program: Not Admitted</span>
+                      <span>Not Admitted</span>
                     </div>
                   )}
 
@@ -103,15 +103,15 @@ export default async function StudentPage({ params }: Props) {
                 <div className='p-6'>
                   <div className='mb-4 flex items-center justify-between'>
                     <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
-                      NMDS Sponsorship Status
+                      NMDS Sponsorship
                     </h3>
                     {isAdmitted ? (
                       <span className='rounded-md bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'>
-                        Approved
+                        Sponsored
                       </span>
                     ) : (
                       <span className='rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-400'>
-                        Not Approved
+                        Not Sponsored
                       </span>
                     )}
                   </div>
@@ -140,16 +140,13 @@ export default async function StudentPage({ params }: Props) {
                         </div>
                         <div>
                           <p className='font-medium text-neutral-900 dark:text-white'>
-                            Not Approved - On Waiting List
+                            Not Sponsored
                           </p>
                           <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
                             Your NMDS sponsorship is currently not approved, but
                             you have been placed on the waiting list. Your
                             sponsorship may be approved if allocated slots
                             become available.
-                          </p>
-                          <p className='mt-2 text-sm font-medium text-amber-600 dark:text-amber-400'>
-                            Waiting List Position: {student.no} of 1250
                           </p>
                         </div>
                       </div>
@@ -186,7 +183,7 @@ export default async function StudentPage({ params }: Props) {
                 <div className='space-y-4'>
                   <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
                     <div className='flex items-start gap-3'>
-                      <div className='mt-0.5 rounded-full bg-neutral-200 p-1 dark:bg-neutral-700'>
+                      <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-1 dark:bg-neutral-700 md:block'>
                         <GraduationCap className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                       </div>
                       <div>
