@@ -71,10 +71,15 @@ export default async function StudentPage({ params }: Props) {
                             Not Sponsored
                           </p>
                           <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                            Your NMDS sponsorship is currently not approved, but
-                            you have been placed on the waiting list. Your
-                            sponsorship may be approved if allocated slots
-                            become available.
+                            You have been placed on the NMDS sponsorship waiting
+                            list based on your academic performance. NMDS
+                            sponsors limited number of students annually, and
+                            positions are highly competitive. If any sponsored
+                            students do not claim their admission, slots may
+                            become available to waitlisted students in order of
+                            academic merit. However, as opportunities are
+                            limited, you should explore alternative financial
+                            arrangements for your studies.
                           </p>
                         </div>
                       </div>
@@ -83,7 +88,7 @@ export default async function StudentPage({ params }: Props) {
                 </div>
               </Card>
             )}
-            {isProgramAdmitted && (
+            {isAdmitted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
                 <div className='p-6'>
                   <div className='mb-4'>
