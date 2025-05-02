@@ -39,7 +39,7 @@ export default async function StudentPage({ params }: Props) {
               <Image
                 src='/images/logo-dark.png'
                 alt='Limkokwing University Logo'
-                className='w-52'
+                className='w-48'
                 width={270}
                 height={135}
                 priority
@@ -53,10 +53,40 @@ export default async function StudentPage({ params }: Props) {
               <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
                 {student.surname} {student.names}
               </h1>
-              <div className='mt-4 flex flex-wrap items-center justify-center gap-3'>
+              <div className='mt-4 flex justify-center'>
                 <span className='inline-flex items-center gap-1.5 rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-white dark:bg-neutral-800'>
-                  <User className='h-3.5 w-3.5' /> {student.candidateNo}
+                  <User className='h-3.5 w-3.5' />{' '}
+                  {student.candidateNo || 'No Candidate Number'}
                 </span>
+              </div>
+
+              <div className='mt-5 flex flex-col items-center gap-3'>
+                <div className='flex flex-wrap justify-center gap-3'>
+                  {isProgramAdmitted ? (
+                    <div className='flex items-center gap-2 rounded-md bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm dark:bg-emerald-900/20 dark:text-emerald-400'>
+                      <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                      <span>Admitted</span>
+                    </div>
+                  ) : (
+                    <div className='flex items-center gap-2 rounded-md bg-red-50 px-4 py-2 text-sm font-medium text-red-700 shadow-sm dark:bg-red-900/20 dark:text-red-400'>
+                      <AlertCircle className='h-4 w-4 text-red-600 dark:text-red-400' />
+                      <span>Program: Not Admitted</span>
+                    </div>
+                  )}
+
+                  {isProgramAdmitted &&
+                    (isAdmitted ? (
+                      <div className='flex items-center gap-2 rounded-md bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm dark:bg-emerald-900/20 dark:text-emerald-400'>
+                        <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                        <span>NMDS: Approved</span>
+                      </div>
+                    ) : (
+                      <div className='flex items-center gap-2 rounded-md bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 shadow-sm dark:bg-amber-900/20 dark:text-amber-400'>
+                        <Clock className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                        <span>NMDS: Waitlisted</span>
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -67,47 +97,54 @@ export default async function StudentPage({ params }: Props) {
         <div className='mx-auto max-w-4xl py-8'>
           <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
             <div className='p-6'>
-              <div className='flex flex-col gap-4 md:flex-row md:items-center md:gap-6'>
-                <div className='flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800'>
-                  <GraduationCap className='h-6 w-6 text-neutral-700 dark:text-neutral-300' />
-                </div>
-
-                <div className='flex-1'>
-                  <h2 className='text-lg font-bold text-neutral-900 dark:text-white'>
-                    {student.program?.name || 'Program information unavailable'}
-                  </h2>
-                  <p className='mt-1 text-neutral-600 dark:text-neutral-400'>
-                    {student.program?.faculty?.name}
-                  </p>
-                </div>
-
-                <div
-                  className={`rounded-md px-3 py-1.5 ${isProgramAdmitted ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}
-                >
-                  <div className='flex items-center gap-2'>
-                    {isProgramAdmitted ? (
-                      <>
-                        <CheckCircle className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
-                        <span className='text-sm font-medium text-emerald-700 dark:text-emerald-400'>
-                          Admitted
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <AlertCircle className='h-4 w-4 text-red-600 dark:text-red-400' />
-                        <span className='text-sm font-medium text-red-700 dark:text-red-400'>
-                          Not Admitted
-                        </span>
-                      </>
-                    )}
+              <div className='flex flex-col gap-4'>
+                <div className='flex items-center gap-6'>
+                  <div className='flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800'>
+                    <GraduationCap className='h-6 w-6 text-neutral-700 dark:text-neutral-300' />
                   </div>
+
+                  <div className='flex-1'>
+                    <h2 className='text-lg font-bold text-neutral-900 dark:text-white'>
+                      {student.program?.name ||
+                        'Program information unavailable'}
+                    </h2>
+                    <p className='mt-1 text-neutral-600 dark:text-neutral-400'>
+                      {student.program?.faculty?.name}
+                    </p>
+                  </div>
+                </div>
+
+                <div className='border-t border-neutral-100 pt-3 dark:border-neutral-800'>
+                  {isProgramAdmitted ? (
+                    <p className='text-sm text-neutral-700 dark:text-neutral-300'>
+                      <span className='font-medium text-emerald-600 dark:text-emerald-400'>
+                        Congratulations!
+                      </span>{' '}
+                      You have been admitted to this program at Limkokwing
+                      University of Creative Technology Lesotho.{' '}
+                      {isAdmitted
+                        ? 'Your NMDS sponsorship has also been approved.'
+                        : isWaitlisted
+                          ? 'You are currently on the waiting list for NMDS sponsorship.'
+                          : ''}
+                    </p>
+                  ) : (
+                    <p className='text-sm text-neutral-700 dark:text-neutral-300'>
+                      <span className='font-medium text-red-600 dark:text-red-400'>
+                        Notice:
+                      </span>{' '}
+                      We regret to inform you that your application to this
+                      program was not successful. Please contact the Registry
+                      office for more information or to explore alternative
+                      programs.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </Card>
 
           <div className='mt-6 grid gap-6 md:grid-cols-2'>
-            {/* Only show NMDS section if student is admitted to the program */}
             {isProgramAdmitted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
                 <div className='p-6'>
