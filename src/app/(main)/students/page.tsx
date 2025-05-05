@@ -1,11 +1,12 @@
 import { Card } from '@/components/ui/card';
 import { Container } from '@/components/ui/container';
+import { Skeleton } from '@/components/ui/skeleton';
 import { students } from '@/db/schema';
 import { searchStudent } from '@/server/students/actions';
-import { Calendar, Loader2, Search, User } from 'lucide-react';
-import Link from 'next/link';
+import { Search } from 'lucide-react';
 import { Suspense } from 'react';
 import Header from './header';
+import StudentCard from './components/StudentCard';
 
 type Student = typeof students.$inferSelect;
 
@@ -23,16 +24,7 @@ export default async function StudentsPage({ searchParams }: Props) {
       <Header searchQuery={searchQuery} />
       <Container width='xl'>
         <div className='mx-auto mt-8 max-w-4xl'>
-          <Suspense
-            fallback={
-              <div className='flex items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-900'>
-                <Loader2 className='h-8 w-8 animate-spin text-emerald-600 dark:text-emerald-400' />
-                <span className='ml-3 font-medium text-neutral-600 dark:text-neutral-300'>
-                  Checking admission status...
-                </span>
-              </div>
-            }
-          >
+          <Suspense fallback={<SearchResultsSkeleton />}>
             <SearchResults searchQuery={searchQuery} />
           </Suspense>
         </div>
@@ -104,29 +96,34 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
   );
 }
 
-function StudentCard({ student }: { student: Student }) {
+function StudentCardSkeleton() {
   return (
-    <Link href={`/students/${student.id}`}>
-      <Card className='cursor-pointer overflow-hidden border border-neutral-200 bg-white transition-all duration-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900'>
-        <div className='p-5'>
-          <div className='mb-4 flex items-start justify-between'>
-            <div className='flex items-start gap-3'>
-              <div className='mt-1 rounded-full bg-neutral-100 p-2 dark:bg-neutral-800'>
-                <User className='size-6 text-neutral-600 dark:text-neutral-300' />
-              </div>
-              <div>
-                <h2 className='text-lg font-semibold'>
-                  {student.surname} {student.names}
-                </h2>
-                <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
-                  <span>Candidate No: </span>
-                  <span className='font-medium'>{student.candidateNo}</span>
-                </div>
-              </div>
+    <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+      <div className='p-5'>
+        <div className='mb-4 flex items-start justify-between'>
+          <div className='flex items-start gap-3'>
+            <Skeleton className='mt-1 h-10 w-10 rounded-full' />
+            <div className='space-y-2'>
+              <Skeleton className='h-6 w-48' />
+              <Skeleton className='h-4 w-32' />
             </div>
           </div>
         </div>
-      </Card>
-    </Link>
+      </div>
+    </Card>
+  );
+}
+
+function SearchResultsSkeleton() {
+  return (
+    <div className='space-y-6'>
+      <div className='border-b border-neutral-200 pb-2 dark:border-neutral-800'>
+        <Skeleton className='h-5 w-3/4' />
+      </div>
+      <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2'>
+        <StudentCardSkeleton />
+        <StudentCardSkeleton />
+      </div>
+    </div>
   );
 }
