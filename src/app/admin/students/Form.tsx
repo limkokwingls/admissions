@@ -6,7 +6,7 @@ import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { getAllPrograms, getPrograms } from '@/server/programs/actions';
+import { getAllPrograms } from '@/server/programs/actions';
 
 type Student = typeof students.$inferInsert;
 

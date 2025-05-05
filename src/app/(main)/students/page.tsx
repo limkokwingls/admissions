@@ -58,7 +58,7 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
         <div>
           <h3 className='text-lg font-medium'>No Results Found</h3>
           <p className='mt-1 text-muted-foreground'>
-            No admission records found matching "{searchQuery}".
+            No admission records found matching &quot;{searchQuery}&quot;.
           </p>
           <p className='mt-2 text-sm text-neutral-500 dark:text-neutral-400'>
             Try using different keywords or check the spelling of your name or
@@ -79,7 +79,7 @@ async function SearchResults({ searchQuery }: { searchQuery: string }) {
             {' '}
             result{results.items.length !== 1 ? 's' : ''} for{' '}
           </span>
-          <span className='font-semibold italic'>"{searchQuery}"</span>{' '}
+          <span className='font-semibold italic'>&quot;{searchQuery}&quot;</span>{' '}
           <span className='text-sm text-neutral-500 dark:text-neutral-400'>
             Click on {results.items.length > 1 ? 'any' : 'the'} student card
             below to view detailed information.

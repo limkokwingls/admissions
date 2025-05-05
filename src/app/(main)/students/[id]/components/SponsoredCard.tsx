@@ -3,9 +3,10 @@ import { GraduationCap, AlertCircle } from 'lucide-react';
 import AcceptanceLetterButton from './AcceptanceLetter';
 import { Suspense } from 'react';
 import { formatDate } from 'date-fns';
+import { getStudent } from '@/server/students/actions';
 
 type Props = {
-  student: any;
+  student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
   properties: {
     acceptanceFee?: number;
     acceptanceDeadline: Date;
@@ -18,7 +19,7 @@ export default function SponsoredCard({ student, properties }: Props) {
       <div className='p-6'>
         <div className='mb-4'>
           <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
-            What's Next?
+            What&apos;s Next?
           </h3>
         </div>
 
