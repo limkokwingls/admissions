@@ -40,29 +40,60 @@ export default async function StudentPage({ params }: Props) {
             {isWaitlisted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
                 <div className='p-6'>
-                  <div className='mb-4 flex items-center justify-between'>
+                  <div className='mb-4'>
                     <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
                       NMDS Sponsorship
                     </h3>
                   </div>
 
-                  <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
-                    <div className='flex items-start gap-3'>
-                      <div>
-                        <p className='font-medium text-red-900 dark:text-red-400'>
-                          Not Sponsored
-                        </p>
-                        <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                          You have been placed on the NMDS sponsorship waiting
-                          list based on your academic performance. NMDS sponsors
-                          limited number of students annually, and positions are
-                          highly competitive. If any sponsored students do not
-                          claim their admission, slots may become available to
-                          Wait Listed students in order of academic merit.
-                          However, as opportunities are limited, you should
-                          explore alternative financial arrangements for your
-                          studies.
-                        </p>
+                  <div className='space-y-4'>
+                    <div className='rounded-lg border border-neutral-200 bg-gradient-to-br from-neutral-100 to-neutral-50 p-6 shadow-sm dark:border-neutral-800 dark:from-neutral-800/50 dark:to-neutral-900/80 dark:shadow-none'>
+                      <div className='flex items-start gap-4'>
+                        <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-2 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 md:block'>
+                          <AlertCircle className='h-5 w-5' />
+                        </div>
+                        <div className='flex-1'>
+                          <h4 className='text-lg font-semibold text-neutral-900 dark:text-neutral-100'>
+                            Not Sponsored
+                          </h4>
+                          <div className='mt-3'>
+                            <p className='text-sm text-neutral-700 dark:text-neutral-300'>
+                              You have been placed on the NMDS sponsorship
+                              waiting list based on your academic performance.
+                              NMDS sponsors a limited number of students
+                              annually, and positions are highly competitive.
+                            </p>
+
+                            <div className='mt-4 rounded-md bg-white/80 p-4 dark:bg-neutral-800/50'>
+                              <h5 className='font-medium text-neutral-900 dark:text-white'>
+                                What this means:
+                              </h5>
+                              <ul className='mt-2 space-y-3 text-sm'>
+                                <li className='flex items-start gap-2'>
+                                  <span className='flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
+                                    •
+                                  </span>
+                                  <span className='text-neutral-700 dark:text-neutral-300'>
+                                    If any sponsored students do not claim their
+                                    admission, slots may become available to
+                                    Wait Listed students in order of academic
+                                    merit.
+                                  </span>
+                                </li>
+                                <li className='flex items-start gap-2'>
+                                  <span className='flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
+                                    •
+                                  </span>
+                                  <span className='text-neutral-700 dark:text-neutral-300'>
+                                    As opportunities are limited, you should
+                                    explore alternative financial arrangements
+                                    for your studies.
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
