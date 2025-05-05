@@ -40,9 +40,9 @@ export default function ProgramCard({ student }: Props) {
               You have been admitted to this to study {program?.name} at
               Limkokwing University of Creative Technology Lesotho.{' '}
               {isProgramAdmitted
-                ? 'Your NMDS sponsorship has also been approved.'
+                ? 'Your education will be fully sponsored by NMDS.'
                 : isWaitlisted
-                  ? 'Unfortunately, you have not secured NMDS sponsorship at this time.'
+                  ? 'Unfortunately, you have not secured NMDS sponsorship.'
                   : ''}
             </p>
           ) : (
@@ -50,8 +50,9 @@ export default function ProgramCard({ student }: Props) {
               <span className='font-medium text-red-600 dark:text-red-400'>
                 Notice:
               </span>{' '}
-              We regret to inform you that your application to this program was
-              not successful.
+              We regret to inform you that your application to study{' '}
+              {program?.name} at Limkokwing University of Creative Technology
+              Lesotho was not successful.
             </p>
           )}
         </div>

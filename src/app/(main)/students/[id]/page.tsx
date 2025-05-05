@@ -43,7 +43,7 @@ export default async function StudentPage({ params }: Props) {
         <div className='mx-auto max-w-4xl py-8'>
           <ProgramCard student={student} />
           <div className='mt-6 flex flex-col gap-2'>
-            {isProgramAdmitted && (
+            {isWaitlisted && (
               <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
                 <div className='p-6'>
                   <div className='mb-4 flex items-center justify-between'>
@@ -53,39 +53,24 @@ export default async function StudentPage({ params }: Props) {
                   </div>
 
                   <div className='rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800/50'>
-                    {isAdmitted ? (
-                      <div className='flex items-start gap-3'>
-                        <div>
-                          <p className='font-medium text-neutral-900 dark:text-white'>
-                            Congratulations!
-                          </p>
-                          <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                            You have been approved for NMDS sponsorship. Your
-                            education at Limkokwing University will be fully
-                            sponsored.
-                          </p>
-                        </div>
+                    <div className='flex items-start gap-3'>
+                      <div>
+                        <p className='font-medium text-red-900 dark:text-red-400'>
+                          Not Sponsored
+                        </p>
+                        <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
+                          You have been placed on the NMDS sponsorship waiting
+                          list based on your academic performance. NMDS sponsors
+                          limited number of students annually, and positions are
+                          highly competitive. If any sponsored students do not
+                          claim their admission, slots may become available to
+                          waitlisted students in order of academic merit.
+                          However, as opportunities are limited, you should
+                          explore alternative financial arrangements for your
+                          studies.
+                        </p>
                       </div>
-                    ) : (
-                      <div className='flex items-start gap-3'>
-                        <div>
-                          <p className='font-medium text-red-900 dark:text-red-400'>
-                            Not Sponsored
-                          </p>
-                          <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
-                            You have been placed on the NMDS sponsorship waiting
-                            list based on your academic performance. NMDS
-                            sponsors limited number of students annually, and
-                            positions are highly competitive. If any sponsored
-                            students do not claim their admission, slots may
-                            become available to waitlisted students in order of
-                            academic merit. However, as opportunities are
-                            limited, you should explore alternative financial
-                            arrangements for your studies.
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -114,10 +99,16 @@ export default async function StudentPage({ params }: Props) {
                               ? 'Please collect your admission letter from the Registry office. Registration begins on May 15, 2025.'
                               : 'You have been admitted to your program but unfortunately, you have not secured NMDS sponsorship. While technically on a waiting list, you should make alternative financial arrangements as sponsorship opportunities are extremely limited.'}
                           </p>
-                          
+
                           {isAdmitted && (
                             <div className='mt-4'>
-                              <Suspense fallback={<div className='text-sm'>Loading acceptance letter...</div>}>
+                              <Suspense
+                                fallback={
+                                  <div className='text-sm'>
+                                    Loading acceptance letter...
+                                  </div>
+                                }
+                              >
                                 <AcceptanceLetterButton student={student} />
                               </Suspense>
                             </div>
