@@ -40,7 +40,7 @@ export default function ProgramCard({ student }: Props) {
               You have been admitted to this to study {program?.name} at
               Limkokwing University of Creative Technology Lesotho.{' '}
               {isProgramAdmitted
-                ? 'Your education will be fully sponsored by NMDS.'
+                ? 'Your education will be not be sponsored by NMDS.'
                 : isWaitlisted
                   ? 'Unfortunately, you have not secured NMDS sponsorship.'
                   : ''}
