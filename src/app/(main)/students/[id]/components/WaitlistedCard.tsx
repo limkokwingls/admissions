@@ -35,9 +35,7 @@ export default function WaitlistedCard() {
                     </h5>
                     <ul className='mt-2 space-y-3 text-sm'>
                       <li className='flex items-start gap-2'>
-                        <span className='flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
-                          •
-                        </span>
+                        <Dot />
                         <span className='text-neutral-700 dark:text-neutral-300'>
                           If any sponsored students do not claim their
                           admission, slots may become available to Wait Listed
@@ -45,9 +43,7 @@ export default function WaitlistedCard() {
                         </span>
                       </li>
                       <li className='flex items-start gap-2'>
-                        <span className='flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
-                          •
-                        </span>
+                        <Dot />
                         <span className='text-neutral-700 dark:text-neutral-300'>
                           As opportunities are limited, you should explore
                           alternative financial arrangements for your studies.
@@ -62,5 +58,13 @@ export default function WaitlistedCard() {
         </div>
       </div>
     </Card>
+  );
+}
+
+function Dot() {
+  return (
+    <span className='flex size-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
+      •
+    </span>
   );
 }
