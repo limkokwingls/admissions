@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
 type Props = {
-  searchQuery: string;
+  searchQuery?: string;
 };
 
 export default function SearchForm({ searchQuery }: Props) {

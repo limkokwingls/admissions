@@ -47,6 +47,14 @@ export default class StudentRepository extends BaseRepository<
           ...substitutionPatterns.map(
             (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
           ),
+          ...substitutionPatterns.map(
+            (pattern) =>
+              sql`LOWER(${students.candidateNo}) LIKE LOWER(${pattern})`,
+          ),
+          ...substitutionPatterns.map(
+            (pattern) =>
+              sql`LOWER(${students.phoneNumber}) LIKE LOWER(${pattern})`,
+          ),
         ];
 
         return or(...fieldConditions);
