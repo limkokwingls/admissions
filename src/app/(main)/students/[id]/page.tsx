@@ -4,9 +4,9 @@ import { Container } from '@/components/ui/container';
 import { Card } from '@/components/ui/card';
 import { notFound } from 'next/navigation';
 import { GraduationCap, AlertCircle } from 'lucide-react';
-import ProgramCard from '@/app/(main)/students/[id]/program-card';
+import ProgramCard from '@/app/(main)/students/[id]/components/ProgramCard';
 import Header from './header';
-import AcceptanceLetterButton from './AcceptanceLetter';
+import AcceptanceLetterButton from './components/AcceptanceLetter';
 import { Suspense } from 'react';
 import { formatDate } from 'date-fns';
 
