@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { getStudent } from '@/server/students/actions';
+import { cn } from '@/lib/utils';
 
 // Register fonts
 Font.register({
@@ -229,8 +230,9 @@ function AcceptanceLetterPDF({ student }: AcceptanceLetterProps) {
             I, {student.names} {student.surname}, accept the offer of admission
             to study {student.program?.name} Limkokwing University of Creative
             Technology, I undertake to comply with the procedures and
-            regulations spelled out in the Student&apos;s Handbook and all rules and
-            regulations in particular, I agree as per the LUCT admission Letter
+            regulations spelled out in the Student&apos;s Handbook and all rules
+            and regulations in particular, I agree as per the LUCT admission
+            Letter
             dated:.........................................................
           </Text>
 
@@ -373,8 +375,8 @@ export default function AcceptanceLetterButton({
       style={{ textDecoration: 'none' }}
     >
       {({ loading }) => (
-        <Button className='w-full' disabled={loading}>
-          <Download className='mr-2 h-4 w-4' />
+        <Button className='w-full py-6' disabled={loading}>
+          <Download className='h-4 w-4' />
           {loading ? 'Generating PDF...' : 'Download Acceptance Letter'}
         </Button>
       )}
