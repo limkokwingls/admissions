@@ -37,8 +37,8 @@ export default function ProgramCard({ student }: Props) {
               <span className='font-medium text-emerald-600 dark:text-emerald-400'>
                 Congratulations!
               </span>{' '}
-              You have been admitted to this program at Limkokwing University of
-              Creative Technology Lesotho.{' '}
+              You have been admitted to this to study {program?.name} at
+              Limkokwing University of Creative Technology Lesotho.{' '}
               {isProgramAdmitted
                 ? 'Your NMDS sponsorship has also been approved.'
                 : isWaitlisted
