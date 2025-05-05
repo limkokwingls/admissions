@@ -10,6 +10,7 @@ import { Divider, Fieldset, Group } from '@mantine/core';
 import { Badge } from '@mantine/core';
 import { Text } from '@mantine/core';
 import { students } from '@/db/schema';
+import { extractReference } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -28,7 +29,7 @@ export default async function StudentDetails({ params }: Props) {
   return (
     <DetailsView>
       <DetailsViewHeader
-        title={'Student'}
+        title={extractReference(student)}
         queryKey={['students']}
         handleDelete={async () => {
           'use server';
@@ -37,18 +38,15 @@ export default async function StudentDetails({ params }: Props) {
       />
       <DetailsViewBody>
         <Group justify='space-between' align='center'>
-          <Text fw={'bold'}>{student.no}</Text>
+          <Text>
+            {student.surname} {student.names}
+          </Text>
           <Badge variant='outline' color={getBadgeColor(student.status)}>
             {student.status}
           </Badge>
         </Group>
         <Divider />
-        <FieldView label='Names'>
-          {student.surname} {student.names}
-        </FieldView>
-        <Fieldset legend='Program'>
-          <Text size='sm'>{student.program?.name}</Text>
-        </Fieldset>
+        <FieldView label='Program'>{student.program?.name}</FieldView>
         <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
         <FieldView label='Candidate No'>{student.candidateNo}</FieldView>
       </DetailsViewBody>

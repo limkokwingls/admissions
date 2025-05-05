@@ -105,8 +105,8 @@ export default function SponsoredCard({ student, properties }: Props) {
                     Failure to complete these steps by the deadline will result
                     in{' '}
                     <span className='font-semibold'>your NMDS sponsorship</span>{' '}
-                    being revoked and given to another student on the waiting
-                    list. There are no extensions to this deadline.
+                    being revoked and given to another student. There are no
+                    extensions to this deadline.
                   </p>
                 </div>
               </div>
