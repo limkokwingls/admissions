@@ -18,7 +18,7 @@ export default function WaitlistedCard() {
                 <AlertCircle className='h-5 w-5' />
               </div>
               <div className='flex-1'>
-                <h4 className='text-lg font-semibold text-neutral-900 dark:text-neutral-100'>
+                <h4 className='text-lg font-semibold text-red-600 dark:text-red-400'>
                   Not Sponsored
                 </h4>
                 <div className='mt-3'>
@@ -37,16 +37,30 @@ export default function WaitlistedCard() {
                       <li className='flex items-start gap-2'>
                         <Dot />
                         <span className='text-neutral-700 dark:text-neutral-300'>
-                          If any sponsored students do not claim their
-                          admission, slots may become available to Wait Listed
-                          students in order of academic merit.
+                          You have been admitted to the university and can
+                          proceed with self-sponsorship. Please review the
+                          payment plan below for financing options.
                         </span>
                       </li>
                       <li className='flex items-start gap-2'>
                         <Dot />
                         <span className='text-neutral-700 dark:text-neutral-300'>
-                          As opportunities are limited, you should explore
-                          alternative financial arrangements for your studies.
+                          In cases where sponsored students do not claim their
+                          admission by the deadline, some slots may become
+                          available to waitlisted students based strictly on
+                          academic merit ranking. Please note that this
+                          possibility is extremely limited and should not be
+                          relied upon for your enrollment planning.
+                        </span>
+                      </li>
+                      <li className='flex items-start gap-2'>
+                        <Dot />
+                        <span className='text-neutral-700 dark:text-neutral-300'>
+                          The Registry Office will contact you directly by call
+                          if a sponsorship opportunity becomes available.
+                          Students are strongly advised to explore alternative
+                          financing options rather than waiting for possible
+                          NMDS sponsorship.
                         </span>
                       </li>
                     </ul>
