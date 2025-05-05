@@ -2,9 +2,8 @@ import React from 'react';
 import { getStudent } from '@/server/students/actions';
 import Link from 'next/link';
 import Image from 'next/image';
-import { User } from 'lucide-react';
 import { Container } from '@/components/ui/container';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, GraduationCap } from 'lucide-react';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -39,7 +38,7 @@ export default function header({ student }: Props) {
             </h1>
             <div className='mt-4 flex justify-center'>
               <span className='inline-flex items-center gap-1.5 rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-white dark:bg-neutral-800'>
-                <User className='h-3.5 w-3.5' />{' '}
+                <GraduationCap className='h-3.5 w-3.5' />{' '}
                 {student.candidateNo || 'No Candidate Number'}
               </span>
             </div>
