@@ -118,15 +118,13 @@ function StudentCard({ student }: { student: Student }) {
                 <h2 className='text-lg font-semibold'>
                   {student.surname} {student.names}
                 </h2>
+                <div className='mt-2 space-y-2'>
+                  <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
+                    <span>Candidate No: </span>
+                    <span className='font-medium'>{student.candidateNo}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className='mb-4 space-y-2'>
-            <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
-              <Calendar className='h-4 w-4' />
-              <span>Candidate No: </span>
-              <span className='font-medium'>{student.candidateNo}</span>
             </div>
           </div>
         </div>
