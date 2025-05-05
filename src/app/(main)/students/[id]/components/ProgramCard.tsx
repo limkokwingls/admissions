@@ -37,13 +37,11 @@ export default function ProgramCard({ student }: Props) {
               <span className='font-medium text-emerald-600 dark:text-emerald-400'>
                 Congratulations!
               </span>{' '}
-              You have been admitted to this to study {program?.name} at
-              Limkokwing University of Creative Technology Lesotho.{' '}
-              {isProgramAdmitted
-                ? 'Your education will be not be sponsored by NMDS.'
-                : isWaitlisted
-                  ? 'Unfortunately, you have not secured NMDS sponsorship.'
-                  : ''}
+              You have been admitted to study {program?.name} at Limkokwing
+              University of Creative Technology Lesotho.{' '}
+              {isWaitlisted
+                ? 'Unfortunately, you have not secured NMDS sponsorship.'
+                : 'Your education will be fully sponsored by NMDS.'}
             </p>
           ) : (
             <p className='text-sm text-neutral-700 dark:text-neutral-300'>
