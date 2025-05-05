@@ -46,11 +46,11 @@ export default function WaitlistedCard() {
                         <Dot />
                         <span className='text-neutral-700 dark:text-neutral-300'>
                           In cases where sponsored students do not claim their
-                          admission by the deadline, some slots may become
-                          available to waitlisted students based strictly on
-                          academic merit ranking. Please note that this
-                          possibility is extremely limited and should not be
-                          relied upon for your enrollment planning.
+                          admission by the deadline, some sponsorship slots may
+                          become available to waitlisted students based strictly
+                          on academic merit ranking. Please note that this
+                          possibility is quite limited and should not be relied
+                          upon
                         </span>
                       </li>
                       <li className='flex items-start gap-2'>
