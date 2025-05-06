@@ -7,8 +7,9 @@ import {
 import { students } from '@/db/schema';
 import { extractReference } from '@/lib/utils';
 import { deleteStudent, getStudent } from '@/server/students/actions';
-import { Badge, Divider, Group, Text } from '@mantine/core';
+import { Badge, Box, Divider, Group, Text } from '@mantine/core';
 import { notFound } from 'next/navigation';
+import AcceptanceSwitch from './AcceptanceSwitch';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -35,15 +36,18 @@ export default async function StudentDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <Group justify='space-between' align='center'>
-          <Text>
-            {student.surname} {student.names}
-          </Text>
-          <Badge variant='outline' color={getBadgeColor(student.status)}>
-            {student.status}
-          </Badge>
-        </Group>
-        <Divider />
+        <AcceptanceSwitch student={student} />
+        <Box mt={'xl'}>
+          <Group justify='space-between' align='center'>
+            <Text>
+              {student.surname} {student.names}
+            </Text>
+            <Badge variant='light' color={getBadgeColor(student.status)}>
+              {student.status}
+            </Badge>
+          </Group>
+          <Divider mt={5} />
+        </Box>
         <FieldView label='Program'>{student.program?.name}</FieldView>
         <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
         <FieldView label='Candidate No'>{student.candidateNo}</FieldView>

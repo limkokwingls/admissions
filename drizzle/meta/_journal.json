@@ -36,6 +36,13 @@
       "when": 1746537054121,
       "tag": "0004_special_giant_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1746538129176,
+      "tag": "0005_lethal_virginia_dare",
+      "breakpoints": true
     }
   ]
 }

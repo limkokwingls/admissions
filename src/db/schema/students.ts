@@ -17,6 +17,7 @@ export const students = sqliteTable(
     candidateNo: text(),
     phoneNumber: text().notNull(),
     status: text({ enum: statusEnum }).notNull(),
+    accepted: integer({ mode: 'boolean' }).notNull().default(false),
     programId: integer()
       .notNull()
       .references(() => programs.id, { onDelete: 'cascade' }),
