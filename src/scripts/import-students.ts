@@ -1,18 +1,15 @@
 import { findProgramByName } from '@/server/programs/actions';
+import { createOrUpdateStudent } from '@/server/students/actions';
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import * as XLSX from 'xlsx';
-import { db } from '../db';
-import { students } from '../db/schema/students';
+import { students } from '../db/schema';
 
 type Student = typeof students.$inferInsert;
 type ExcelRow = Record<string, string | number | null | undefined>;
 
-function extractSheetMetadata(data: ExcelRow[]): {
-  programName: string | null;
-  status: Student['status'];
-} {
+function extractSheetMetadata(data: ExcelRow[]) {
   let programName: string | null = null;
   let status: Student['status'] = 'Wait Listed';
 
@@ -42,29 +39,6 @@ function extractSheetMetadata(data: ExcelRow[]): {
       } else if (statusText.includes('DQ')) {
         status = 'DQ';
       }
-    }
-  }
-
-  if (!programName) {
-    for (let i = 0; i < 15; i++) {
-      const row = data[i] || {};
-      for (const [key, value] of Object.entries(row)) {
-        if (value && typeof value === 'string' && !programName) {
-          const programPatterns = [
-            /BSC\s+IT/i,
-            /DIPLOMA\s+IN\s+.+/i,
-            /BACHELOR\s+OF\s+.+/i,
-          ];
-
-          for (const pattern of programPatterns) {
-            if (pattern.test(value)) {
-              programName = value.trim();
-              break;
-            }
-          }
-        }
-      }
-      if (programName) break;
     }
   }
 
@@ -169,9 +143,10 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         for (let i = 0; i < studentsData.length; i++) {
           const student = studentsData[i];
           try {
-            await db.insert(students).values(student);
+            const result = await createOrUpdateStudent(student);
+            const action = result.id !== student.id ? 'Updated' : 'Imported';
             console.log(
-              `Imported student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}`,
+              `${action} student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}`,
             );
           } catch (error) {
             console.error(

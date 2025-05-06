@@ -22,6 +22,28 @@ export default class StudentRepository extends BaseRepository<
     });
   }
 
+  async findByUniqueIdentifiers(student: typeof students.$inferInsert) {
+    if (student.candidateNo) {
+      const existingByCandidate = await db.query.students.findFirst({
+        where: eq(students.candidateNo, student.candidateNo),
+      });
+      if (existingByCandidate) return existingByCandidate;
+    }
+
+    if (student.surname && student.names && student.phoneNumber) {
+      const existingByNameAndPhone = await db.query.students.findFirst({
+        where: and(
+          eq(students.surname, student.surname),
+          eq(students.names, student.names),
+          eq(students.phoneNumber, student.phoneNumber),
+        ),
+      });
+      if (existingByNameAndPhone) return existingByNameAndPhone;
+    }
+
+    return null;
+  }
+
   override async query(params: QueryOptions<typeof students>) {
     let filter = undefined;
 
@@ -93,7 +115,6 @@ export default class StudentRepository extends BaseRepository<
 
     for (let i = 0; i < term.length; i++) {
       const char = term[i].toLowerCase();
-      // If it's a vowel, create patterns with substitutions
       if (vowelMap[char]) {
         for (const substitute of vowelMap[char]) {
           const pattern =
@@ -128,7 +149,6 @@ export default class StudentRepository extends BaseRepository<
       m: ['n'],
     };
 
-    // Check for two-character consonants first
     for (let i = 0; i < term.length - 1; i++) {
       const twoChars = term.substring(i, i + 2).toLowerCase();
       if (consonantMap[twoChars]) {
@@ -144,7 +164,6 @@ export default class StudentRepository extends BaseRepository<
       }
     }
 
-    // Then check single consonants
     for (let i = 0; i < term.length; i++) {
       const char = term[i].toLowerCase();
       if (consonantMap[char]) {

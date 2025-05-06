@@ -24,6 +24,25 @@ class StudentService {
     return withAuth(async () => this.repository.create(data), []);
   }
 
+  async createOrUpdate(data: Student) {
+    return withAuth(async () => {
+      // Check if student already exists
+      const existingStudent = await this.repository.findByUniqueIdentifiers(data);
+      
+      if (existingStudent) {
+        // Update existing student
+        return this.repository.update(existingStudent.id, {
+          ...data,
+          // Preserve the original ID
+          id: existingStudent.id,
+        });
+      } else {
+        // Create new student
+        return this.repository.create(data);
+      }
+    }, []);
+  }
+
   async update(id: string, data: Student) {
     return withAuth(async () => this.repository.update(id, data), []);
   }
