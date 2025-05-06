@@ -32,6 +32,10 @@ class ProgramService {
     );
   }
 
+  async findByName(programName: string) {
+    return this.repository.findByName(programName);
+  }
+
   async create(data: Program) {
     return withAuth(async () => this.repository.create(data), []);
   }

@@ -32,3 +32,7 @@ export async function updateProgram(id: number, program: Program) {
 export async function deleteProgram(id: number) {
   return service.delete(id);
 }
+
+export async function findProgramByName(programName: string) {
+  return service.findByName(programName);
+}

@@ -1,11 +1,10 @@
-import * as XLSX from 'xlsx';
+import { findProgramByName } from '@/server/programs/actions';
+import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
+import * as XLSX from 'xlsx';
 import { db } from '../db';
 import { students } from '../db/schema/students';
-import { programs } from '../db/schema/programs';
-import { eq, sql } from 'drizzle-orm';
-import 'dotenv/config';
 
 if (!process.env.TURSO_DATABASE_URL) {
   console.error(
@@ -23,15 +22,6 @@ interface StudentData {
   candidateNo: string;
   status: 'Admitted' | 'Wait Listed' | 'DQ';
   programId: number;
-}
-
-async function findProgramByName(
-  programName: string,
-): Promise<number | undefined> {
-  const result = await db.query.programs.findFirst({
-    where: sql`LOWER(${programs.name}) = LOWER(${programName.trim()})`,
-  });
-  return result?.id;
 }
 
 function extractSheetMetadata(data: any[]): {
