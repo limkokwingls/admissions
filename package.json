@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "import-students": "tsx src/scripts/import-students.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.0",
@@ -52,6 +53,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.3"
   },
   "devDependencies": {

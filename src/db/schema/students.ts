@@ -17,7 +17,7 @@ export const students = sqliteTable(
     candidateNo: text(),
     phoneNumber: text().notNull(),
     status: text({ enum: statusEnum }).notNull(),
-    programId: text()
+    programId: integer()
       .notNull()
       .references(() => programs.id, { onDelete: 'cascade' }),
     createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
