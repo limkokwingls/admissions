@@ -7,8 +7,9 @@ import { db } from '../db';
 import { students } from '../db/schema/students';
 
 type Student = typeof students.$inferInsert;
+type ExcelRow = Record<string, string | number | null | undefined>;
 
-function extractSheetMetadata(data: any[]): {
+function extractSheetMetadata(data: ExcelRow[]): {
   programName: string | null;
   status: 'Admitted' | 'Wait Listed' | 'DQ';
 } {
@@ -16,7 +17,7 @@ function extractSheetMetadata(data: any[]): {
   let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
 
   for (let i = 0; i < 15; i++) {
-    const row: any = data[i] || {};
+    const row = data[i] || {};
 
     if (
       row.A &&
@@ -46,7 +47,7 @@ function extractSheetMetadata(data: any[]): {
 
   if (!programName) {
     for (let i = 0; i < 15; i++) {
-      const row: any = data[i] || {};
+      const row = data[i] || {};
       for (const [key, value] of Object.entries(row)) {
         if (value && typeof value === 'string' && !programName) {
           const programPatterns = [
@@ -72,7 +73,7 @@ function extractSheetMetadata(data: any[]): {
 
 async function processWorksheet(
   sheetName: string,
-  data: any[],
+  data: ExcelRow[],
 ): Promise<Student[]> {
   const { programName, status } = extractSheetMetadata(data);
 
@@ -94,7 +95,7 @@ async function processWorksheet(
 
   let headerRowIndex = -1;
   for (let i = 0; i < data.length; i++) {
-    const row: any = data[i] || {};
+    const row = data[i] || {};
     if (row.A === 'NO' && row.B === 'SURNAME' && row.C === 'OTHER NAMES') {
       headerRowIndex = i;
       break;
@@ -106,7 +107,7 @@ async function processWorksheet(
     return [];
   }
 
-  const headerRow: any = data[headerRowIndex];
+  const headerRow = data[headerRowIndex];
   const columnIndices: Record<string, string> = {};
 
   for (const [key, value] of Object.entries(headerRow)) {
@@ -123,7 +124,7 @@ async function processWorksheet(
 
   const studentsData: Student[] = [];
   for (let i = headerRowIndex + 1; i < data.length; i++) {
-    const row: any = data[i];
+    const row = data[i];
 
     if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
       continue;
@@ -154,7 +155,9 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
     for (const sheetName of workbook.SheetNames) {
       console.log(`Processing sheet: ${sheetName}`);
       const worksheet = workbook.Sheets[sheetName];
-      const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
+      const data: ExcelRow[] = XLSX.utils.sheet_to_json(worksheet, {
+        header: 'A',
+      });
 
       const studentsData = await processWorksheet(sheetName, data);
 
