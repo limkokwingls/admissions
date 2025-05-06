@@ -1,0 +1,369 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Receipt,
+  CreditCard,
+  Calendar,
+  Clock,
+  CheckCircle2,
+  Wallet,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+export default function PaymentPlanCard() {
+  return (
+    <Card className='mt-6 overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+      <CardHeader className='border-b border-neutral-200 pb-3 dark:border-neutral-800'>
+        <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+          <CardTitle className='text-lg font-bold text-neutral-900 dark:text-white'>
+            Payment Plan 2025/2026
+          </CardTitle>
+        </div>
+      </CardHeader>
+
+      <CardContent className='p-4 md:p-6'>
+        <Tabs defaultValue='diploma' className='w-full'>
+          <TabsList className='mb-6 grid w-full grid-cols-2'>
+            <TabsTrigger value='diploma'>Diploma</TabsTrigger>
+            <TabsTrigger value='degree'>Degree</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value='diploma' className='space-y-6'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 1
+                </h3>
+                <PaymentCard
+                  title='Semester 1'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M8,500.00' },
+                    { month: 'September-October', amount: 'M2,812.50' },
+                    { month: 'November-December', amount: 'M2,812.50' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 2'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M8,500.00' },
+                    { month: 'March-April', amount: 'M2,812.50' },
+                    { month: 'May-June', amount: 'M2,812.50' },
+                  ]}
+                />
+              </div>
+
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 2
+                </h3>
+                <PaymentCard
+                  title='Semester 3'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M8,500.00' },
+                    { month: 'September-October', amount: 'M2,812.50' },
+                    { month: 'November-December', amount: 'M2,812.50' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 4'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M8,500.00' },
+                    { month: 'March-April', amount: 'M2,812.50' },
+                    { month: 'May-June', amount: 'M2,812.50' },
+                  ]}
+                />
+              </div>
+
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 3
+                </h3>
+                <PaymentCard
+                  title='Semester 5'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M8,500.00' },
+                    { month: 'September-October', amount: 'M2,812.50' },
+                    { month: 'November-December', amount: 'M2,812.50' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 6'
+                  amount='M14,125.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M8,500.00' },
+                    { month: 'March-April', amount: 'M2,812.50' },
+                    { month: 'May-June', amount: 'M2,812.50' },
+                  ]}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value='degree' className='space-y-6'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 1
+                </h3>
+                <PaymentCard
+                  title='Semester 1'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M12,000.00' },
+                    { month: 'September-October', amount: 'M4,575.00' },
+                    { month: 'November-December', amount: 'M4,575.00' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 2'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M12,000.00' },
+                    { month: 'March-April', amount: 'M4,575.00' },
+                    { month: 'May-June', amount: 'M4,575.00' },
+                  ]}
+                />
+              </div>
+
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 2
+                </h3>
+                <PaymentCard
+                  title='Semester 3'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M12,000.00' },
+                    { month: 'September-October', amount: 'M4,575.00' },
+                    { month: 'November-December', amount: 'M4,575.00' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 4'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M12,000.00' },
+                    { month: 'March-April', amount: 'M4,575.00' },
+                    { month: 'May-June', amount: 'M4,575.00' },
+                  ]}
+                />
+              </div>
+
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 3
+                </h3>
+                <PaymentCard
+                  title='Semester 5'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M12,000.00' },
+                    { month: 'September-October', amount: 'M4,575.00' },
+                    { month: 'November-December', amount: 'M4,575.00' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 6'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M12,000.00' },
+                    { month: 'March-April', amount: 'M4,575.00' },
+                    { month: 'May-June', amount: 'M4,575.00' },
+                  ]}
+                />
+              </div>
+
+              <div className='space-y-4'>
+                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                  YEAR 4
+                </h3>
+                <PaymentCard
+                  title='Semester 7'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'August (Upfront)', amount: 'M12,000.00' },
+                    { month: 'September-October', amount: 'M4,575.00' },
+                    { month: 'November-December', amount: 'M4,575.00' },
+                  ]}
+                />
+
+                <PaymentCard
+                  title='Semester 8'
+                  amount='M21,150.00'
+                  installments={[
+                    { month: 'February (Upfront)', amount: 'M12,000.00' },
+                    { month: 'March-April', amount: 'M4,575.00' },
+                    { month: 'May-June', amount: 'M4,575.00' },
+                  ]}
+                />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <div className='mt-8 border-t border-neutral-200 pt-6 dark:border-neutral-700'>
+          <h3 className='mb-4 text-base font-semibold text-neutral-900 dark:text-white'>
+            Payment Options
+          </h3>
+
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+            <PaymentInfoCard
+              icon={<Wallet className='h-5 w-5' />}
+              title='Flexible Payments'
+              description='Choose between full payment or convenient installment plans to fit your budget'
+            />
+
+            <PaymentInfoCard
+              icon={<Clock className='h-5 w-5' />}
+              title='Payment Schedule'
+              description='Initial payment at registration with remaining installments spread throughout the semester'
+            />
+
+            <PaymentInfoCard
+              icon={<CheckCircle2 className='h-5 w-5' />}
+              title='Easy Process'
+              description='Simple payment process through bank transfer or direct payment at the finance office'
+            />
+          </div>
+
+          <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
+            <div className='flex items-start gap-3'>
+              <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
+                <Receipt className='h-4 w-4' />
+              </div>
+              <div>
+                <h4 className='text-sm font-medium text-blue-900 dark:text-blue-300'>
+                  Bank Account Details
+                </h4>
+                <div className='mt-2 grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2 md:grid-cols-3'>
+                  <div>
+                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                      Bank:
+                    </span>
+                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                      Standard Lesotho Bank
+                    </span>
+                  </div>
+                  <div>
+                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                      Account No:
+                    </span>
+                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                      9080019987451
+                    </span>
+                  </div>
+                  <div>
+                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                      Branch:
+                    </span>
+                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                      City Branch (051)
+                    </span>
+                  </div>
+                  <div>
+                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                      Account Type:
+                    </span>
+                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                      Current Account
+                    </span>
+                  </div>
+                  <div>
+                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                      Swift Code:
+                    </span>
+                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                      SBICLSMX
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+type PaymentCardProps = {
+  title: string;
+  amount: string;
+  installments: { month: string; amount: string }[];
+};
+
+function PaymentCard({ title, amount, installments }: PaymentCardProps) {
+  return (
+    <div className='overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800'>
+      <div className='border-b border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900'>
+        <div className='flex items-center justify-between'>
+          <h4 className='font-medium text-neutral-900 dark:text-white'>
+            {title}
+          </h4>
+          <span className='text-sm text-neutral-500 dark:text-neutral-400'>
+            Semester Fee
+          </span>
+        </div>
+        <p className='mt-1 text-lg font-semibold text-neutral-900 dark:text-white'>
+          {amount}
+        </p>
+      </div>
+
+      <div className='p-4'>
+        <h5 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+          Payment Schedule
+        </h5>
+        <div className='space-y-3'>
+          {installments.map((item, index) => (
+            <div
+              key={index}
+              className='flex items-center justify-between text-sm'
+            >
+              <span className='text-neutral-600 dark:text-neutral-400'>
+                {item.month}
+              </span>
+              <span className='font-medium text-neutral-900 dark:text-white'>
+                {item.amount}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type PaymentInfoCardProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+};
+
+function PaymentInfoCard({ icon, title, description }: PaymentInfoCardProps) {
+  return (
+    <div className='flex items-start gap-3'>
+      <div className='mt-0.5 rounded-full bg-neutral-100 p-2 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'>
+        {icon}
+      </div>
+      <div>
+        <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
+          {title}
+        </h4>
+        <p className='mt-1 text-xs text-neutral-600 dark:text-neutral-400'>
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
