@@ -6,11 +6,68 @@ import {
   Clock,
   CheckCircle2,
   Wallet,
+  Info,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function PaymentPlanCard() {
+  // Define semester payment patterns by program type
+  const semesterPatterns = {
+    diploma: {
+      odd: {
+        title: 'Semester 1',
+        amount: 'M14,125.00',
+        installments: [
+          { month: 'August (Upfront)', amount: 'M8,500.00' },
+          { month: 'September-October', amount: 'M2,812.50' },
+          { month: 'November-December', amount: 'M2,812.50' },
+        ],
+      },
+      even: {
+        title: 'Semester 2',
+        amount: 'M14,125.00',
+        installments: [
+          { month: 'February (Upfront)', amount: 'M8,500.00' },
+          { month: 'March-April', amount: 'M2,812.50' },
+          { month: 'May-June', amount: 'M2,812.50' },
+        ],
+      },
+    },
+    degree: {
+      odd: {
+        title: 'Semester 1',
+        amount: 'M21,150.00',
+        installments: [
+          { month: 'August (Upfront)', amount: 'M12,000.00' },
+          { month: 'September-October', amount: 'M4,575.00' },
+          { month: 'November-December', amount: 'M4,575.00' },
+        ],
+      },
+      even: {
+        title: 'Semester 2',
+        amount: 'M21,150.00',
+        installments: [
+          { month: 'February (Upfront)', amount: 'M12,000.00' },
+          { month: 'March-April', amount: 'M4,575.00' },
+          { month: 'May-June', amount: 'M4,575.00' },
+        ],
+      },
+    },
+  };
+
+  // Define program structure
+  const programStructure = {
+    diploma: {
+      years: 3,
+      semestersPerYear: 2,
+    },
+    degree: {
+      years: 4,
+      semestersPerYear: 2,
+    },
+  };
+
   return (
     <Card className='mt-6 overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
       <CardHeader className='border-b border-neutral-200 pb-3 dark:border-neutral-800'>
@@ -28,188 +85,55 @@ export default function PaymentPlanCard() {
             <TabsTrigger value='degree'>Degree</TabsTrigger>
           </TabsList>
 
-          <TabsContent value='diploma' className='space-y-6'>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 1
-                </h3>
-                <PaymentCard
-                  title='Semester 1'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M8,500.00' },
-                    { month: 'September-October', amount: 'M2,812.50' },
-                    { month: 'November-December', amount: 'M2,812.50' },
-                  ]}
-                />
+          {Object.entries(programStructure).map(([program, structure]) => (
+            <TabsContent key={program} value={program} className='space-y-6'>
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                <div className='space-y-4'>
+                  <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                    SEMESTER 1
+                  </h3>
+                  <PaymentCard
+                    title='Semester 1'
+                    amount={semesterPatterns[program].odd.amount}
+                    installments={semesterPatterns[program].odd.installments}
+                  />
+                </div>
 
-                <PaymentCard
-                  title='Semester 2'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M8,500.00' },
-                    { month: 'March-April', amount: 'M2,812.50' },
-                    { month: 'May-June', amount: 'M2,812.50' },
-                  ]}
-                />
+                <div className='space-y-4'>
+                  <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                    SEMESTER 2
+                  </h3>
+                  <PaymentCard
+                    title='Semester 2'
+                    amount={semesterPatterns[program].even.amount}
+                    installments={semesterPatterns[program].even.installments}
+                  />
+                </div>
               </div>
-
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 2
-                </h3>
-                <PaymentCard
-                  title='Semester 3'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M8,500.00' },
-                    { month: 'September-October', amount: 'M2,812.50' },
-                    { month: 'November-December', amount: 'M2,812.50' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 4'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M8,500.00' },
-                    { month: 'March-April', amount: 'M2,812.50' },
-                    { month: 'May-June', amount: 'M2,812.50' },
-                  ]}
-                />
+              
+              <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
+                <div className='flex items-start gap-3'>
+                  <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
+                    <Info className='h-4 w-4' />
+                  </div>
+                  <div>
+                    <h4 className='text-sm font-medium text-blue-900 dark:text-blue-300'>
+                      Payment Schedule Information
+                    </h4>
+                    <p className='mt-2 text-sm text-blue-800 dark:text-blue-200'>
+                      This payment schedule repeats for all years of your program. The {structure.years}-year {program} program consists of {structure.years * structure.semestersPerYear} semesters total.
+                    </p>
+                    <p className='mt-2 text-sm text-blue-800 dark:text-blue-200'>
+                      <span className='font-medium'>All odd-numbered semesters</span> (1, 3, 5, etc.) follow the Semester 1 payment pattern with payments in August, September-October, and November-December.
+                    </p>
+                    <p className='mt-1 text-sm text-blue-800 dark:text-blue-200'>
+                      <span className='font-medium'>All even-numbered semesters</span> (2, 4, 6, etc.) follow the Semester 2 payment pattern with payments in February, March-April, and May-June.
+                    </p>
+                  </div>
+                </div>
               </div>
-
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 3
-                </h3>
-                <PaymentCard
-                  title='Semester 5'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M8,500.00' },
-                    { month: 'September-October', amount: 'M2,812.50' },
-                    { month: 'November-December', amount: 'M2,812.50' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 6'
-                  amount='M14,125.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M8,500.00' },
-                    { month: 'March-April', amount: 'M2,812.50' },
-                    { month: 'May-June', amount: 'M2,812.50' },
-                  ]}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value='degree' className='space-y-6'>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 1
-                </h3>
-                <PaymentCard
-                  title='Semester 1'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M12,000.00' },
-                    { month: 'September-October', amount: 'M4,575.00' },
-                    { month: 'November-December', amount: 'M4,575.00' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 2'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M12,000.00' },
-                    { month: 'March-April', amount: 'M4,575.00' },
-                    { month: 'May-June', amount: 'M4,575.00' },
-                  ]}
-                />
-              </div>
-
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 2
-                </h3>
-                <PaymentCard
-                  title='Semester 3'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M12,000.00' },
-                    { month: 'September-October', amount: 'M4,575.00' },
-                    { month: 'November-December', amount: 'M4,575.00' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 4'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M12,000.00' },
-                    { month: 'March-April', amount: 'M4,575.00' },
-                    { month: 'May-June', amount: 'M4,575.00' },
-                  ]}
-                />
-              </div>
-
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 3
-                </h3>
-                <PaymentCard
-                  title='Semester 5'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M12,000.00' },
-                    { month: 'September-October', amount: 'M4,575.00' },
-                    { month: 'November-December', amount: 'M4,575.00' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 6'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M12,000.00' },
-                    { month: 'March-April', amount: 'M4,575.00' },
-                    { month: 'May-June', amount: 'M4,575.00' },
-                  ]}
-                />
-              </div>
-
-              <div className='space-y-4'>
-                <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                  YEAR 4
-                </h3>
-                <PaymentCard
-                  title='Semester 7'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'August (Upfront)', amount: 'M12,000.00' },
-                    { month: 'September-October', amount: 'M4,575.00' },
-                    { month: 'November-December', amount: 'M4,575.00' },
-                  ]}
-                />
-
-                <PaymentCard
-                  title='Semester 8'
-                  amount='M21,150.00'
-                  installments={[
-                    { month: 'February (Upfront)', amount: 'M12,000.00' },
-                    { month: 'March-April', amount: 'M4,575.00' },
-                    { month: 'May-June', amount: 'M4,575.00' },
-                  ]}
-                />
-              </div>
-            </div>
-          </TabsContent>
+            </TabsContent>
+          ))}
         </Tabs>
 
         <div className='mt-8 border-t border-neutral-200 pt-6 dark:border-neutral-700'>
