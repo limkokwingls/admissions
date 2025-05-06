@@ -10,10 +10,43 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ReactNode } from 'react';
+
+type InstallmentType = {
+  month: string;
+  amount: string;
+};
+
+type SemesterType = {
+  title: string;
+  amount: string;
+  installments: InstallmentType[];
+};
+
+type ProgramPatternType = {
+  odd: SemesterType;
+  even: SemesterType;
+};
+
+type SemesterPatternsType = {
+  diploma: ProgramPatternType;
+  degree: ProgramPatternType;
+};
+
+type ProgramStructureType = {
+  years: number;
+  semestersPerYear: number;
+};
+
+type ProgramStructuresType = {
+  diploma: ProgramStructureType;
+  degree: ProgramStructureType;
+};
+
+type ProgramType = keyof SemesterPatternsType;
 
 export default function PaymentPlanCard() {
-  // Define semester payment patterns by program type
-  const semesterPatterns = {
+  const semesterPatterns: SemesterPatternsType = {
     diploma: {
       odd: {
         title: 'Semester 1',
@@ -56,8 +89,7 @@ export default function PaymentPlanCard() {
     },
   };
 
-  // Define program structure
-  const programStructure = {
+  const programStructure: ProgramStructuresType = {
     diploma: {
       years: 3,
       semestersPerYear: 2,
@@ -85,55 +117,57 @@ export default function PaymentPlanCard() {
             <TabsTrigger value='degree'>Degree</TabsTrigger>
           </TabsList>
 
-          {Object.entries(programStructure).map(([program, structure]) => (
-            <TabsContent key={program} value={program} className='space-y-6'>
-              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                <div className='space-y-4'>
-                  <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                    SEMESTER 1
-                  </h3>
-                  <PaymentCard
-                    title='Semester 1'
-                    amount={semesterPatterns[program].odd.amount}
-                    installments={semesterPatterns[program].odd.installments}
-                  />
+          {Object.entries(programStructure).map(([program, structure]) => {
+            const typedProgram = program as ProgramType;
+            return (
+              <TabsContent key={program} value={program} className='space-y-6'>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <div className='space-y-4'>
+                    <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                      SEMESTER 1
+                    </h3>
+                    <PaymentCard
+                      title='Semester 1'
+                      amount={semesterPatterns[typedProgram].odd.amount}
+                      installments={
+                        semesterPatterns[typedProgram].odd.installments
+                      }
+                    />
+                  </div>
+
+                  <div className='space-y-4'>
+                    <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+                      SEMESTER 2
+                    </h3>
+                    <PaymentCard
+                      title='Semester 2'
+                      amount={semesterPatterns[typedProgram].even.amount}
+                      installments={
+                        semesterPatterns[typedProgram].even.installments
+                      }
+                    />
+                  </div>
                 </div>
 
-                <div className='space-y-4'>
-                  <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                    SEMESTER 2
-                  </h3>
-                  <PaymentCard
-                    title='Semester 2'
-                    amount={semesterPatterns[program].even.amount}
-                    installments={semesterPatterns[program].even.installments}
-                  />
-                </div>
-              </div>
-              
-              <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
-                <div className='flex items-start gap-3'>
-                  <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
-                    <Info className='h-4 w-4' />
-                  </div>
-                  <div>
-                    <h4 className='text-sm font-medium text-blue-900 dark:text-blue-300'>
-                      Payment Schedule Information
-                    </h4>
-                    <p className='mt-2 text-sm text-blue-800 dark:text-blue-200'>
-                      This payment schedule repeats for all years of your program. The {structure.years}-year {program} program consists of {structure.years * structure.semestersPerYear} semesters total.
-                    </p>
-                    <p className='mt-2 text-sm text-blue-800 dark:text-blue-200'>
-                      <span className='font-medium'>All odd-numbered semesters</span> (1, 3, 5, etc.) follow the Semester 1 payment pattern with payments in August, September-October, and November-December.
-                    </p>
-                    <p className='mt-1 text-sm text-blue-800 dark:text-blue-200'>
-                      <span className='font-medium'>All even-numbered semesters</span> (2, 4, 6, etc.) follow the Semester 2 payment pattern with payments in February, March-April, and May-June.
-                    </p>
+                <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
+                  <div className='flex items-start gap-3'>
+                    <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
+                      <Info className='h-4 w-4' />
+                    </div>
+                    <div>
+                      <h4 className='text-sm font-medium text-blue-700 dark:text-blue-300'>
+                        Important Payment Information
+                      </h4>
+                      <p className='mt-1 text-xs text-blue-600 dark:text-blue-400'>
+                        Please note the following payment guidelines for your
+                        program.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </TabsContent>
-          ))}
+              </TabsContent>
+            );
+          })}
         </Tabs>
 
         <div className='mt-8 border-t border-neutral-200 pt-6 dark:border-neutral-700'>
@@ -269,7 +303,7 @@ function PaymentCard({ title, amount, installments }: PaymentCardProps) {
 }
 
 type PaymentInfoCardProps = {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
 };
