@@ -194,21 +194,26 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
       );
 
       if (studentsData.length > 0) {
-        const batchSize = 50;
-        for (let i = 0; i < studentsData.length; i += batchSize) {
-          const batch = studentsData.slice(i, i + batchSize);
+        console.log(
+          `Starting to import ${studentsData.length} students one by one...`,
+        );
+
+        for (let i = 0; i < studentsData.length; i++) {
+          const student = studentsData[i];
           try {
-            await db.insert(students).values(batch);
+            await db.insert(students).values(student);
             console.log(
-              `Imported batch ${Math.floor(i / batchSize) + 1} (${batch.length} students) successfully`,
+              `Imported student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}`,
             );
           } catch (error) {
             console.error(
-              `Error importing batch ${Math.floor(i / batchSize) + 1}:`,
+              `Error importing student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}:`,
               error,
             );
           }
         }
+
+        console.log(`Finished importing students for ${programName}`);
       }
     }
 
