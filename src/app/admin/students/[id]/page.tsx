@@ -1,16 +1,14 @@
 import {
   DetailsView,
+  DetailsViewBody,
   DetailsViewHeader,
   FieldView,
-  DetailsViewBody,
 } from '@/components/adease';
-import { notFound } from 'next/navigation';
-import { getStudent, deleteStudent } from '@/server/students/actions';
-import { Divider, Fieldset, Group } from '@mantine/core';
-import { Badge } from '@mantine/core';
-import { Text } from '@mantine/core';
 import { students } from '@/db/schema';
 import { extractReference } from '@/lib/utils';
+import { deleteStudent, getStudent } from '@/server/students/actions';
+import { Badge, Divider, Group, Text } from '@mantine/core';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ id: string }>;

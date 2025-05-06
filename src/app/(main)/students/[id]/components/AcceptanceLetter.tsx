@@ -1,21 +1,18 @@
 'use client';
 
-import React from 'react';
+import { Button } from '@/components/ui/button';
+import { getStudent } from '@/server/students/actions';
 import {
   Document,
+  Font,
   Page,
+  PDFDownloadLink,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  PDFDownloadLink,
-  Font,
 } from '@react-pdf/renderer';
-import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
-import { getStudent } from '@/server/students/actions';
-import { cn } from '@/lib/utils';
 
-// Register fonts
 Font.register({
   family: 'Roboto',
   fonts: [
