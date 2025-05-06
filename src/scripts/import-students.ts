@@ -11,10 +11,10 @@ type ExcelRow = Record<string, string | number | null | undefined>;
 
 function extractSheetMetadata(data: ExcelRow[]): {
   programName: string | null;
-  status: 'Admitted' | 'Wait Listed' | 'DQ';
+  status: Student['status'];
 } {
   let programName: string | null = null;
-  let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
+  let status: Student['status'] = 'Wait Listed';
 
   for (let i = 0; i < 15; i++) {
     const row = data[i] || {};
