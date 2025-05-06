@@ -5,9 +5,15 @@ import { db } from '../db';
 import { students } from '../db/schema/students';
 import { programs } from '../db/schema/programs';
 import { eq } from 'drizzle-orm';
-
-// Load environment variables if needed
 import 'dotenv/config';
+
+if (!process.env.TURSO_DATABASE_URL) {
+  console.error(
+    'Error: TURSO_DATABASE_URL environment variable is not defined.',
+  );
+  console.error('Please make sure your .env file is properly configured.');
+  process.exit(1);
+}
 
 interface StudentData {
   no: number;
@@ -31,34 +37,23 @@ async function findProgramByName(
 async function importStudentsFromExcel(filePath: string): Promise<void> {
   try {
     console.log(`Reading Excel file: ${filePath}`);
-
-    // Read the Excel file
     const workbook = XLSX.readFile(filePath);
 
-    // Process each sheet
     for (const sheetName of workbook.SheetNames) {
       console.log(`Processing sheet: ${sheetName}`);
-
       const worksheet = workbook.Sheets[sheetName];
-
-      // Convert the worksheet to JSON
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
 
-      // Find program name and status
       let programName: string | null = null;
-      let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed'; // Default
+      let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
 
-      // Look for program name and status in the headers
       for (let i = 0; i < 15; i++) {
-        // Check first 15 rows for header info
         const row: any = data[i] || {};
 
-        // Look for course/programme name
         if (row.A === 'COURSE/PROGRAMME NAME:' && row.B) {
           programName = row.B;
         }
 
-        // Look for status field
         if (row.A === 'STATUS:') {
           if (row.B && typeof row.B === 'string') {
             if (
@@ -82,7 +77,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
 
       console.log(`Found program: "${programName}" with status: ${status}`);
 
-      // Find the program ID in the database
       const programId = await findProgramByName(programName);
 
       if (!programId) {
@@ -92,7 +86,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
-      // Find the table header row
       let headerRowIndex = -1;
       for (let i = 0; i < data.length; i++) {
         const row: any = data[i] || {};
@@ -107,11 +100,9 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
-      // Map column headers to indices
       const headerRow: any = data[headerRowIndex];
       const columnIndices: Record<string, string> = {};
 
-      // Find the correct column indices for each required field
       for (const [key, value] of Object.entries(headerRow)) {
         if (value === 'NO') columnIndices['NO'] = key;
         else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
@@ -122,12 +113,10 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
           columnIndices['CANDIDATE #'] = key;
       }
 
-      // Extract student data rows
       const studentsData: StudentData[] = [];
       for (let i = headerRowIndex + 1; i < data.length; i++) {
         const row: any = data[i];
 
-        // Skip if no data or end of table
         if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
           continue;
         }
@@ -149,9 +138,7 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         `Found ${studentsData.length} students in sheet: ${sheetName}`,
       );
 
-      // Insert data into the database
       if (studentsData.length > 0) {
-        // Insert in batches to avoid potential issues with large datasets
         const batchSize = 50;
         for (let i = 0; i < studentsData.length; i += batchSize) {
           const batch = studentsData.slice(i, i + batchSize);
@@ -176,7 +163,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
   }
 }
 
-// Main function to handle command-line arguments
 async function main() {
   const args = process.argv.slice(2);
 
@@ -187,8 +173,6 @@ async function main() {
   }
 
   const filePath = args[0];
-
-  // Check if the path is relative and resolve it
   const resolvedPath = path.isAbsolute(filePath)
     ? filePath
     : path.resolve(process.cwd(), filePath);
@@ -205,7 +189,6 @@ async function main() {
   process.exit(0);
 }
 
-// Run the script
 main().catch((err) => {
   console.error('Unhandled error during import:', err);
   process.exit(1);
