@@ -38,22 +38,11 @@ function extractSheetMetadata(data: any[]): {
   programName: string | null;
   status: 'Admitted' | 'Wait Listed' | 'DQ';
 } {
-  let institution: string | null = null;
   let programName: string | null = null;
-  let selectionCriteria: string | null = null;
-  let certificateInfo: string | null = null;
   let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
 
   for (let i = 0; i < 15; i++) {
     const row: any = data[i] || {};
-
-    if (
-      row.A &&
-      typeof row.A === 'string' &&
-      row.A.includes('LIMKOKWING UNIVERSITY')
-    ) {
-      institution = row.A;
-    }
 
     if (
       row.A &&
@@ -64,22 +53,6 @@ function extractSheetMetadata(data: any[]): {
       if (matches && matches[1]) {
         programName = matches[1].trim();
       }
-    }
-
-    if (
-      row.A &&
-      typeof row.A === 'string' &&
-      row.A.includes('SELECTION CRITERIA:')
-    ) {
-      selectionCriteria = row.A;
-    }
-
-    if (
-      row.A &&
-      typeof row.A === 'string' &&
-      row.A.includes("With 'O' Grade")
-    ) {
-      certificateInfo = row.A;
     }
 
     if (row.A && typeof row.A === 'string' && row.A.includes('STATUS:')) {
