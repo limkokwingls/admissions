@@ -4,7 +4,7 @@ import path from 'path';
 import { db } from '../db';
 import { students } from '../db/schema/students';
 import { programs } from '../db/schema/programs';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import 'dotenv/config';
 
 if (!process.env.TURSO_DATABASE_URL) {
@@ -29,7 +29,7 @@ async function findProgramByName(
   programName: string,
 ): Promise<number | undefined> {
   const result = await db.query.programs.findFirst({
-    where: eq(programs.name, programName.trim()),
+    where: sql`LOWER(${programs.name}) = LOWER(${programName.trim()})`,
   });
   return result?.id;
 }
@@ -44,7 +44,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
       const worksheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
 
-      // Extract institution and program information from the header rows
       let institution: string | null = null;
       let programName: string | null = null;
       let selectionCriteria: string | null = null;
@@ -54,7 +53,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
       for (let i = 0; i < 15; i++) {
         const row: any = data[i] || {};
 
-        // Look for the institution name (first line from screenshot)
         if (
           row.A &&
           typeof row.A === 'string' &&
@@ -63,20 +61,17 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
           institution = row.A;
         }
 
-        // Look for program/course information (line 2 from screenshot)
         if (
           row.A &&
           typeof row.A === 'string' &&
           row.A.includes('COURSE/PROGRAMME NAME:')
         ) {
-          // Extract the program name from the format "COURSE/PROGRAMME NAME: [PROGRAM]"
           const matches = row.A.match(/COURSE\/PROGRAMME NAME:\s*(.+)/);
           if (matches && matches[1]) {
             programName = matches[1].trim();
           }
         }
 
-        // Look for selection criteria information
         if (
           row.A &&
           typeof row.A === 'string' &&
@@ -85,7 +80,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
           selectionCriteria = row.A;
         }
 
-        // Look for certificate requirement information
         if (
           row.A &&
           typeof row.A === 'string' &&
@@ -94,7 +88,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
           certificateInfo = row.A;
         }
 
-        // Determine admission status
         if (row.A && typeof row.A === 'string' && row.A.includes('STATUS:')) {
           const statusText = row.A.replace('STATUS:', '').trim().toUpperCase();
           if (
@@ -110,13 +103,11 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         }
       }
 
-      // If we can't find the program name, try to extract it from any source
       if (!programName) {
         for (let i = 0; i < 15; i++) {
           const row: any = data[i] || {};
           for (const [key, value] of Object.entries(row)) {
             if (value && typeof value === 'string' && !programName) {
-              // Try to find a string that looks like a program name
               const programPatterns = [
                 /BSC\s+IT/i,
                 /DIPLOMA\s+IN\s+.+/i,
@@ -151,11 +142,9 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
-      // Find the header row with column titles
       let headerRowIndex = -1;
       for (let i = 0; i < data.length; i++) {
         const row: any = data[i] || {};
-        // Look for the header row that contains 'NO', 'SURNAME', 'OTHER NAMES', etc.
         if (row.A === 'NO' && row.B === 'SURNAME' && row.C === 'OTHER NAMES') {
           headerRowIndex = i;
           break;
@@ -167,11 +156,9 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
-      // Map column headers to their indices
       const headerRow: any = data[headerRowIndex];
       const columnIndices: Record<string, string> = {};
 
-      // Map all column headers to their respective keys
       for (const [key, value] of Object.entries(headerRow)) {
         if (value === 'NO') columnIndices['NO'] = key;
         else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
@@ -181,12 +168,10 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         else if (value === 'CERTIFICATE #') columnIndices['CANDIDATE #'] = key;
       }
 
-      // Process each student row
       const studentsData: StudentData[] = [];
       for (let i = headerRowIndex + 1; i < data.length; i++) {
         const row: any = data[i];
 
-        // Skip empty rows
         if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
           continue;
         }
@@ -208,7 +193,6 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         `Found ${studentsData.length} students in sheet: ${sheetName}`,
       );
 
-      // Save to database in batches
       if (studentsData.length > 0) {
         const batchSize = 50;
         for (let i = 0; i < studentsData.length; i += batchSize) {
