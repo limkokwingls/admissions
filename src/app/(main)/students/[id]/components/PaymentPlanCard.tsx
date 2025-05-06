@@ -1,15 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Receipt,
-  CreditCard,
-  Calendar,
-  Clock,
-  CheckCircle2,
-  Wallet,
-  Info,
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CheckCircle2, Clock, Info, Receipt, Wallet } from 'lucide-react';
 import { ReactNode } from 'react';
 
 type InstallmentType = {
