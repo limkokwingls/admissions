@@ -6,23 +6,7 @@ import * as XLSX from 'xlsx';
 import { db } from '../db';
 import { students } from '../db/schema/students';
 
-if (!process.env.TURSO_DATABASE_URL) {
-  console.error(
-    'Error: TURSO_DATABASE_URL environment variable is not defined.',
-  );
-  console.error('Please make sure your .env file is properly configured.');
-  process.exit(1);
-}
-
-interface StudentData {
-  no: number;
-  surname: string;
-  names: string;
-  phoneNumber: string;
-  candidateNo: string;
-  status: 'Admitted' | 'Wait Listed' | 'DQ';
-  programId: number;
-}
+type Student = typeof students.$inferInsert;
 
 function extractSheetMetadata(data: any[]): {
   programName: string | null;
@@ -89,7 +73,7 @@ function extractSheetMetadata(data: any[]): {
 async function processWorksheet(
   sheetName: string,
   data: any[],
-): Promise<StudentData[]> {
+): Promise<Student[]> {
   const { programName, status } = extractSheetMetadata(data);
 
   if (!programName) {
@@ -137,7 +121,7 @@ async function processWorksheet(
 
   console.log('Column indices found:', columnIndices);
 
-  const studentsData: StudentData[] = [];
+  const studentsData: Student[] = [];
   for (let i = headerRowIndex + 1; i < data.length; i++) {
     const row: any = data[i];
 
@@ -145,7 +129,7 @@ async function processWorksheet(
       continue;
     }
 
-    const studentData: StudentData = {
+    const studentData: Student = {
       no: Number(row[columnIndices['NO']]),
       surname: String(row[columnIndices['SURNAME']] || '').trim(),
       names: String(row[columnIndices['OTHER NAMES']] || '').trim(),
