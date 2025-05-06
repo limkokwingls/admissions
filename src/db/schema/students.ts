@@ -11,7 +11,7 @@ export const students = sqliteTable(
     id: text()
       .$defaultFn(() => nanoid())
       .primaryKey(),
-    no: integer().notNull(),
+    no: integer().notNull().default(0),
     surname: text().notNull(),
     names: text().notNull(),
     candidateNo: text(),
