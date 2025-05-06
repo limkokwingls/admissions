@@ -34,6 +34,171 @@ async function findProgramByName(
   return result?.id;
 }
 
+function extractSheetMetadata(data: any[]): {
+  programName: string | null;
+  status: 'Admitted' | 'Wait Listed' | 'DQ';
+} {
+  let institution: string | null = null;
+  let programName: string | null = null;
+  let selectionCriteria: string | null = null;
+  let certificateInfo: string | null = null;
+  let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
+
+  for (let i = 0; i < 15; i++) {
+    const row: any = data[i] || {};
+
+    if (
+      row.A &&
+      typeof row.A === 'string' &&
+      row.A.includes('LIMKOKWING UNIVERSITY')
+    ) {
+      institution = row.A;
+    }
+
+    if (
+      row.A &&
+      typeof row.A === 'string' &&
+      row.A.includes('COURSE/PROGRAMME NAME:')
+    ) {
+      const matches = row.A.match(/COURSE\/PROGRAMME NAME:\s*(.+)/);
+      if (matches && matches[1]) {
+        programName = matches[1].trim();
+      }
+    }
+
+    if (
+      row.A &&
+      typeof row.A === 'string' &&
+      row.A.includes('SELECTION CRITERIA:')
+    ) {
+      selectionCriteria = row.A;
+    }
+
+    if (
+      row.A &&
+      typeof row.A === 'string' &&
+      row.A.includes("With 'O' Grade")
+    ) {
+      certificateInfo = row.A;
+    }
+
+    if (row.A && typeof row.A === 'string' && row.A.includes('STATUS:')) {
+      const statusText = row.A.replace('STATUS:', '').trim().toUpperCase();
+      if (
+        statusText.includes('WAIT LISTED') ||
+        statusText.includes('WAITLISTED')
+      ) {
+        status = 'Wait Listed';
+      } else if (statusText.includes('ADMITTED')) {
+        status = 'Admitted';
+      } else if (statusText.includes('DQ')) {
+        status = 'DQ';
+      }
+    }
+  }
+
+  if (!programName) {
+    for (let i = 0; i < 15; i++) {
+      const row: any = data[i] || {};
+      for (const [key, value] of Object.entries(row)) {
+        if (value && typeof value === 'string' && !programName) {
+          const programPatterns = [
+            /BSC\s+IT/i,
+            /DIPLOMA\s+IN\s+.+/i,
+            /BACHELOR\s+OF\s+.+/i,
+          ];
+
+          for (const pattern of programPatterns) {
+            if (pattern.test(value)) {
+              programName = value.trim();
+              break;
+            }
+          }
+        }
+      }
+      if (programName) break;
+    }
+  }
+
+  return { programName, status };
+}
+
+async function processWorksheet(
+  sheetName: string,
+  data: any[],
+): Promise<StudentData[]> {
+  const { programName, status } = extractSheetMetadata(data);
+
+  if (!programName) {
+    console.error(`Could not find program name in sheet: ${sheetName}`);
+    return [];
+  }
+
+  console.log(`Found program: "${programName}" with status: ${status}`);
+
+  const programId = await findProgramByName(programName);
+
+  if (!programId) {
+    console.error(
+      `Program "${programName}" not found in database. Please create it first.`,
+    );
+    return [];
+  }
+
+  let headerRowIndex = -1;
+  for (let i = 0; i < data.length; i++) {
+    const row: any = data[i] || {};
+    if (row.A === 'NO' && row.B === 'SURNAME' && row.C === 'OTHER NAMES') {
+      headerRowIndex = i;
+      break;
+    }
+  }
+
+  if (headerRowIndex === -1) {
+    console.error(`Could not find header row in sheet: ${sheetName}`);
+    return [];
+  }
+
+  const headerRow: any = data[headerRowIndex];
+  const columnIndices: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(headerRow)) {
+    if (value === 'NO') columnIndices['NO'] = key;
+    else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
+    else if (value === 'OTHER NAMES') columnIndices['OTHER NAMES'] = key;
+    else if (value === 'EDUCATION/CONTACT #' || value === 'CONTACT #')
+      columnIndices['CONTACT #'] = key;
+    else if (value === 'CERTIFICATE #' || value === 'CANDIDATE #')
+      columnIndices['CANDIDATE #'] = key;
+  }
+
+  console.log('Column indices found:', columnIndices);
+
+  const studentsData: StudentData[] = [];
+  for (let i = headerRowIndex + 1; i < data.length; i++) {
+    const row: any = data[i];
+
+    if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
+      continue;
+    }
+
+    const studentData: StudentData = {
+      no: Number(row[columnIndices['NO']]),
+      surname: String(row[columnIndices['SURNAME']] || '').trim(),
+      names: String(row[columnIndices['OTHER NAMES']] || '').trim(),
+      phoneNumber: String(row[columnIndices['CONTACT #']] || '').trim(),
+      candidateNo: String(row[columnIndices['CANDIDATE #']] || '').trim(),
+      status,
+      programId,
+    };
+
+    studentsData.push(studentData);
+  }
+
+  console.log(`Found ${studentsData.length} students in sheet: ${sheetName}`);
+  return studentsData;
+}
+
 async function importStudentsFromExcel(filePath: string): Promise<void> {
   try {
     console.log(`Reading Excel file: ${filePath}`);
@@ -44,154 +209,7 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
       const worksheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
 
-      let institution: string | null = null;
-      let programName: string | null = null;
-      let selectionCriteria: string | null = null;
-      let certificateInfo: string | null = null;
-      let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
-
-      for (let i = 0; i < 15; i++) {
-        const row: any = data[i] || {};
-
-        if (
-          row.A &&
-          typeof row.A === 'string' &&
-          row.A.includes('LIMKOKWING UNIVERSITY')
-        ) {
-          institution = row.A;
-        }
-
-        if (
-          row.A &&
-          typeof row.A === 'string' &&
-          row.A.includes('COURSE/PROGRAMME NAME:')
-        ) {
-          const matches = row.A.match(/COURSE\/PROGRAMME NAME:\s*(.+)/);
-          if (matches && matches[1]) {
-            programName = matches[1].trim();
-          }
-        }
-
-        if (
-          row.A &&
-          typeof row.A === 'string' &&
-          row.A.includes('SELECTION CRITERIA:')
-        ) {
-          selectionCriteria = row.A;
-        }
-
-        if (
-          row.A &&
-          typeof row.A === 'string' &&
-          row.A.includes("With 'O' Grade")
-        ) {
-          certificateInfo = row.A;
-        }
-
-        if (row.A && typeof row.A === 'string' && row.A.includes('STATUS:')) {
-          const statusText = row.A.replace('STATUS:', '').trim().toUpperCase();
-          if (
-            statusText.includes('WAIT LISTED') ||
-            statusText.includes('WAITLISTED')
-          ) {
-            status = 'Wait Listed';
-          } else if (statusText.includes('ADMITTED')) {
-            status = 'Admitted';
-          } else if (statusText.includes('DQ')) {
-            status = 'DQ';
-          }
-        }
-      }
-
-      if (!programName) {
-        for (let i = 0; i < 15; i++) {
-          const row: any = data[i] || {};
-          for (const [key, value] of Object.entries(row)) {
-            if (value && typeof value === 'string' && !programName) {
-              const programPatterns = [
-                /BSC\s+IT/i,
-                /DIPLOMA\s+IN\s+.+/i,
-                /BACHELOR\s+OF\s+.+/i,
-              ];
-
-              for (const pattern of programPatterns) {
-                if (pattern.test(value)) {
-                  programName = value.trim();
-                  break;
-                }
-              }
-            }
-          }
-          if (programName) break;
-        }
-      }
-
-      if (!programName) {
-        console.error(`Could not find program name in sheet: ${sheetName}`);
-        continue;
-      }
-
-      console.log(`Found program: "${programName}" with status: ${status}`);
-
-      const programId = await findProgramByName(programName);
-
-      if (!programId) {
-        console.error(
-          `Program "${programName}" not found in database. Please create it first.`,
-        );
-        continue;
-      }
-
-      let headerRowIndex = -1;
-      for (let i = 0; i < data.length; i++) {
-        const row: any = data[i] || {};
-        if (row.A === 'NO' && row.B === 'SURNAME' && row.C === 'OTHER NAMES') {
-          headerRowIndex = i;
-          break;
-        }
-      }
-
-      if (headerRowIndex === -1) {
-        console.error(`Could not find header row in sheet: ${sheetName}`);
-        continue;
-      }
-
-      const headerRow: any = data[headerRowIndex];
-      const columnIndices: Record<string, string> = {};
-
-      for (const [key, value] of Object.entries(headerRow)) {
-        if (value === 'NO') columnIndices['NO'] = key;
-        else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
-        else if (value === 'OTHER NAMES') columnIndices['OTHER NAMES'] = key;
-        else if (value === 'EDUCATION/CONTACT #')
-          columnIndices['CONTACT #'] = key;
-        else if (value === 'CERTIFICATE #') columnIndices['CANDIDATE #'] = key;
-      }
-
-      const studentsData: StudentData[] = [];
-      for (let i = headerRowIndex + 1; i < data.length; i++) {
-        const row: any = data[i];
-
-        if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
-          continue;
-        }
-
-        const studentData: StudentData = {
-          no: Number(row[columnIndices['NO']]),
-          surname: String(row[columnIndices['SURNAME']] || '').trim(),
-          names: String(row[columnIndices['OTHER NAMES']] || '').trim(),
-          phoneNumber: String(row[columnIndices['CONTACT #']] || '').trim(),
-          candidateNo: String(row[columnIndices['CANDIDATE #']] || '').trim(),
-          status,
-          programId,
-        };
-
-        studentsData.push(studentData);
-      }
-
-      console.log(
-        `Found ${studentsData.length} students in sheet: ${sheetName}`,
-      );
+      const studentsData = await processWorksheet(sheetName, data);
 
       if (studentsData.length > 0) {
         console.log(
@@ -213,7 +231,9 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
           }
         }
 
-        console.log(`Finished importing students for ${programName}`);
+        console.log(
+          `Finished importing students for program ID: ${studentsData[0].programId}`,
+        );
       }
     }
 
