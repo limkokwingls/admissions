@@ -123,9 +123,6 @@ export default function PaymentPlanCard() {
               <TabsContent key={program} value={program} className='space-y-6'>
                 <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                   <div className='space-y-4'>
-                    <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                      SEMESTER 1
-                    </h3>
                     <PaymentCard
                       title='Semester 1'
                       amount={semesterPatterns[typedProgram].odd.amount}
@@ -136,9 +133,6 @@ export default function PaymentPlanCard() {
                   </div>
 
                   <div className='space-y-4'>
-                    <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-                      SEMESTER 2
-                    </h3>
                     <PaymentCard
                       title='Semester 2'
                       amount={semesterPatterns[typedProgram].even.amount}
@@ -149,18 +143,19 @@ export default function PaymentPlanCard() {
                   </div>
                 </div>
 
-                <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
+                <div className='mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50'>
                   <div className='flex items-start gap-3'>
-                    <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
+                    <div className='mt-0.5 rounded-full bg-neutral-200 p-1.5 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300'>
                       <Info className='h-4 w-4' />
                     </div>
                     <div>
-                      <h4 className='text-sm font-medium text-blue-700 dark:text-blue-300'>
+                      <h4 className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                         Important Payment Information
                       </h4>
-                      <p className='mt-1 text-xs text-blue-600 dark:text-blue-400'>
-                        Please note the following payment guidelines for your
-                        program.
+                      <p className='mt-2 text-sm text-neutral-600 dark:text-neutral-400'>
+                        Your {program} program takes {structure.years} years to
+                        complete, with 2 semesters per year. Each semester costs{' '}
+                        {semesterPatterns[typedProgram].odd.amount}
                       </p>
                     </div>
                   </div>
@@ -195,53 +190,53 @@ export default function PaymentPlanCard() {
             />
           </div>
 
-          <div className='mt-6 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/50'>
+          <div className='mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50'>
             <div className='flex items-start gap-3'>
-              <div className='mt-0.5 rounded-full bg-blue-100 p-1.5 text-blue-700 dark:bg-blue-900 dark:text-blue-300'>
+              <div className='mt-0.5 rounded-full bg-neutral-200 p-1.5 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300'>
                 <Receipt className='h-4 w-4' />
               </div>
               <div>
-                <h4 className='text-sm font-medium text-blue-900 dark:text-blue-300'>
+                <h4 className='text-sm font-medium text-neutral-900 dark:text-neutral-300'>
                   Bank Account Details
                 </h4>
                 <div className='mt-2 grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2 md:grid-cols-3'>
                   <div>
-                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                    <span className='font-medium text-neutral-700 dark:text-neutral-400'>
                       Bank:
                     </span>
-                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                    <span className='ml-2 text-neutral-900 dark:text-neutral-200'>
                       Standard Lesotho Bank
                     </span>
                   </div>
                   <div>
-                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                    <span className='font-medium text-neutral-700 dark:text-neutral-400'>
                       Account No:
                     </span>
-                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                    <span className='ml-2 text-neutral-900 dark:text-neutral-200'>
                       9080019987451
                     </span>
                   </div>
                   <div>
-                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                    <span className='font-medium text-neutral-700 dark:text-neutral-400'>
                       Branch:
                     </span>
-                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                    <span className='ml-2 text-neutral-900 dark:text-neutral-200'>
                       City Branch (051)
                     </span>
                   </div>
                   <div>
-                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                    <span className='font-medium text-neutral-700 dark:text-neutral-400'>
                       Account Type:
                     </span>
-                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                    <span className='ml-2 text-neutral-900 dark:text-neutral-200'>
                       Current Account
                     </span>
                   </div>
                   <div>
-                    <span className='font-medium text-blue-700 dark:text-blue-400'>
+                    <span className='font-medium text-neutral-700 dark:text-neutral-400'>
                       Swift Code:
                     </span>
-                    <span className='ml-2 text-blue-900 dark:text-blue-200'>
+                    <span className='ml-2 text-neutral-900 dark:text-neutral-200'>
                       SBICLSMX
                     </span>
                   </div>
