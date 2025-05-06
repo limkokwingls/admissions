@@ -36,8 +36,8 @@ export default function AcceptanceSwitch({ student }: Props) {
           queryKey: ['students'],
         });
         notifications.show({
-          title: status ? 'Accepted' : 'Unaccepted',
-          message: `Acceptance status updated to ${status ? 'accepted' : 'unaccepted'}`,
+          title: status ? 'Accepted' : 'Not Accepted',
+          message: `Acceptance status updated to ${status ? 'accepted' : 'not accepted'}`,
           color: status ? 'green' : 'gray',
           icon: status ? (
             <IconCircleCheck size={rem(20)} />
@@ -65,9 +65,9 @@ export default function AcceptanceSwitch({ student }: Props) {
         color='green'
         size='sm'
         label={
-          isPending ? 'Updating...' : isAccepted ? 'Accepted' : 'Unaccepted'
+          isPending ? 'Updating...' : isAccepted ? 'Accepted' : 'Not Accepted'
         }
-        description={`Click switch to mark as ${isAccepted ? 'unaccepted' : 'accepted'}`}
+        description={`Click switch to mark as ${isAccepted ? 'not accepted' : 'accepted'}`}
         disabled={isPending}
         thumbIcon={
           isAccepted ? (

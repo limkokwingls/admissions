@@ -7,7 +7,7 @@ import {
 import { students } from '@/db/schema';
 import { extractReference } from '@/lib/utils';
 import { deleteStudent, getStudent } from '@/server/students/actions';
-import { Badge, Box, Divider, Group, Text } from '@mantine/core';
+import { Badge, Box, Divider, Group, SimpleGrid, Text } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 
@@ -35,7 +35,7 @@ export default async function StudentDetails({ params }: Props) {
           await deleteStudent(id);
         }}
       />
-      <DetailsViewBody>
+      <DetailsViewBody gap={'lg'}>
         <AcceptanceSwitch student={student} />
         <Box mt={'xl'}>
           <Group justify='space-between' align='center'>
@@ -49,8 +49,10 @@ export default async function StudentDetails({ params }: Props) {
           <Divider mt={5} />
         </Box>
         <FieldView label='Program'>{student.program?.name}</FieldView>
-        <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
-        <FieldView label='Candidate No'>{student.candidateNo}</FieldView>
+        <SimpleGrid cols={2}>
+          <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
+          <FieldView label='Candidate No'>{student.candidateNo}</FieldView>
+        </SimpleGrid>
       </DetailsViewBody>
     </DetailsView>
   );
