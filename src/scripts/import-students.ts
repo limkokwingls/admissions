@@ -29,7 +29,7 @@ async function findProgramByName(
   programName: string,
 ): Promise<number | undefined> {
   const result = await db.query.programs.findFirst({
-    where: eq(programs.name, programName),
+    where: eq(programs.name, programName.trim()),
   });
   return result?.id;
 }
@@ -44,29 +44,94 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
       const worksheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
 
+      // Extract institution and program information from the header rows
+      let institution: string | null = null;
       let programName: string | null = null;
+      let selectionCriteria: string | null = null;
+      let certificateInfo: string | null = null;
       let status: 'Admitted' | 'Wait Listed' | 'DQ' = 'Wait Listed';
 
       for (let i = 0; i < 15; i++) {
         const row: any = data[i] || {};
 
-        if (row.A === 'COURSE/PROGRAMME NAME:' && row.B) {
-          programName = row.B;
+        // Look for the institution name (first line from screenshot)
+        if (
+          row.A &&
+          typeof row.A === 'string' &&
+          row.A.includes('LIMKOKWING UNIVERSITY')
+        ) {
+          institution = row.A;
         }
 
-        if (row.A === 'STATUS:') {
-          if (row.B && typeof row.B === 'string') {
-            if (
-              row.B.toUpperCase().includes('WAIT LISTED') ||
-              row.B.toUpperCase().includes('WAITLISTED')
-            ) {
-              status = 'Wait Listed';
-            } else if (row.B.toUpperCase().includes('ADMITTED')) {
-              status = 'Admitted';
-            } else if (row.B.toUpperCase().includes('DQ')) {
-              status = 'DQ';
+        // Look for program/course information (line 2 from screenshot)
+        if (
+          row.A &&
+          typeof row.A === 'string' &&
+          row.A.includes('COURSE/PROGRAMME NAME:')
+        ) {
+          // Extract the program name from the format "COURSE/PROGRAMME NAME: [PROGRAM]"
+          const matches = row.A.match(/COURSE\/PROGRAMME NAME:\s*(.+)/);
+          if (matches && matches[1]) {
+            programName = matches[1].trim();
+          }
+        }
+
+        // Look for selection criteria information
+        if (
+          row.A &&
+          typeof row.A === 'string' &&
+          row.A.includes('SELECTION CRITERIA:')
+        ) {
+          selectionCriteria = row.A;
+        }
+
+        // Look for certificate requirement information
+        if (
+          row.A &&
+          typeof row.A === 'string' &&
+          row.A.includes("With 'O' Grade")
+        ) {
+          certificateInfo = row.A;
+        }
+
+        // Determine admission status
+        if (row.A && typeof row.A === 'string' && row.A.includes('STATUS:')) {
+          const statusText = row.A.replace('STATUS:', '').trim().toUpperCase();
+          if (
+            statusText.includes('WAIT LISTED') ||
+            statusText.includes('WAITLISTED')
+          ) {
+            status = 'Wait Listed';
+          } else if (statusText.includes('ADMITTED')) {
+            status = 'Admitted';
+          } else if (statusText.includes('DQ')) {
+            status = 'DQ';
+          }
+        }
+      }
+
+      // If we can't find the program name, try to extract it from any source
+      if (!programName) {
+        for (let i = 0; i < 15; i++) {
+          const row: any = data[i] || {};
+          for (const [key, value] of Object.entries(row)) {
+            if (value && typeof value === 'string' && !programName) {
+              // Try to find a string that looks like a program name
+              const programPatterns = [
+                /BSC\s+IT/i,
+                /DIPLOMA\s+IN\s+.+/i,
+                /BACHELOR\s+OF\s+.+/i,
+              ];
+
+              for (const pattern of programPatterns) {
+                if (pattern.test(value)) {
+                  programName = value.trim();
+                  break;
+                }
+              }
             }
           }
+          if (programName) break;
         }
       }
 
@@ -86,9 +151,11 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
+      // Find the header row with column titles
       let headerRowIndex = -1;
       for (let i = 0; i < data.length; i++) {
         const row: any = data[i] || {};
+        // Look for the header row that contains 'NO', 'SURNAME', 'OTHER NAMES', etc.
         if (row.A === 'NO' && row.B === 'SURNAME' && row.C === 'OTHER NAMES') {
           headerRowIndex = i;
           break;
@@ -100,35 +167,38 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         continue;
       }
 
+      // Map column headers to their indices
       const headerRow: any = data[headerRowIndex];
       const columnIndices: Record<string, string> = {};
 
+      // Map all column headers to their respective keys
       for (const [key, value] of Object.entries(headerRow)) {
         if (value === 'NO') columnIndices['NO'] = key;
         else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
         else if (value === 'OTHER NAMES') columnIndices['OTHER NAMES'] = key;
-        else if (value === 'CONTACT #' || value === 'CONTACT#')
+        else if (value === 'EDUCATION/CONTACT #')
           columnIndices['CONTACT #'] = key;
-        else if (value === 'CANDIDATE #' || value === 'CANDIDATE#')
-          columnIndices['CANDIDATE #'] = key;
+        else if (value === 'CERTIFICATE #') columnIndices['CANDIDATE #'] = key;
       }
 
+      // Process each student row
       const studentsData: StudentData[] = [];
       for (let i = headerRowIndex + 1; i < data.length; i++) {
         const row: any = data[i];
 
+        // Skip empty rows
         if (!row[columnIndices['NO']] || !row[columnIndices['SURNAME']]) {
           continue;
         }
 
         const studentData: StudentData = {
           no: Number(row[columnIndices['NO']]),
-          surname: String(row[columnIndices['SURNAME']]).trim(),
+          surname: String(row[columnIndices['SURNAME']] || '').trim(),
           names: String(row[columnIndices['OTHER NAMES']] || '').trim(),
           phoneNumber: String(row[columnIndices['CONTACT #']] || '').trim(),
           candidateNo: String(row[columnIndices['CANDIDATE #']] || '').trim(),
           status,
-          programId: programId,
+          programId,
         };
 
         studentsData.push(studentData);
@@ -138,6 +208,7 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         `Found ${studentsData.length} students in sheet: ${sheetName}`,
       );
 
+      // Save to database in batches
       if (studentsData.length > 0) {
         const batchSize = 50;
         for (let i = 0; i < studentsData.length; i += batchSize) {
