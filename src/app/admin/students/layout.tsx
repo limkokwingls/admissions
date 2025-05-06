@@ -15,7 +15,7 @@ export default function Layout({ children }: PropsWithChildren) {
       renderItem={(it) => (
         <ListItem
           id={it.id}
-          label={`${it.surname} ${it.names}`}
+          label={formatNames(`${it.surname} ${it.names}`)}
           rightSection={it.accepted ? <IconCheck size={'1rem'} /> : undefined}
         />
       )}
@@ -23,4 +23,21 @@ export default function Layout({ children }: PropsWithChildren) {
       {children}
     </ListLayout>
   );
+}
+
+function formatNames(name: string): string {
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map((part) =>
+      part
+        .split(/('|-)/g)
+        .map((segment, index) =>
+          index % 2 === 0
+            ? segment.charAt(0).toUpperCase() + segment.slice(1)
+            : segment,
+        )
+        .join(''),
+    )
+    .join(' ');
 }
