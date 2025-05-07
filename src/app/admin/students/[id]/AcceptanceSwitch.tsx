@@ -1,20 +1,17 @@
 'use client';
 import { students } from '@/db/schema';
+import { formatNames } from '@/lib/utils';
 import { updateStudent } from '@/server/students/actions';
 import {
   ActionIcon,
-  Badge,
   Box,
   Button,
   Card,
-  Flex,
   Group,
   Modal,
   Paper,
   Switch,
   Text,
-  Title,
-  Tooltip,
   rem,
   useComputedColorScheme,
   useMantineTheme,
@@ -22,11 +19,9 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import {
-  IconCheck,
   IconCircleCheck,
   IconEdit,
   IconExclamationCircle,
-  IconExclamationMark,
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
@@ -119,15 +114,15 @@ export default function AcceptanceSwitch({ student }: Props) {
       <Modal
         opened={opened}
         onClose={close}
-        title='Update Acceptance Status'
+        title='Update Status'
         centered
         radius='md'
-        size='sm'
+        size='md'
       >
         <Box mb='md'>
-          <Text size='sm'>
-            Student: {student.surname} {student.names}
-          </Text>
+          <Paper withBorder radius='sm' p='sm'>
+            <Text>{formatNames(`${student.surname} ${student.names}`)}</Text>
+          </Paper>
         </Box>
 
         <Switch
@@ -153,10 +148,10 @@ export default function AcceptanceSwitch({ student }: Props) {
           </Button>
           <Button
             onClick={update}
-            color={tempIsAccepted ? 'red' : 'green'}
+            color={tempIsAccepted ? 'green' : 'red'}
             loading={isPending}
           >
-            {tempIsAccepted ? 'Mark as Not Accepted' : 'Mark as Accepted'}
+            Update
           </Button>
         </Group>
       </Modal>
