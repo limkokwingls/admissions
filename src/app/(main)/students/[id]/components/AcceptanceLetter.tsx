@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
 } from '@react-pdf/renderer';
 import { Download } from 'lucide-react';
 
@@ -34,50 +35,73 @@ const styles = StyleSheet.create({
     padding: 50,
     fontFamily: 'Roboto',
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    borderBottom: '1pt solid black',
+    paddingBottom: 10,
+  },
+  headerLeft: {
+    width: '60%',
+  },
+  headerRight: {
+    width: '40%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  universityName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  addressText: {
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  logo: {
+    width: 150,
+    height: 100,
+    objectFit: 'contain',
+  },
   header: {
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'center',
   },
   headerText: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  logo: {
-    width: 150,
-    height: 75,
-    alignSelf: 'center',
-    marginBottom: 20,
+    marginBottom: 8,
   },
   date: {
     fontSize: 12,
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'left',
   },
   reference: {
     fontSize: 12,
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'right',
   },
   greeting: {
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 8,
   },
   content: {
     fontSize: 12,
-    marginBottom: 20,
-    lineHeight: 1.5,
+    marginBottom: 15,
+    lineHeight: 1.3,
   },
   bankDetails: {
     fontSize: 12,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   bankTable: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   bankRow: {
     flexDirection: 'row',
-    marginBottom: 5,
+    marginBottom: 4,
   },
   bankLabel: {
     width: 100,
@@ -88,11 +112,11 @@ const styles = StyleSheet.create({
   },
   note: {
     fontSize: 12,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   noteItem: {
     flexDirection: 'row',
-    marginBottom: 5,
+    marginBottom: 4,
   },
   bullet: {
     width: 10,
@@ -104,11 +128,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     border: '1pt solid black',
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   signature: {
     fontSize: 12,
-    marginTop: 40,
+    marginTop: 30,
   },
 });
 
@@ -149,7 +173,23 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
     <Document>
       {/* First Page - Acceptance Letter */}
       <Page size='A4' style={styles.page}>
-        {/* Header with Logo */}
+        {/* University Header with Logo */}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.universityName}>Limkokwing University of Creative Technology</Text>
+            <Text style={styles.addressText}>Moshoeshoe Road Maseru Central</Text>
+            <Text style={styles.addressText}>P.O. Box 8971</Text>
+            <Text style={styles.addressText}>Maseru Maseru 0101</Text>
+            <Text style={styles.addressText}>Lesotho</Text>
+            <Text style={styles.addressText}>+(266) 22315767 | Ext. 116</Text>
+            <Text style={styles.addressText}>registry@limkokwing.ac.ls</Text>
+          </View>
+          <View style={styles.headerRight}>
+            <Image src="/images/logo.png" style={styles.logo} />
+          </View>
+        </View>
+        
+        {/* Document Title */}
         <View style={styles.header}>
           <Text style={styles.headerText}>ACCEPTANCE LETTER</Text>
         </View>
