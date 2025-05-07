@@ -42,6 +42,16 @@ export default async function PropertyDetails({ params }: Props) {
         <FieldView label='Orientation Date'>
           {format(new Date(property.orientationDate), 'dd MMM yyyy')}
         </FieldView>
+        {property.privatePaymentDateFrom && (
+          <FieldView label='Private Payment Date (From)'>
+            {format(new Date(property.privatePaymentDateFrom), 'dd MMM yyyy')}
+          </FieldView>
+        )}
+        {property.privatePaymentDateTo && (
+          <FieldView label='Private Payment Date (To)'>
+            {format(new Date(property.privatePaymentDateTo), 'dd MMM yyyy')}
+          </FieldView>
+        )}
       </DetailsViewBody>
     </DetailsView>
   );

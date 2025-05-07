@@ -5,7 +5,7 @@ import { Form } from '@/components/adease';
 import { NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
-import { DateInput, YearPickerInput } from '@mantine/dates';
+import { DateInput, YearPickerInput, DatePickerInput } from '@mantine/dates';
 
 type Property = typeof properties.$inferInsert;
 
@@ -46,7 +46,7 @@ export default function PropertyForm({
             onChange={(value) =>
               form.setFieldValue(
                 'id',
-                value ? value.getFullYear().toString() : '',
+                value ? new Date(value).getFullYear().toString() : '',
               )
             }
           />
@@ -56,15 +56,30 @@ export default function PropertyForm({
           />
           <DateInput
             label='Acceptance Deadline'
+            valueFormat='YYYY-MM-DD'
             {...form.getInputProps('acceptanceDeadline')}
           />
           <DateInput
             label='Registration Date'
+            valueFormat='YYYY-MM-DD'
             {...form.getInputProps('registrationDate')}
           />
           <DateInput
             label='Orientation Date'
+            valueFormat='YYYY-MM-DD'
             {...form.getInputProps('orientationDate')}
+          />
+          <DatePickerInput
+            label='Private Payment Date (From)'
+            placeholder='Select start date'
+            valueFormat='YYYY-MM-DD'
+            {...form.getInputProps('privatePaymentDateFrom')}
+          />
+          <DatePickerInput
+            label='Private Payment Date (To)'
+            placeholder='Select end date'
+            valueFormat='YYYY-MM-DD'
+            {...form.getInputProps('privatePaymentDateTo')}
           />
         </>
       )}
