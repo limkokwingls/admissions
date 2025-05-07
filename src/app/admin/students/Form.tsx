@@ -3,6 +3,7 @@
 import { statusEnum, students } from '@/db/schema';
 import { Form } from '@/components/adease';
 import { Group, NumberInput, Select, TextInput } from '@mantine/core';
+import ProgramSelect from '@/components/ProgramSelect';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -22,10 +23,6 @@ type Props = {
 
 export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  const { data: programs } = useQuery({
-    queryKey: ['programs'],
-    queryFn: () => getAllPrograms(),
-  });
 
   return (
     <Form
@@ -53,20 +50,18 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
               <TextInput label='Names' {...form.getInputProps('names')} />
             </Group>
 
-            <Select
-              label='Program'
-              {...form.getInputProps('programId')}
+            <ProgramSelect
+              value={form.values.programId}
               onChange={(value) => {
-                if (value) {
-                  form.setFieldValue('programId', parseInt(value, 10));
+                if (value === null) {
+                  form.setFieldValue('programId', 0);
+                  form.clearFieldError('programId');
+                } else {
+                  form.setFieldValue('programId', value);
                 }
               }}
-              searchable
-              clearable
-              data={programs?.items.map((program) => ({
-                value: program.id.toString(),
-                label: program.name,
-              }))}
+              error={form.errors.programId}
+              required
             />
 
             <TextInput
