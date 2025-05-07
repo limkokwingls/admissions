@@ -115,7 +115,7 @@ export default function SponsoredCard({ student, properties }: Props) {
                     <div className='text-sm'>Loading acceptance letter...</div>
                   }
                 >
-                  <AcceptanceLetterButton student={student} />
+                  <AcceptanceLetterButton student={student} properties={properties} />
                 </Suspense>
               </div>
             </div>

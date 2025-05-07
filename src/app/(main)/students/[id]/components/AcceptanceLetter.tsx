@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { getStudent } from '@/server/students/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
 import {
   Document,
   Font,
@@ -111,12 +112,33 @@ const styles = StyleSheet.create({
   },
 });
 
-type AcceptanceLetterProps = {
+type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+  properties: NonNullable<Awaited<ReturnType<typeof getCurrentProperties>>>;
 };
 
-// PDF Document Component
-function AcceptanceLetterPDF({ student }: AcceptanceLetterProps) {
+export default function AcceptanceLetterButton({ student, properties }: Props) {
+  if (!student || student.status !== 'Admitted') {
+    return null;
+  }
+
+  return (
+    <PDFDownloadLink
+      document={<AcceptanceLetterPDF student={student} properties={properties} />}
+      fileName={`acceptance-letter-${student.surname}-${student.names}.pdf`}
+      style={{ textDecoration: 'none' }}
+    >
+      {({ loading }) => (
+        <Button className='w-full py-6' disabled={loading}>
+          <Download className='h-4 w-4' />
+          {loading ? 'Generating PDF...' : 'Download Acceptance Letter'}
+        </Button>
+      )}
+    </PDFDownloadLink>
+  );
+}
+
+function AcceptanceLetterPDF({ student, properties }: Props) {
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
     month: '2-digit',
@@ -155,7 +177,11 @@ function AcceptanceLetterPDF({ student }: AcceptanceLetterProps) {
             accepted to study {student.program?.name} at Limkokwing University.
             Please complete the attached form and submit it to the Registry
             Department together with the confirmation receipt of the acceptance
-            fee of M500.00 on or before 7th June 2024. Kindly note that failure
+            fee of M{properties.acceptanceFee.toFixed(2)} on or before {new Date(properties.acceptanceDeadline).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}. Kindly note that failure
             to return the completed form and confirmation receipt by the
             stipulated deadline will result in your slot being allocated to
             another candidate.
@@ -354,29 +380,5 @@ function AcceptanceLetterPDF({ student }: AcceptanceLetterProps) {
         </View>
       </Page>
     </Document>
-  );
-}
-
-// Download Button Component
-export default function AcceptanceLetterButton({
-  student,
-}: AcceptanceLetterProps) {
-  if (!student || student.status !== 'Admitted') {
-    return null;
-  }
-
-  return (
-    <PDFDownloadLink
-      document={<AcceptanceLetterPDF student={student} />}
-      fileName={`acceptance-letter-${student.surname}-${student.names}.pdf`}
-      style={{ textDecoration: 'none' }}
-    >
-      {({ loading }) => (
-        <Button className='w-full py-6' disabled={loading}>
-          <Download className='h-4 w-4' />
-          {loading ? 'Generating PDF...' : 'Download Acceptance Letter'}
-        </Button>
-      )}
-    </PDFDownloadLink>
   );
 }
