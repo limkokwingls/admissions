@@ -40,7 +40,7 @@ export default function PropertyForm({
       {(form) => (
         <>
           <YearPickerInput
-            label='Id'
+            label='Year (ID)'
             {...form.getInputProps('id', { type: 'input' })}
             value={form.values.id ? new Date(form.values.id) : null}
             onChange={(value) =>
@@ -60,40 +60,62 @@ export default function PropertyForm({
             firstDayOfWeek={0}
             {...form.getInputProps('acceptanceDeadline')}
           />
-          <DateInput
-            label='Registration Date'
+          <DatePickerInput
+            type='range'
+            label='Registration Date Range'
             valueFormat='DD/MM/YYYY'
             firstDayOfWeek={0}
-            {...form.getInputProps('registrationDate')}
-          />
-          <DateInput
-            label='Orientation Date'
-            valueFormat='DD/MM/YYYY'
-            firstDayOfWeek={0}
-            {...form.getInputProps('orientationDate')}
+            value={[
+              form.values.registrationDateFrom
+                ? new Date(form.values.registrationDateFrom)
+                : null,
+              form.values.registrationDateTo
+                ? new Date(form.values.registrationDateTo)
+                : null,
+            ]}
+            onChange={(dates) => {
+              if (Array.isArray(dates)) {
+                const startDate = dates[0]
+                  ? new Date(dates[0]).toISOString()
+                  : '';
+                const endDate = dates[1]
+                  ? new Date(dates[1]).toISOString()
+                  : '';
+
+                form.setFieldValue('registrationDateFrom', startDate);
+                form.setFieldValue('registrationDateTo', endDate);
+              } else {
+                form.setFieldValue('registrationDateFrom', '');
+                form.setFieldValue('registrationDateTo', '');
+              }
+            }}
           />
           <DatePickerInput
-            type="range"
+            type='range'
             label='Private Payment Date Range'
-            placeholder="Select date range"
             valueFormat='DD/MM/YYYY'
             firstDayOfWeek={0}
             clearable
             value={[
-              form.values.privatePaymentDateFrom ? new Date(form.values.privatePaymentDateFrom) : null,
-              form.values.privatePaymentDateTo ? new Date(form.values.privatePaymentDateTo) : null
+              form.values.privatePaymentDateFrom
+                ? new Date(form.values.privatePaymentDateFrom)
+                : null,
+              form.values.privatePaymentDateTo
+                ? new Date(form.values.privatePaymentDateTo)
+                : null,
             ]}
             onChange={(dates) => {
-              // Handle the dates array safely
               if (Array.isArray(dates)) {
-                // Convert to ISO string format for storage
-                const startDate = dates[0] ? new Date(dates[0]).toISOString() : null;
-                const endDate = dates[1] ? new Date(dates[1]).toISOString() : null;
-                
+                const startDate = dates[0]
+                  ? new Date(dates[0]).toISOString()
+                  : null;
+                const endDate = dates[1]
+                  ? new Date(dates[1]).toISOString()
+                  : null;
+
                 form.setFieldValue('privatePaymentDateFrom', startDate);
                 form.setFieldValue('privatePaymentDateTo', endDate);
               } else {
-                // Reset values if dates is null/undefined
                 form.setFieldValue('privatePaymentDateFrom', null);
                 form.setFieldValue('privatePaymentDateTo', null);
               }

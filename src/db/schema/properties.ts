@@ -4,8 +4,8 @@ export const properties = sqliteTable('properties', {
   id: text().primaryKey(),
   acceptanceFee: real().notNull(),
   acceptanceDeadline: text().notNull(),
-  registrationDate: text().notNull(),
-  orientationDate: text().notNull(),
+  registrationDateFrom: text().notNull(),
+  registrationDateTo: text().notNull(),
   privatePaymentDateFrom: text(),
   privatePaymentDateTo: text(),
 });
