@@ -1,7 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle2, Clock, Info, Receipt, Wallet } from 'lucide-react';
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle2,
+  Info,
+  Receipt,
+} from 'lucide-react';
 import { ReactNode } from 'react';
+import { getCurrentProperties } from '@/server/properties/actions';
+import { formatDate } from 'date-fns';
 
 type Installment = {
   month: string;
@@ -66,7 +74,17 @@ type Props = {
   level: 'diploma' | 'degree' | 'certificate';
 };
 
-export default function PaymentPlanCard({ level }: Props) {
+type PaymentDates = {
+  privatePaymentDateFrom: string | null;
+  privatePaymentDateTo: string | null;
+};
+
+export default async function PaymentPlanCard({ level }: Props) {
+  const properties = await getCurrentProperties();
+  const paymentDates: PaymentDates = {
+    privatePaymentDateFrom: properties?.privatePaymentDateFrom || null,
+    privatePaymentDateTo: properties?.privatePaymentDateTo || null,
+  };
   return (
     <Card className='mt-6 overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
       <CardHeader className='border-b border-neutral-200 pb-3 dark:border-neutral-800'>
@@ -114,7 +132,26 @@ export default function PaymentPlanCard({ level }: Props) {
                   <p className='mt-2 text-sm text-neutral-600 dark:text-neutral-400'>
                     Your {program} program takes {info.years} years to complete,
                     with 2 semesters per year. Each semester costs{' '}
-                    {info.semesterFee}
+                    {info.semesterFee}.
+                    {paymentDates.privatePaymentDateFrom &&
+                    paymentDates.privatePaymentDateTo ? (
+                      <>
+                        {' '}
+                        Proof of payment must be submitted between{' '}
+                        {formatDate(
+                          paymentDates.privatePaymentDateFrom,
+                          'dd MMM yyyy',
+                        )}
+                        {' and '}
+                        {formatDate(
+                          paymentDates.privatePaymentDateTo,
+                          'dd MMM yyyy',
+                        )}{' '}
+                        before registration.
+                      </>
+                    ) : (
+                      'Payment must be made before registration.'
+                    )}
                   </p>
                 </InfoBox>
               </TabsContent>
@@ -124,26 +161,37 @@ export default function PaymentPlanCard({ level }: Props) {
 
         <div className='mt-8 border-t border-neutral-200 pt-6 dark:border-neutral-700'>
           <h3 className='mb-4 text-base font-semibold text-neutral-900 dark:text-white'>
-            Payment Options
+            Payment Schedule Information
           </h3>
 
           <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
             <PaymentInfoCard
-              icon={<Wallet className='h-5 w-5' />}
-              title='Flexible Payments'
-              description='Choose between full payment or convenient installment plans to fit your budget'
+              icon={<Calendar className='h-5 w-5' />}
+              title='Payment Window'
+              description={
+                paymentDates.privatePaymentDateFrom &&
+                paymentDates.privatePaymentDateTo
+                  ? `Payments are only accepted between ${formatDate(
+                      paymentDates.privatePaymentDateFrom,
+                      'dd MMM yyyy',
+                    )} and ${formatDate(
+                      paymentDates.privatePaymentDateTo,
+                      'dd MMM yyyy',
+                    )}`
+                  : 'Payments are only accepted during the designated payment period'
+              }
             />
 
             <PaymentInfoCard
-              icon={<Clock className='h-5 w-5' />}
-              title='Payment Schedule'
-              description='Initial payment at registration with remaining installments spread throughout the semester'
+              icon={<AlertCircle className='h-5 w-5' />}
+              title='Required Before Registration'
+              description='All required payments must be completed before you can register for classes'
             />
 
             <PaymentInfoCard
               icon={<CheckCircle2 className='h-5 w-5' />}
-              title='Easy Process'
-              description='Simple payment process through bank transfer or direct payment at the finance office'
+              title='Payment Verification'
+              description='Keep your payment receipts as proof of payment for registration verification'
             />
           </div>
 
