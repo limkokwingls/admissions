@@ -13,7 +13,6 @@ import {
   Switch,
   Text,
   rem,
-  useComputedColorScheme,
   useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -39,7 +38,6 @@ export default function AcceptanceSwitch({ student }: Props) {
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
-  const colorScheme = useComputedColorScheme('dark');
 
   const statusColor = isAccepted ? theme.colors.green[6] : theme.colors.gray[6];
 

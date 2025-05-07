@@ -1,13 +1,11 @@
 'use client';
 
-import { statusEnum, students } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import ProgramSelect from '@/components/ProgramSelect';
+import { statusEnum, students } from '@/db/schema';
+import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { getAllPrograms } from '@/server/programs/actions';
 
 type Student = typeof students.$inferInsert;
 

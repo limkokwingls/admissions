@@ -36,22 +36,17 @@ export default async function PropertyDetails({ params }: Props) {
         <FieldView label='Acceptance Deadline'>
           {format(new Date(property.acceptanceDeadline), 'dd MMM yyyy')}
         </FieldView>
+        {property.privatePaymentDate && (
+          <FieldView label='Private Payment Date'>
+            {format(new Date(property.privatePaymentDate), 'dd MMM yyyy')}
+          </FieldView>
+        )}
         <FieldView label='Registration Date (From)'>
           {format(new Date(property.registrationDateFrom), 'dd MMM yyyy')}
         </FieldView>
         <FieldView label='Registration Date (To)'>
           {format(new Date(property.registrationDateTo), 'dd MMM yyyy')}
         </FieldView>
-        {property.privatePaymentDateFrom && (
-          <FieldView label='Private Payment Date (From)'>
-            {format(new Date(property.privatePaymentDateFrom), 'dd MMM yyyy')}
-          </FieldView>
-        )}
-        {property.privatePaymentDateTo && (
-          <FieldView label='Private Payment Date (To)'>
-            {format(new Date(property.privatePaymentDateTo), 'dd MMM yyyy')}
-          </FieldView>
-        )}
       </DetailsViewBody>
     </DetailsView>
   );
