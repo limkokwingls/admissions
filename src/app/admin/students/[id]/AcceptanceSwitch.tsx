@@ -83,31 +83,13 @@ export default function AcceptanceSwitch({ student }: Props) {
 
   return (
     <>
-      <Card
-        shadow='sm'
-        padding='xs'
-        radius='md'
-        withBorder
-        style={{
-          borderColor: statusColor,
-          borderWidth: '2px',
-          transition: 'all 0.2s ease',
-        }}
-      >
+      <Card shadow='sm' padding='xs' radius='md' withBorder>
         <Group justify='space-between' wrap='nowrap'>
           <Group gap='xs'>
             {isAccepted ? (
-              <IconCircleCheck
-                size={rem(20)}
-                color={theme.colors.green[6]}
-                style={{ flexShrink: 0 }}
-              />
+              <IconCircleCheck color={theme.colors.green[6]} />
             ) : (
-              <IconExclamationCircle
-                size={rem(20)}
-                color={theme.colors.gray[6]}
-                style={{ flexShrink: 0 }}
-              />
+              <IconExclamationCircle color={theme.colors.gray[6]} />
             )}
             <Box>
               <Text fw={500} size='sm' c={statusColor}>
@@ -116,19 +98,17 @@ export default function AcceptanceSwitch({ student }: Props) {
             </Box>
           </Group>
 
-          <Tooltip label='Update status'>
-            <ActionIcon
-              variant='light'
-              color={isAccepted ? 'green' : 'gray'}
-              size='lg'
-              radius='md'
-              onClick={open}
-              disabled={isPending}
-              loading={isPending}
-            >
-              <IconEdit size={rem(16)} />
-            </ActionIcon>
-          </Tooltip>
+          <ActionIcon
+            variant='light'
+            color={isAccepted ? 'green' : 'gray'}
+            size='lg'
+            radius='md'
+            onClick={open}
+            disabled={isPending}
+            loading={isPending}
+          >
+            <IconEdit size={'1rem'} />
+          </ActionIcon>
         </Group>
       </Card>
 
