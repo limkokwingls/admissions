@@ -56,6 +56,11 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
             <Select
               label='Program'
               {...form.getInputProps('programId')}
+              onChange={(value) => {
+                if (value) {
+                  form.setFieldValue('programId', parseInt(value, 10));
+                }
+              }}
               searchable
               clearable
               data={programs?.items.map((program) => ({
