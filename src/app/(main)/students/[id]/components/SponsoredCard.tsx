@@ -4,13 +4,11 @@ import AcceptanceLetterButton from './AcceptanceLetter';
 import { Suspense } from 'react';
 import { formatDate } from 'date-fns';
 import { getStudent } from '@/server/students/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
-  properties: {
-    acceptanceFee?: number;
-    acceptanceDeadline: Date;
-  };
+  properties: NonNullable<Awaited<ReturnType<typeof getCurrentProperties>>>;
 };
 
 export default function SponsoredCard({ student, properties }: Props) {

@@ -72,6 +72,7 @@ const BANK_DETAILS = [
 
 type Props = {
   level: 'diploma' | 'degree' | 'certificate';
+  properties: NonNullable<Awaited<ReturnType<typeof getCurrentProperties>>>;
 };
 
 type PaymentDates = {
@@ -79,8 +80,7 @@ type PaymentDates = {
   privatePaymentDateTo: string | null;
 };
 
-export default async function PaymentPlanCard({ level }: Props) {
-  const properties = await getCurrentProperties();
+export default async function PaymentPlanCard({ level, properties }: Props) {
   const paymentDates: PaymentDates = {
     privatePaymentDateFrom: properties?.privatePaymentDate || null,
     privatePaymentDateTo: properties?.registrationDateTo || null,

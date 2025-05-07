@@ -34,7 +34,9 @@ export default async function StudentPage({ params }: Props) {
         <div className='mx-auto max-w-4xl py-8'>
           <ProgramCard student={student} />
           <div className='mt-6 flex flex-col gap-2'>
-            {isWaitlisted && <WaitlistedCard student={student} />}
+            {isWaitlisted && (
+              <WaitlistedCard student={student} properties={properties} />
+            )}
             {isAdmitted && (
               <SponsoredCard student={student} properties={properties} />
             )}
