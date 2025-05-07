@@ -344,18 +344,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
                 </View>
 
                 <View style={styles.noteItem}>
-                  <Text style={{ width: 20 }}>b.</Text>
-                  <Text>
-                    Disputes of any nature with my sponsors are not the
-                    responsibility of the University and should not be a reason
-                    for any demonstrations or strikes on any of the
-                    University&apos;s campuses. Should I engage in any
-                    disruptive behavior on the above, the University should have
-                    the right to exclude me from campus and/or expel me.
-                  </Text>
-                </View>
-
-                <View style={styles.noteItem}>
                   <Text style={{ width: 20 }}>c.</Text>
                   <Text>
                     Any damage to University property that I may cause as a
@@ -397,26 +385,57 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </View>
 
           <View style={{ marginTop: 30 }}>
-            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-              <Text style={{ width: 150 }}>Student Signature:</Text>
-              <Text style={{ flex: 1, borderBottom: '1px solid black' }}></Text>
+            <View style={{ marginBottom: 30 }}>
+              <Text
+                style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}
+              >
+                Student
+              </Text>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ width: 150 }}>Name:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ width: 150 }}>Signature:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ width: 150 }}>Date:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
             </View>
 
-            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-              <Text style={{ width: 150 }}>Date:</Text>
-              <Text style={{ flex: 1, borderBottom: '1px solid black' }}></Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-              <Text style={{ width: 150 }}>Contacts:</Text>
-              <Text style={{ flex: 1, borderBottom: '1px solid black' }}></Text>
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: 150 }}>Parent/Guardian Name:</Text>
-              <Text style={{ flex: 1, borderBottom: '1px solid black' }}></Text>
-              <Text style={{ width: 80 }}>Contacts:</Text>
-              <Text style={{ flex: 1, borderBottom: '1px solid black' }}></Text>
+            {/* Parent/Guardian section */}
+            <View style={{ marginBottom: 20 }}>
+              <Text
+                style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}
+              >
+                Parent/Guardian
+              </Text>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ width: 150 }}>Name:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ width: 150 }}>Signature:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ width: 150 }}>Date:</Text>
+                <Text
+                  style={{ flex: 1, borderBottom: '1px solid black' }}
+                ></Text>
+              </View>
             </View>
           </View>
         </View>
