@@ -36,7 +36,8 @@ class StudentService {
         };
         if (!existingStudent.no) {
           updateData.no = data.no;
-        } else if (!existingStudent.phoneNumber) {
+        }
+        if (!existingStudent.phoneNumber) {
           updateData.phoneNumber = data.phoneNumber;
         }
         return this.repository.update(existingStudent.id, updateData);
