@@ -25,6 +25,7 @@ import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createInsertSchema } from 'drizzle-zod';
 import { useState } from 'react';
+import { capitalCase } from 'change-case';
 
 type Program = typeof programsTable.$inferInsert;
 
@@ -132,6 +133,7 @@ export default function ProgramsManager({ facultyId }: Props) {
             <Table.Th>ID</Table.Th>
             <Table.Th>Code</Table.Th>
             <Table.Th>Name</Table.Th>
+            <Table.Th>Level</Table.Th>
             <Table.Th style={{ width: 120 }}>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -155,7 +157,11 @@ export default function ProgramsManager({ facultyId }: Props) {
                   <Table.Td>{program.id}</Table.Td>
                   <Table.Td>{program.code}</Table.Td>
                   <Table.Td>{program.name}</Table.Td>
-                  <Table.Td>{program.level}</Table.Td>
+                  <Table.Td>
+                    <Text size='sm' tt='capitalize'>
+                      {program.level}
+                    </Text>
+                  </Table.Td>
                   <Table.Td>
                     <Group gap='xs'>
                       <ActionIcon
@@ -213,7 +219,7 @@ export default function ProgramsManager({ facultyId }: Props) {
               {...form.getInputProps('level')}
               data={programLevels.map((level) => ({
                 value: level,
-                label: level,
+                label: capitalCase(level),
               }))}
             />
             <Group justify='flex-end'>
