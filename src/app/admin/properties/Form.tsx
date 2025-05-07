@@ -73,18 +73,31 @@ export default function PropertyForm({
             {...form.getInputProps('orientationDate')}
           />
           <DatePickerInput
-            label='Private Payment Date (From)'
-            placeholder='Select start date'
+            type="range"
+            label='Private Payment Date Range'
+            placeholder="Select date range"
             valueFormat='DD/MM/YYYY'
             firstDayOfWeek={0}
-            {...form.getInputProps('privatePaymentDateFrom')}
-          />
-          <DatePickerInput
-            label='Private Payment Date (To)'
-            placeholder='Select end date'
-            valueFormat='DD/MM/YYYY'
-            firstDayOfWeek={0}
-            {...form.getInputProps('privatePaymentDateTo')}
+            clearable
+            value={[
+              form.values.privatePaymentDateFrom ? new Date(form.values.privatePaymentDateFrom) : null,
+              form.values.privatePaymentDateTo ? new Date(form.values.privatePaymentDateTo) : null
+            ]}
+            onChange={(dates) => {
+              // Handle the dates array safely
+              if (Array.isArray(dates)) {
+                // Convert to ISO string format for storage
+                const startDate = dates[0] ? new Date(dates[0]).toISOString() : null;
+                const endDate = dates[1] ? new Date(dates[1]).toISOString() : null;
+                
+                form.setFieldValue('privatePaymentDateFrom', startDate);
+                form.setFieldValue('privatePaymentDateTo', endDate);
+              } else {
+                // Reset values if dates is null/undefined
+                form.setFieldValue('privatePaymentDateFrom', null);
+                form.setFieldValue('privatePaymentDateTo', null);
+              }
+            }}
           />
         </>
       )}
