@@ -6,6 +6,5 @@ export const properties = sqliteTable('properties', {
   acceptanceDeadline: text().notNull(),
   registrationDateFrom: text().notNull(),
   registrationDateTo: text().notNull(),
-  privatePaymentDateFrom: text(),
-  privatePaymentDateTo: text(),
+  privatePaymentDate: text(),
 });

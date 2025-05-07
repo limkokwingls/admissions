@@ -82,8 +82,8 @@ type PaymentDates = {
 export default async function PaymentPlanCard({ level }: Props) {
   const properties = await getCurrentProperties();
   const paymentDates: PaymentDates = {
-    privatePaymentDateFrom: properties?.privatePaymentDateFrom || null,
-    privatePaymentDateTo: properties?.privatePaymentDateTo || null,
+    privatePaymentDateFrom: properties?.privatePaymentDate || null,
+    privatePaymentDateTo: properties?.registrationDateTo || null,
   };
   return (
     <Card className='mt-6 overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
