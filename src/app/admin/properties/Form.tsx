@@ -60,6 +60,23 @@ export default function PropertyForm({
             firstDayOfWeek={0}
             {...form.getInputProps('acceptanceDeadline')}
           />
+          <DateInput
+            label='Private Payment Date'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
+            clearable
+            value={
+              form.values.privatePaymentDate
+                ? new Date(form.values.privatePaymentDate)
+                : null
+            }
+            onChange={(value) => {
+              const formattedDate = value
+                ? new Date(value).toISOString()
+                : null;
+              form.setFieldValue('privatePaymentDate', formattedDate);
+            }}
+          />
           <DatePickerInput
             type='range'
             label='Registration Date Range'
@@ -87,37 +104,6 @@ export default function PropertyForm({
               } else {
                 form.setFieldValue('registrationDateFrom', '');
                 form.setFieldValue('registrationDateTo', '');
-              }
-            }}
-          />
-          <DatePickerInput
-            type='range'
-            label='Private Payment Date Range'
-            valueFormat='DD/MM/YYYY'
-            firstDayOfWeek={0}
-            clearable
-            value={[
-              form.values.privatePaymentDateFrom
-                ? new Date(form.values.privatePaymentDateFrom)
-                : null,
-              form.values.privatePaymentDateTo
-                ? new Date(form.values.privatePaymentDateTo)
-                : null,
-            ]}
-            onChange={(dates) => {
-              if (Array.isArray(dates)) {
-                const startDate = dates[0]
-                  ? new Date(dates[0]).toISOString()
-                  : null;
-                const endDate = dates[1]
-                  ? new Date(dates[1]).toISOString()
-                  : null;
-
-                form.setFieldValue('privatePaymentDateFrom', startDate);
-                form.setFieldValue('privatePaymentDateTo', endDate);
-              } else {
-                form.setFieldValue('privatePaymentDateFrom', null);
-                form.setFieldValue('privatePaymentDateTo', null);
               }
             }}
           />
