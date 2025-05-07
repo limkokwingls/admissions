@@ -176,11 +176,11 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
       {/* First Page - Acceptance Letter */}
       <Page size='A4' style={styles.page}>
         {/* University Header with Logo */}
+        <Text style={styles.universityName}>
+          Limkokwing University of Creative Technology
+        </Text>
         <View style={styles.headerContainer}>
           <View style={styles.headerLeft}>
-            <Text style={styles.universityName}>
-              Limkokwing University of Creative Technology
-            </Text>
             <Text style={styles.addressText}>
               Moshoeshoe Road Maseru Central
             </Text>
