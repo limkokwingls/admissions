@@ -29,7 +29,6 @@ Font.register({
   ],
 });
 
-// Define styles
 const styles = StyleSheet.create({
   page: {
     padding: 50,
@@ -173,9 +172,7 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
 
   return (
     <Document>
-      {/* First Page - Acceptance Letter */}
       <Page size='A4' style={styles.page}>
-        {/* University Header with Logo */}
         <Text style={styles.universityName}>
           Limkokwing University of Creative Technology
         </Text>
@@ -195,12 +192,10 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </View>
         </View>
 
-        {/* Document Title */}
         <View style={styles.header}>
           <Text style={styles.headerText}>ACCEPTANCE LETTER</Text>
         </View>
 
-        {/* Date and Reference */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.date}>Date: {currentDate}</Text>
           <Text style={styles.reference}>
@@ -214,14 +209,12 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </Text>
         </View>
 
-        {/* Greeting */}
         <View style={styles.greeting}>
           <Text>
             Dear {student.names} {student.surname}
           </Text>
         </View>
 
-        {/* Main Content */}
         <View style={styles.content}>
           <Text>
             Congratulations! We are pleased to inform you that you have been
@@ -243,7 +236,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </Text>
         </View>
 
-        {/* Bank Details */}
         <View style={styles.bankDetails}>
           <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>
             Banking details are as follows:
@@ -269,7 +261,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </View>
         </View>
 
-        {/* Notes */}
         <View style={styles.note}>
           <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>NB:</Text>
 
@@ -285,7 +276,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </View>
         </View>
 
-        {/* Contact Information */}
         <View style={styles.contact}>
           <Text>
             Should you need any further clarifications, please do not hesitate
@@ -294,14 +284,12 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           </Text>
         </View>
 
-        {/* Signature */}
         <View style={styles.signature}>
           <Text>Registry Department</Text>
           <Text>Limkokwing University of Creative Technology</Text>
         </View>
       </Page>
 
-      {/* Second Page - Declaration Form */}
       <Page size='A4' style={styles.page}>
         <View style={styles.content}>
           <Text style={{ marginBottom: 20 }}>
@@ -408,7 +396,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
             </View>
           </View>
 
-          {/* Signature Fields */}
           <View style={{ marginTop: 30 }}>
             <View style={{ flexDirection: 'row', marginBottom: 20 }}>
               <Text style={{ width: 150 }}>Student Signature:</Text>
