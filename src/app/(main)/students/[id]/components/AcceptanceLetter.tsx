@@ -148,7 +148,9 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
 
   return (
     <PDFDownloadLink
-      document={<AcceptanceLetterPDF student={student} properties={properties} />}
+      document={
+        <AcceptanceLetterPDF student={student} properties={properties} />
+      }
       fileName={`acceptance-letter-${student.surname}-${student.names}.pdf`}
       style={{ textDecoration: 'none' }}
     >
@@ -176,8 +178,12 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
         {/* University Header with Logo */}
         <View style={styles.headerContainer}>
           <View style={styles.headerLeft}>
-            <Text style={styles.universityName}>Limkokwing University of Creative Technology</Text>
-            <Text style={styles.addressText}>Moshoeshoe Road Maseru Central</Text>
+            <Text style={styles.universityName}>
+              Limkokwing University of Creative Technology
+            </Text>
+            <Text style={styles.addressText}>
+              Moshoeshoe Road Maseru Central
+            </Text>
             <Text style={styles.addressText}>P.O. Box 8971</Text>
             <Text style={styles.addressText}>Maseru Maseru 0101</Text>
             <Text style={styles.addressText}>Lesotho</Text>
@@ -185,10 +191,10 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
             <Text style={styles.addressText}>registry@limkokwing.ac.ls</Text>
           </View>
           <View style={styles.headerRight}>
-            <Image src="/images/logo.png" style={styles.logo} />
+            <Image src='/images/logo.png' style={styles.logo} />
           </View>
         </View>
-        
+
         {/* Document Title */}
         <View style={styles.header}>
           <Text style={styles.headerText}>ACCEPTANCE LETTER</Text>
@@ -199,7 +205,12 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
           <Text style={styles.date}>Date: {currentDate}</Text>
           <Text style={styles.reference}>
             Ref: {student.program?.faculty?.code}/{student.program?.code}/
-            {student.no}
+            {student.status === 'DQ'
+              ? 'DQ'
+              : student.status === 'Wait Listed'
+                ? 'W'
+                : 'A'}
+            /{student.no}
           </Text>
         </View>
 
@@ -217,14 +228,18 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
             accepted to study {student.program?.name} at Limkokwing University.
             Please complete the attached form and submit it to the Registry
             Department together with the confirmation receipt of the acceptance
-            fee of M{properties.acceptanceFee.toFixed(2)} on or before {new Date(properties.acceptanceDeadline).toLocaleDateString('en-GB', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            })}. Kindly note that failure
-            to return the completed form and confirmation receipt by the
-            stipulated deadline will result in your slot being allocated to
-            another candidate.
+            fee of M{properties.acceptanceFee.toFixed(2)} on or before{' '}
+            {new Date(properties.acceptanceDeadline).toLocaleDateString(
+              'en-GB',
+              {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              },
+            )}
+            . Kindly note that failure to return the completed form and
+            confirmation receipt by the stipulated deadline will result in your
+            slot being allocated to another candidate.
           </Text>
         </View>
 
