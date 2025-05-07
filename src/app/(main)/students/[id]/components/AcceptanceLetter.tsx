@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
   universityName: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   addressText: {
     fontSize: 10,
-    marginBottom: 2,
+    marginBottom: 0,
   },
   logo: {
     width: 150,
