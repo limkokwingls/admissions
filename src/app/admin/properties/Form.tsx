@@ -56,29 +56,34 @@ export default function PropertyForm({
           />
           <DateInput
             label='Acceptance Deadline'
-            valueFormat='YYYY-MM-DD'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
             {...form.getInputProps('acceptanceDeadline')}
           />
           <DateInput
             label='Registration Date'
-            valueFormat='YYYY-MM-DD'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
             {...form.getInputProps('registrationDate')}
           />
           <DateInput
             label='Orientation Date'
-            valueFormat='YYYY-MM-DD'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
             {...form.getInputProps('orientationDate')}
           />
           <DatePickerInput
             label='Private Payment Date (From)'
             placeholder='Select start date'
-            valueFormat='YYYY-MM-DD'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
             {...form.getInputProps('privatePaymentDateFrom')}
           />
           <DatePickerInput
             label='Private Payment Date (To)'
             placeholder='Select end date'
-            valueFormat='YYYY-MM-DD'
+            valueFormat='DD/MM/YYYY'
+            firstDayOfWeek={0}
             {...form.getInputProps('privatePaymentDateTo')}
           />
         </>
