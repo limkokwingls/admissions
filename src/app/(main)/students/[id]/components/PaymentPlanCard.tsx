@@ -62,7 +62,11 @@ const BANK_DETAILS = [
   { label: 'Swift Code', value: 'SBICLSMX' },
 ];
 
-export default function PaymentPlanCard() {
+type Props = {
+  level: 'diploma' | 'degree' | 'certificate';
+};
+
+export default function PaymentPlanCard({ level }: Props) {
   return (
     <Card className='mt-6 overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
       <CardHeader className='border-b border-neutral-200 pb-3 dark:border-neutral-800'>
@@ -74,7 +78,7 @@ export default function PaymentPlanCard() {
       </CardHeader>
 
       <CardContent className='p-4 md:p-6'>
-        <Tabs defaultValue='diploma' className='w-full'>
+        <Tabs defaultValue={level} className='w-full'>
           <TabsList className='mb-6 grid w-full grid-cols-2'>
             <TabsTrigger value='diploma'>Diploma</TabsTrigger>
             <TabsTrigger value='degree'>Degree</TabsTrigger>

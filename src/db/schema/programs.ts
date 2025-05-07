@@ -2,6 +2,8 @@ import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 
+export const programLevels = ['certificate', 'diploma', 'degree'] as const;
+
 export const faculties = sqliteTable('faculties', {
   id: integer('id').primaryKey(),
   code: text().notNull(),
@@ -18,6 +20,7 @@ export const programs = sqliteTable('programs', {
   id: integer('id').primaryKey(),
   code: text().notNull(),
   name: text().notNull(),
+  level: text({ enum: programLevels }).notNull(),
   facultyId: integer()
     .notNull()
     .references(() => faculties.id, { onDelete: 'cascade' }),

@@ -1,8 +1,13 @@
 import { Card } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
 import PaymentPlanCard from './PaymentPlanCard';
+import { getStudent } from '@/server/students/actions';
 
-export default function WaitlistedCard() {
+type Props = {
+  student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+};
+
+export default function WaitlistedCard({ student }: Props) {
   return (
     <>
       <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
@@ -72,7 +77,7 @@ export default function WaitlistedCard() {
           </div>
         </div>
       </Card>
-      <PaymentPlanCard />
+      <PaymentPlanCard level={student.program.level} />
     </>
   );
 }
