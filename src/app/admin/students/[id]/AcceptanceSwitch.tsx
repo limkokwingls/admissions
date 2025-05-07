@@ -38,6 +38,9 @@ type Props = {
 export default function AcceptanceSwitch({ student }: Props) {
   const theme = useMantineTheme();
   const [isAccepted, setIsAccepted] = useState<boolean>(student.accepted);
+  const [tempIsAccepted, setTempIsAccepted] = useState<boolean>(
+    student.accepted,
+  );
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
@@ -46,7 +49,7 @@ export default function AcceptanceSwitch({ student }: Props) {
   const statusColor = isAccepted ? theme.colors.green[6] : theme.colors.gray[6];
 
   function update() {
-    const status = !isAccepted;
+    const status = tempIsAccepted;
     setIsAccepted(status);
 
     startTransition(async () => {
@@ -71,6 +74,7 @@ export default function AcceptanceSwitch({ student }: Props) {
         close();
       } catch (error) {
         setIsAccepted(student.accepted);
+        setTempIsAccepted(student.accepted);
         notifications.show({
           title: 'Error updating acceptance status',
           message: error instanceof Error ? error.message : 'An error occurred',
@@ -115,128 +119,46 @@ export default function AcceptanceSwitch({ student }: Props) {
       <Modal
         opened={opened}
         onClose={close}
-        title={<Title order={4}>Update Acceptance Status</Title>}
+        title='Update Acceptance Status'
         centered
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
         radius='md'
-        padding='lg'
-        size='md'
+        size='sm'
       >
-        <Paper p='lg' withBorder shadow='md' radius='md'>
-          <Box mb='md'>
-            <Text size='sm' c='dimmed' mb={4}>
-              Student
-            </Text>
-            <Text fw={600} size='lg'>
-              {student.surname} {student.names}
-            </Text>
-          </Box>
+        <Box mb='md'>
+          <Text size='sm'>
+            Student: {student.surname} {student.names}
+          </Text>
+        </Box>
 
-          <Card
-            withBorder
-            p='md'
-            radius='md'
-            mb='lg'
-            bg={
-              colorScheme === 'dark'
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0]
-            }
+        <Switch
+          checked={tempIsAccepted}
+          onChange={(event) => setTempIsAccepted(event.currentTarget.checked)}
+          color='green'
+          size='md'
+          label={tempIsAccepted ? 'Accepted' : 'Not Accepted'}
+          description={`Toggle to mark as ${tempIsAccepted ? 'not accepted' : 'accepted'}`}
+          disabled={isPending}
+        />
+
+        <Group justify='flex-end' mt='lg'>
+          <Button
+            variant='default'
+            onClick={() => {
+              setTempIsAccepted(isAccepted);
+              close();
+            }}
+            disabled={isPending}
           >
-            <Text fw={500} size='sm' mb='md'>
-              Current Status
-            </Text>
-
-            <Group justify='apart' mb='md'>
-              <Text size='xl' fw={700} c={statusColor}>
-                {isAccepted ? 'Accepted' : 'Not Accepted'}
-              </Text>
-
-              {isAccepted ? (
-                <IconCircleCheck size={rem(24)} color={theme.colors.green[6]} />
-              ) : (
-                <IconExclamationCircle
-                  size={rem(24)}
-                  color={theme.colors.gray[6]}
-                />
-              )}
-            </Group>
-
-            <Text size='sm' c='dimmed'>
-              Change the status using the switch below
-            </Text>
-          </Card>
-
-          <Flex direction='column' gap='md'>
-            <Switch
-              checked={isAccepted}
-              onChange={update}
-              color='green'
-              size='lg'
-              radius='xl'
-              label={
-                <Text fw={500} size='md'>
-                  {isPending
-                    ? 'Updating...'
-                    : isAccepted
-                      ? 'Accepted'
-                      : 'Not Accepted'}
-                </Text>
-              }
-              description={`Toggle to mark as ${isAccepted ? 'not accepted' : 'accepted'}`}
-              disabled={isPending}
-              styles={{
-                track: {
-                  cursor: 'pointer',
-                },
-              }}
-              thumbIcon={
-                isAccepted ? (
-                  <IconCheck
-                    style={{ width: rem(12), height: rem(12) }}
-                    color={theme.colors.green[5]}
-                    stroke={3}
-                  />
-                ) : (
-                  <IconExclamationMark
-                    style={{ width: rem(12), height: rem(12) }}
-                    color={theme.colors.red[6]}
-                    stroke={3}
-                  />
-                )
-              }
-            />
-
-            <Group justify='flex-end' mt='xl'>
-              <Button
-                variant='default'
-                onClick={close}
-                disabled={isPending}
-                radius='md'
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={update}
-                color={isAccepted ? 'red' : 'green'}
-                loading={isPending}
-                radius='md'
-                leftSection={
-                  isAccepted ? (
-                    <IconExclamationCircle size={rem(16)} />
-                  ) : (
-                    <IconCircleCheck size={rem(16)} />
-                  )
-                }
-              >
-                {isAccepted ? 'Mark as Not Accepted' : 'Mark as Accepted'}
-              </Button>
-            </Group>
-          </Flex>
-        </Paper>
+            Cancel
+          </Button>
+          <Button
+            onClick={update}
+            color={tempIsAccepted ? 'red' : 'green'}
+            loading={isPending}
+          >
+            {tempIsAccepted ? 'Mark as Not Accepted' : 'Mark as Accepted'}
+          </Button>
+        </Group>
       </Modal>
     </>
   );
