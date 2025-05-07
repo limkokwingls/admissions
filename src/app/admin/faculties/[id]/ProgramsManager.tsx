@@ -1,6 +1,6 @@
 'use client';
 
-import { programs as programsTable } from '@/db/schema';
+import { programLevels, programs as programsTable } from '@/db/schema';
 import {
   createProgram,
   deleteProgram,
@@ -14,6 +14,7 @@ import {
   Group,
   Modal,
   NumberInput,
+  Select,
   Stack,
   Table,
   Text,
@@ -44,13 +45,7 @@ export default function ProgramsManager({ facultyId }: Props) {
 
   const programs = programsData?.items || [];
 
-  const form = useForm({
-    initialValues: {
-      id: 0,
-      code: '',
-      name: '',
-      facultyId: facultyId,
-    },
+  const form = useForm<Program>({
     validate: zodResolver(createInsertSchema(programsTable)),
   });
 
@@ -86,6 +81,7 @@ export default function ProgramsManager({ facultyId }: Props) {
         code: program.code,
         name: program.name,
         facultyId: program.facultyId,
+        level: program.level,
       });
     } else {
       setEditingProgram(null);
@@ -153,11 +149,13 @@ export default function ProgramsManager({ facultyId }: Props) {
                 code: string;
                 name: string;
                 facultyId: number;
+                level: (typeof programLevels)[number];
               }) => (
                 <Table.Tr key={program.id}>
                   <Table.Td>{program.id}</Table.Td>
                   <Table.Td>{program.code}</Table.Td>
                   <Table.Td>{program.name}</Table.Td>
+                  <Table.Td>{program.level}</Table.Td>
                   <Table.Td>
                     <Group gap='xs'>
                       <ActionIcon
@@ -209,6 +207,14 @@ export default function ProgramsManager({ facultyId }: Props) {
               placeholder='Enter program name'
               required
               {...form.getInputProps('name')}
+            />
+            <Select
+              label='Level'
+              {...form.getInputProps('level')}
+              data={programLevels.map((level) => ({
+                value: level,
+                label: level,
+              }))}
             />
             <Group justify='flex-end'>
               <Button variant='outline' onClick={handleCloseModal}>
