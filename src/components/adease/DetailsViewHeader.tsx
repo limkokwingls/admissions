@@ -18,6 +18,7 @@ export interface DetailsViewHeaderProps {
   onDeleteSuccess?: () => Promise<void>;
   deleteRoles?: UserRole[];
   editRoles?: UserRole[];
+  actions?: React.ReactNode[];
 }
 
 export function DetailsViewHeader({
@@ -27,6 +28,7 @@ export function DetailsViewHeader({
   onDeleteSuccess,
   deleteRoles,
   editRoles,
+  actions,
 }: DetailsViewHeaderProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -73,6 +75,7 @@ export function DetailsViewHeader({
               <IconEdit size={'1rem'} />
             </ActionIcon>
           )}
+          {actions}
         </Group>
       </Flex>
       <Divider my={15} />

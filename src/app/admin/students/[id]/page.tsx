@@ -28,6 +28,8 @@ import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 import { formatDistanceToNow } from 'date-fns';
 import { IconEye, IconFileDownload } from '@tabler/icons-react';
+import PrintAdmission from './edit/PrintAdmission';
+import { getCurrentProperties } from '@/server/properties/actions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -40,6 +42,7 @@ export default async function StudentDetails({ params }: Props) {
   const student = await getStudent(id);
   const pageVisit = await getPageVisitByStudentId(student?.id || '');
   const letterDownload = await getLetterDownloadByStudentId(student?.id || '');
+  const properties = await getCurrentProperties();
 
   if (!student) {
     return notFound();
@@ -54,6 +57,13 @@ export default async function StudentDetails({ params }: Props) {
           'use server';
           await deleteStudent(id);
         }}
+        actions={[
+          <PrintAdmission
+            key='print'
+            student={student}
+            properties={properties}
+          />,
+        ]}
       />
       <DetailsViewBody gap={'lg'}>
         <AcceptanceSwitch student={student} />
