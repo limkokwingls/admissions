@@ -1,6 +1,6 @@
 'use server';
 
-import { studentHistory } from '@/db/schema/history';
+import { ActionType, studentHistory } from '@/db/schema/history';
 import { historyService as service } from './service';
 import { QueryOptions } from '../base/BaseRepository';
 import { auth } from '@/auth';
@@ -15,15 +15,20 @@ export async function getHistoryByStudentId(studentId: string) {
   return service.getHistoryByStudentId(studentId);
 }
 
-export async function getHistoryByAction(action: string) {
+export async function getHistoryByAction(action: ActionType) {
   return service.getHistoryByAction(action);
 }
 
-export async function getHistoryByStudentIdAndAction(studentId: string, action: string) {
+export async function getHistoryByStudentIdAndAction(
+  studentId: string,
+  action: ActionType,
+) {
   return service.getHistoryByStudentIdAndAction(studentId, action);
 }
 
-export async function getAllHistory(params: QueryOptions<typeof studentHistory>) {
+export async function getAllHistory(
+  params: QueryOptions<typeof studentHistory>,
+) {
   return service.getAllHistory(params);
 }
 
@@ -32,34 +37,32 @@ export async function createHistoryEntry(data: StudentHistory) {
 }
 
 export async function trackAcceptanceChange(
-  studentId: string, 
-  oldValue: boolean, 
-  newValue: boolean
+  studentId: string,
+  oldValue: boolean,
+  newValue: boolean,
 ) {
   const session = await auth();
-  const userEmail = session?.user?.email || 'system';
-  
-  return service.trackAcceptanceChange(
-    studentId,
-    oldValue,
-    newValue,
-    userEmail
-  );
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+
+  return service.trackAcceptanceChange(studentId, oldValue, newValue, userId);
 }
 
 export async function trackAdmissionPrinted(studentId: string) {
   const session = await auth();
-  const userEmail = session?.user?.email || 'system';
-  
-  return service.trackAdmissionPrinted(
-    studentId,
-    userEmail
-  );
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+
+  return service.trackAdmissionPrinted(studentId, userId);
 }
 
 export async function updateHistoryEntry(
   id: string,
-  data: Partial<StudentHistory>
+  data: Partial<StudentHistory>,
 ) {
   return service.updateHistoryEntry(id, data);
 }

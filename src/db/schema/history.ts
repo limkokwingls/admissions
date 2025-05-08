@@ -4,6 +4,9 @@ import { nanoid } from 'nanoid';
 import { students } from './students';
 import { users } from './auth';
 
+const actionsEnum = ['acceptance_changed', 'admission_printed'] as const;
+export type ActionType = (typeof actionsEnum)[number];
+
 export const studentHistory = sqliteTable(
   'student_history',
   {
@@ -13,7 +16,7 @@ export const studentHistory = sqliteTable(
     studentId: text()
       .notNull()
       .references(() => students.id, { onDelete: 'cascade' }),
-    action: text().notNull(),
+    action: text({ enum: actionsEnum }).notNull(),
     oldValue: text(),
     newValue: text(),
     performedBy: text()

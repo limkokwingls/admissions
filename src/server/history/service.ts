@@ -1,4 +1,4 @@
-import { studentHistory } from '@/db/schema/history';
+import { ActionType, studentHistory } from '@/db/schema/history';
 import { studentHistoryRepository } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
@@ -6,24 +6,32 @@ import { QueryOptions } from '../base/BaseRepository';
 type StudentHistory = typeof studentHistory.$inferInsert;
 
 class HistoryService {
-  constructor(
-    private readonly studentHistoryRepo = studentHistoryRepository
-  ) {}
+  constructor(private readonly studentHistoryRepo = studentHistoryRepository) {}
 
   async getHistoryItem(id: string) {
     return withAuth(async () => this.studentHistoryRepo.findById(id), []);
   }
 
   async getHistoryByStudentId(studentId: string) {
-    return withAuth(async () => this.studentHistoryRepo.findByStudentId(studentId), []);
+    return withAuth(
+      async () => this.studentHistoryRepo.findByStudentId(studentId),
+      [],
+    );
   }
 
-  async getHistoryByAction(action: string) {
-    return withAuth(async () => this.studentHistoryRepo.findByAction(action), []);
+  async getHistoryByAction(action: ActionType) {
+    return withAuth(
+      async () => this.studentHistoryRepo.findByAction(action),
+      [],
+    );
   }
 
-  async getHistoryByStudentIdAndAction(studentId: string, action: string) {
-    return withAuth(async () => this.studentHistoryRepo.findByStudentIdAndAction(studentId, action), []);
+  async getHistoryByStudentIdAndAction(studentId: string, action: ActionType) {
+    return withAuth(
+      async () =>
+        this.studentHistoryRepo.findByStudentIdAndAction(studentId, action),
+      [],
+    );
   }
 
   async getAllHistory(params: QueryOptions<typeof studentHistory>) {
@@ -35,10 +43,10 @@ class HistoryService {
   }
 
   async trackAcceptanceChange(
-    studentId: string, 
-    oldValue: boolean, 
-    newValue: boolean, 
-    performedBy: string
+    studentId: string,
+    oldValue: boolean,
+    newValue: boolean,
+    performedBy: string,
   ) {
     return this.createHistoryEntry({
       studentId,
@@ -49,10 +57,7 @@ class HistoryService {
     });
   }
 
-  async trackAdmissionPrinted(
-    studentId: string,
-    performedBy: string
-  ) {
+  async trackAdmissionPrinted(studentId: string, performedBy: string) {
     return this.createHistoryEntry({
       studentId,
       action: 'admission_printed',
