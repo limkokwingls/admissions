@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   noteListItem: {
     flexDirection: 'row',
-    marginBottom: 3,
+    fontSize: 10,
   },
   noteListNumber: {
     width: 20,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   signatureSection: {
-    marginTop: 40,
+    marginTop: 30,
   },
   signatureName: {
     marginTop: 10,

@@ -15,7 +15,6 @@ import {
 } from '@react-pdf/renderer';
 import { Download } from 'lucide-react';
 
-// Using Open Sans from Google Fonts as a replacement for Tahoma (similar sans-serif font)
 Font.register({
   family: 'Tahoma',
   fonts: [
@@ -64,14 +63,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   noteList: {
-    marginLeft: 20, // Further indent for note items if needed
+    marginLeft: 20,
   },
   noteListItem: {
     flexDirection: 'row',
     marginBottom: 3,
   },
   noteListNumber: {
-    width: 20, // Space for "i) ", "ii) "
+    width: 20,
   },
   noteListText: {
     flex: 1,
@@ -80,12 +79,8 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   signatureName: {
-    marginTop: 10, // Space for actual signature
+    marginTop: 10,
   },
-  // Remove unused styles from the old version
-  // headerContainer, headerLeft, headerRight, universityName, addressText, logo,
-  // header, headerText, date, reference, greeting, content, bankDetails,
-  // bankTable, bankRow, bankLabel, bankValue, note, contact (if it was specific to old style)
 });
 
 type Props = {
@@ -98,7 +93,6 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
     return null;
   }
 
-  // Function to track letter download
   const handleDownload = async () => {
     try {
       await incrementLetterDownload(student.id);
@@ -127,16 +121,12 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
 }
 
 function AcceptanceLetterPDF({ student, properties }: Props) {
-  // Data from the image, to be replaced with dynamic props if available
   const letterDate = '30/01/2025';
   const referenceNumber = 'LUCT/FICT/BSCBIT/P/P1';
-  // Assuming program name comes from student.program.name
-  // Assuming student names come from student.names and student.surname
 
-  // Values from the image template
   const programName =
     student.program?.name || 'BSC IN BUSINESS INFORMATION TECHNOLOGY';
-  const commencementDate = '01st AUGUST 2025'; // This might need formatting logic for "st"
+  const commencementDate = '01st AUGUST 2025';
   const studyDuration = '4 YEARS';
   const tuitionFee = 'M42,300.00 per annum';
   const contactPhoneNumber = '22315767';
@@ -226,8 +216,6 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
 
         <View style={styles.signatureSection}>
           <Text>Yours sincerely,</Text>
-          {/* Placeholder for signature image if you have one */}
-          {/* <Image src="/path/to/signature.png" style={styles.signatureImage} /> */}
           <Text style={styles.signatureName}>{registrarName}</Text>
           <Text>{registrarTitle}</Text>
         </View>
