@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { getStudent } from '@/server/students/actions';
-import { getCurrentProperties } from '@/server/properties/actions';
 import { incrementLetterDownload } from '@/server/analytics/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
+import { getStudent } from '@/server/students/actions';
 import {
   Document,
   Font,
@@ -12,19 +12,19 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
 } from '@react-pdf/renderer';
 import { Download } from 'lucide-react';
 
+// Using Open Sans from Google Fonts as a replacement for Tahoma (similar sans-serif font)
 Font.register({
-  family: 'Roboto',
+  family: 'Tahoma',
   fonts: [
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
+      src: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf',
       fontWeight: 'normal',
     },
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
+      src: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf',
       fontWeight: 'bold',
     },
   ],
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 60,
     paddingHorizontal: 50,
-    fontFamily: 'Roboto',
+    fontFamily: 'Tahoma',
     fontSize: 11,
     lineHeight: 1.5,
   },

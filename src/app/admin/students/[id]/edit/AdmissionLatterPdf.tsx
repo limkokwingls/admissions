@@ -1,37 +1,32 @@
 'use client';
-import { ActionIcon } from '@mantine/core';
-import { IconPrinter } from '@tabler/icons-react';
-import React, { useState } from 'react';
-import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
-import { Text } from '@mantine/core';
+import { getStudent } from '@/server/students/actions';
 import {
   Document,
   Font,
   Page,
-  StyleSheet,
   Text as PDFText,
+  StyleSheet,
   View,
-  Image,
-  pdf,
 } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
+// Using Open Sans from Google Fonts as a replacement for Tahoma (similar sans-serif font)
 Font.register({
-  family: 'Roboto',
+  family: 'Tahoma',
   fonts: [
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
+      src: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf',
       fontWeight: 'normal',
       fontStyle: 'normal',
     },
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
+      src: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf',
       fontWeight: 'bold',
       fontStyle: 'normal',
     },
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-italic-webfont.ttf',
+      src: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf',
       fontWeight: 'normal',
       fontStyle: 'italic',
     },
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
     paddingTop: 140,
     paddingBottom: 60,
     paddingHorizontal: 50,
-    fontFamily: 'Roboto',
+    fontFamily: 'Tahoma',
     fontSize: 11,
     lineHeight: 1.5,
   },
