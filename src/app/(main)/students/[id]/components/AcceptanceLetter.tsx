@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { incrementLetterDownload } from '@/server/analytics/actions';
 import {
   Document,
   Font,
@@ -145,6 +146,15 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
     return null;
   }
 
+  // Function to track letter download
+  const handleDownload = async () => {
+    try {
+      await incrementLetterDownload(student.id);
+    } catch (error) {
+      console.error('Failed to track letter download:', error);
+    }
+  };
+
   return (
     <PDFDownloadLink
       document={
@@ -152,6 +162,7 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
       }
       fileName={`acceptance-letter-${student.surname}-${student.names}.pdf`}
       style={{ textDecoration: 'none' }}
+      onClick={handleDownload}
     >
       {({ loading }) => (
         <Button className='w-full py-6' disabled={loading}>

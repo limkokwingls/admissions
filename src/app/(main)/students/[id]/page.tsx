@@ -1,5 +1,6 @@
 import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { incrementPageVisit } from '@/server/analytics/actions';
 import { Container } from '@/components/ui/container';
 import { notFound } from 'next/navigation';
 import ProgramCard from '@/app/(main)/students/[id]/components/ProgramCard';
@@ -19,6 +20,8 @@ export default async function StudentPage({ params }: Props) {
   if (!student) {
     return notFound();
   }
+
+  await incrementPageVisit(student.id);
 
   const isAdmitted = student.status === 'Admitted';
   const isWaitlisted = student.status === 'Wait Listed';
