@@ -77,7 +77,7 @@ export default async function StudentDetails({ params }: Props) {
           <Title order={5} mb='md' c='dimmed' size='sm'>
             Analytics
           </Title>
-          <SimpleGrid cols={2}>
+          <SimpleGrid cols={3}>
             <Box>
               <Group gap='xs'>
                 <Text size='sm' fw={500}>

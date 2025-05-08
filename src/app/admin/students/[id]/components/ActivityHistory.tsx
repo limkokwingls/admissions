@@ -88,11 +88,41 @@ export default function ActivityHistory({ studentId }: Props) {
                 ? format(new Date(item.performedAt), 'HH:mm')
                 : '';
 
-              let actionDescription = '';
+              let actionDescription: React.ReactNode;
               if (item.action === 'acceptance_changed') {
-                actionDescription = `changed status from ${item.oldValue === 'true' ? 'Accepted' : 'Not Accepted'} to ${item.newValue === 'true' ? 'Accepted' : 'Not Accepted'}`;
+                actionDescription = (
+                  <>
+                    changed status from{' '}
+                    {item.oldValue === 'true' ? (
+                      <Text span c='blue'>
+                        Accepted
+                      </Text>
+                    ) : (
+                      <Text span c='red'>
+                        Not Accepted
+                      </Text>
+                    )}{' '}
+                    to{' '}
+                    {item.newValue === 'true' ? (
+                      <Text span c='blue'>
+                        Accepted
+                      </Text>
+                    ) : (
+                      <Text span c='red'>
+                        Not Accepted
+                      </Text>
+                    )}
+                  </>
+                );
               } else {
-                actionDescription = 'printed admission letter';
+                actionDescription = (
+                  <>
+                    <Text span c='blue'>
+                      Printed
+                    </Text>{' '}
+                    admission letter
+                  </>
+                );
               }
 
               return (
