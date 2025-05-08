@@ -42,73 +42,60 @@ Font.register({
 // Styles for PDF document
 const styles = StyleSheet.create({
   page: {
-    padding: 50,
+    paddingTop: 30,
+    paddingBottom: 60,
+    paddingHorizontal: 50,
     fontFamily: 'Roboto',
-    fontSize: 12,
-  },
-  date: {
-    marginBottom: 15,
     fontSize: 11,
+    lineHeight: 1.5,
   },
-  reference: {
-    marginBottom: 15,
-    fontSize: 11,
-    textAlign: 'right',
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+    fontSize: 10,
   },
   letterTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 15,
-    textTransform: 'uppercase',
-  },
-  greeting: {
-    marginBottom: 10,
+    fontSize: 12,
     fontWeight: 'bold',
+    textDecoration: 'underline',
+    marginBottom: 30,
   },
-  content: {
-    lineHeight: 1.5,
-    marginBottom: 15,
+  paragraph: {
+    marginBottom: 12,
     textAlign: 'justify',
   },
-  tuitionSection: {
-    marginBottom: 10,
-  },
-  tuitionAmount: {
+  boldText: {
     fontWeight: 'bold',
   },
-  note: {
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 11,
+  indentSection: {
+    marginLeft: 20,
+    marginBottom: 12,
   },
-  noteItem: {
-    marginBottom: 5,
+  noteList: {
+    marginLeft: 20,
   },
-  signature: {
+  noteListItem: {
+    flexDirection: 'row',
+    marginBottom: 3,
+  },
+  noteListNumber: {
+    width: 20,
+  },
+  noteListText: {
+    flex: 1,
+  },
+  signatureSection: {
     marginTop: 40,
-    alignItems: 'flex-start',
-  },
-  signatureImage: {
-    width: 150,
-    height: 50,
-    marginBottom: 5,
   },
   signatureName: {
+    marginTop: 10,
     fontWeight: 'bold',
     fontSize: 11,
   },
   registrarTitle: {
     fontSize: 11,
-  },
-  footer: {
-    marginTop: 20,
-    fontSize: 10,
-    textAlign: 'center',
-  },
-  flexRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
 
@@ -118,98 +105,104 @@ type Props = {
 };
 
 function AdmissionLetterPDF({ student, properties }: Props) {
-  const currentDate = format(new Date(), 'dd/MM/yyyy');
-  const programDuration = '4 YEARS';
+  const letterDate = '30/01/2025';
+  const referenceNumber = 'LUCT/FICT/BSCBIT/P/P1';
   const programName =
     student.program?.name || 'BSC IN BUSINESS INFORMATION TECHNOLOGY';
-  const facultyCode = student.program?.faculty?.code || 'FICT';
-  const programCode = student.program?.code || 'BSCBIT';
-  const statusCode =
-    student.status === 'Admitted'
-      ? 'A'
-      : student.status === 'Wait Listed'
-        ? 'W'
-        : student.status === 'DQ'
-          ? 'DQ'
-          : 'P';
+  const commencementDate = '01st AUGUST 2025';
+  const studyDuration = '4 YEARS';
+  const tuitionFeeText = 'M42,300.00 per annum';
+  const contactPhoneNumber = '22315767';
+  const contactEmail = 'registry@limkokwing.ac.ls';
+  const registrarNameText = 'Mateboho Moorosi (Mrs.)';
+  const registrarTitleText = 'Registrar';
 
   return (
     <Document>
       <Page size='A4' style={styles.page}>
-        <View style={styles.flexRow}>
-          <PDFText style={styles.date}>Date: {currentDate}</PDFText>
-          <PDFText style={styles.reference}>
-            Ref: LUCT/{facultyCode}/{programCode}/{statusCode}/
-            {student.no || 'P1'}
-          </PDFText>
+        <View style={styles.topRow}>
+          <PDFText>Date: {letterDate}</PDFText>
+          <PDFText>Ref: {referenceNumber}</PDFText>
         </View>
 
         <PDFText style={styles.letterTitle}>
-          Letter of Admission for {student.names} {student.surname}
+          LETTER OF ADMISSION FOR {String(student.names).toUpperCase()}{' '}
+          {String(student.surname).toUpperCase()}
         </PDFText>
 
-        <PDFText style={styles.greeting}>
+        <PDFText style={styles.paragraph}>
           Dear {student.names} {student.surname},
         </PDFText>
 
-        <PDFText style={styles.content}>
+        <PDFText style={styles.paragraph}>
           Congratulations! We are pleased to inform you that you have been
-          accepted for enrollment in
-          {programName} at Limkokwing University of Creative Technology,
-          Lesotho, commencing 01st AUGUST 2025. The duration of the study is{' '}
-          {programDuration}.
+          accepted for enrolment in{' '}
+          <PDFText style={styles.boldText}>{programName}</PDFText> at Limkokwing
+          University of Creative Technology, Lesotho, commencing{' '}
+          <PDFText style={styles.boldText}>{commencementDate}</PDFText>. The
+          duration of the study is{' '}
+          <PDFText style={styles.boldText}>{studyDuration}</PDFText>.
         </PDFText>
 
-        <PDFText style={styles.content}>
+        <PDFText style={styles.paragraph}>
           As an upgrading student, you are required to observe and avail
           yourself of the following:
         </PDFText>
 
-        <View style={styles.tuitionSection}>
-          <PDFText style={styles.tuitionAmount}>Tuition Fee</PDFText>
-          <PDFText>M42,300.00 per annum</PDFText>
+        <View style={styles.indentSection}>
+          <PDFText style={styles.boldText}>Tuition Fee</PDFText>
+          <PDFText>{tuitionFeeText}</PDFText>
         </View>
 
-        <View style={styles.note}>
-          <PDFText style={{ fontWeight: 'bold' }}>
-            *NOTE: i) Those under National Manpower Development Secretariat
-            Sponsorship, tuition will be paid by the sponsor.
-          </PDFText>
-          <PDFText style={styles.noteItem}>
-            {' '}
-            ii) The above fees are subject to change without prior notice.
-          </PDFText>
-          <PDFText style={styles.noteItem}>
-            {' '}
-            iii) All first-year students must attend orientation.
-          </PDFText>
+        <View style={styles.indentSection}>
+          <PDFText style={styles.boldText}>*NOTE:</PDFText>
+          <View style={styles.noteList}>
+            <View style={styles.noteListItem}>
+              <PDFText style={styles.noteListNumber}>i)</PDFText>
+              <PDFText style={styles.noteListText}>
+                Those under National Manpower Development Secretariat
+                Sponsorship, tuition will be paid by the sponsor.
+              </PDFText>
+            </View>
+            <View style={styles.noteListItem}>
+              <PDFText style={styles.noteListNumber}>ii)</PDFText>
+              <PDFText style={styles.noteListText}>
+                The above fees are subject to change without prior notice.
+              </PDFText>
+            </View>
+            <View style={styles.noteListItem}>
+              <PDFText style={styles.noteListNumber}>iii)</PDFText>
+              <PDFText style={styles.noteListText}>
+                All first-year students{' '}
+                <PDFText style={styles.boldText}>must</PDFText> attend
+                orientation.
+              </PDFText>
+            </View>
+          </View>
         </View>
 
-        <PDFText style={styles.content}>
+        <PDFText style={styles.paragraph}>
           You will be eligible for registration upon submission of proof of
           sponsorship and payment of item 1 mentioned above. All tuition fees
-          must be paid in full within four weeks from the enrollment date of the
+          must be paid in full within four weeks from the enrolment date of the
           respective semester.
         </PDFText>
 
-        <PDFText style={styles.content}>
+        <PDFText style={styles.paragraph}>
           Should you need any further clarification, please do not hesitate to
-          contact us at 22315767 or forward your inquiries to
-          registry@limkokwing.ac.ls
+          contact us at {contactPhoneNumber} or forward your inquiries to{' '}
+          {contactEmail}
         </PDFText>
 
-        <PDFText style={styles.content}>
+        <PDFText style={styles.paragraph}>
           Thank you in advance, and we warmly welcome you to Limkokwing
           University-Lesotho.
         </PDFText>
 
-        <View style={styles.signature}>
-          <Image
-            src='/images/signature_small.jpg'
-            style={styles.signatureImage}
-          />
-          <PDFText style={styles.signatureName}>Rebaone Moroosi (Mrs.)</PDFText>
-          <PDFText style={styles.registrarTitle}>Registrar</PDFText>
+        <View style={styles.signatureSection}>
+          <PDFText>Yours sincerely,</PDFText>
+          <PDFText style={styles.signatureName}>{registrarNameText}</PDFText>
+          <PDFText style={styles.registrarTitle}>{registrarTitleText}</PDFText>
         </View>
       </Page>
     </Document>
