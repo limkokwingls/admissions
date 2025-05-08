@@ -1,5 +1,5 @@
 'use client';
-import { students } from '@/db/schema';
+import { properties, students } from '@/db/schema';
 import { formatNames } from '@/lib/utils';
 import { updateStudent } from '@/server/students/actions';
 import {
@@ -24,12 +24,16 @@ import {
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
+import PrintAdmission from './components/PrintAdmission';
+import { getCurrentProperties } from '@/server/properties/actions';
+import { getStudent } from '@/server/students/actions';
 
 type Props = {
-  student: typeof students.$inferSelect;
+  student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+  properties: Awaited<ReturnType<typeof getCurrentProperties>>;
 };
 
-export default function AcceptanceSwitch({ student }: Props) {
+export default function AcceptanceSwitch({ student, properties }: Props) {
   const theme = useMantineTheme();
   const [isAccepted, setIsAccepted] = useState<boolean>(student.accepted);
   const [tempIsAccepted, setTempIsAccepted] = useState<boolean>(
@@ -95,17 +99,26 @@ export default function AcceptanceSwitch({ student }: Props) {
             </Box>
           </Group>
 
-          <ActionIcon
-            variant='light'
-            color={isAccepted ? 'green' : 'gray'}
-            size='lg'
-            radius='md'
-            onClick={open}
-            disabled={isPending}
-            loading={isPending}
-          >
-            <IconEdit size={'1rem'} />
-          </ActionIcon>
+          <Group>
+            {isAccepted ? (
+              <PrintAdmission
+                key='print'
+                student={student}
+                properties={properties}
+              />
+            ) : null}
+            <ActionIcon
+              variant='light'
+              color={isAccepted ? 'green' : 'gray'}
+              size='lg'
+              radius='md'
+              onClick={open}
+              disabled={isPending}
+              loading={isPending}
+            >
+              <IconEdit size={'1rem'} />
+            </ActionIcon>
+          </Group>
         </Group>
       </Card>
 

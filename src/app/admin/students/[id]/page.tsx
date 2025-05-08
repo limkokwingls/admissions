@@ -28,7 +28,6 @@ import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 import { formatDistanceToNow } from 'date-fns';
 import { IconEye, IconFileDownload } from '@tabler/icons-react';
-import PrintAdmission from './edit/PrintAdmission';
 import { getCurrentProperties } from '@/server/properties/actions';
 
 type Props = {
@@ -57,16 +56,9 @@ export default async function StudentDetails({ params }: Props) {
           'use server';
           await deleteStudent(id);
         }}
-        actions={[
-          <PrintAdmission
-            key='print'
-            student={student}
-            properties={properties}
-          />,
-        ]}
       />
       <DetailsViewBody gap={'lg'}>
-        <AcceptanceSwitch student={student} />
+        <AcceptanceSwitch student={student} properties={properties} />
         <Box mt={'xl'}>
           <Group justify='space-between' align='center'>
             <Text>
