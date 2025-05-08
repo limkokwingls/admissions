@@ -29,6 +29,7 @@ import AcceptanceSwitch from './AcceptanceSwitch';
 import { formatDistanceToNow } from 'date-fns';
 import { IconEye, IconFileDownload } from '@tabler/icons-react';
 import { getCurrentProperties } from '@/server/properties/actions';
+import StudentHistoryTimeline from '@/app/admin/students/[id]/components/StudentHistoryTimeline';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -126,6 +127,10 @@ export default async function StudentDetails({ params }: Props) {
               </Group>
             </Box>
           </SimpleGrid>
+        </Paper>
+
+        <Paper withBorder p='md' radius='md' shadow='xs' mt='xl'>
+          <StudentHistoryTimeline studentId={student.id} />
         </Paper>
       </DetailsViewBody>
     </DetailsView>

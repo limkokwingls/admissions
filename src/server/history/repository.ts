@@ -12,11 +12,13 @@ class StudentHistoryRepository extends BaseRepository<
   }
 
   async findByStudentId(studentId: string) {
-    return db
-      .select()
-      .from(studentHistory)
-      .where(eq(studentHistory.studentId, studentId))
-      .orderBy(desc(studentHistory.performedAt));
+    return db.query.studentHistory.findMany({
+      where: eq(studentHistory.studentId, studentId),
+      with: {
+        performedBy: true,
+      },
+      orderBy: desc(studentHistory.performedAt),
+    });
   }
 
   async findByAction(action: ActionType) {
