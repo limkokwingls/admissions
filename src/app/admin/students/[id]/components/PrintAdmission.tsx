@@ -1,22 +1,12 @@
 'use client';
-import { ActionIcon } from '@mantine/core';
-import { IconPrinter } from '@tabler/icons-react';
-import React, { useState } from 'react';
-import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
-import { Text } from '@mantine/core';
-import {
-  Document,
-  Font,
-  Page,
-  StyleSheet,
-  Text as PDFText,
-  View,
-  Image,
-  pdf,
-} from '@react-pdf/renderer';
-import { format } from 'date-fns';
+import { getStudent } from '@/server/students/actions';
+import { ActionIcon, Text } from '@mantine/core';
+import { pdf } from '@react-pdf/renderer';
+import { IconPrinter } from '@tabler/icons-react';
+import { useState } from 'react';
 import AdmissionLetterPDF from './AdmissionLatterPdf';
+import { trackAdmissionPrinted } from '@/server/history/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -37,6 +27,9 @@ export default function PrintAdmission({ student, properties }: Props) {
   const handlePrint = async () => {
     setIsGenerating(true);
     try {
+      // Track the admission letter printing in history
+      await trackAdmissionPrinted(student.id);
+      
       const blob = await pdf(
         <AdmissionLetterPDF student={student} properties={properties} />,
       ).toBlob();

@@ -85,6 +85,13 @@
       "when": 1746688543604,
       "tag": "0011_normal_kulan_gath",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1746716104353,
+      "tag": "0012_round_bloodstrike",
+      "breakpoints": true
     }
   ]
 }

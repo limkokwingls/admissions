@@ -27,6 +27,7 @@ import { useState, useTransition } from 'react';
 import PrintAdmission from './components/PrintAdmission';
 import { getCurrentProperties } from '@/server/properties/actions';
 import { getStudent } from '@/server/students/actions';
+import { trackAcceptanceChange } from '@/server/history/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -47,14 +48,20 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
 
   function update() {
     const status = tempIsAccepted;
+    const previousStatus = isAccepted;
     setIsAccepted(status);
 
     startTransition(async () => {
       try {
+        // Update student acceptance status
         await updateStudent(student.id, {
           ...student,
           accepted: status,
         });
+        
+        // Track the acceptance change in history
+        await trackAcceptanceChange(student.id, previousStatus, status);
+        
         queryClient.invalidateQueries({
           queryKey: ['students'],
         });
