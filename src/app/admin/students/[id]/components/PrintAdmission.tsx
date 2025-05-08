@@ -93,7 +93,7 @@ export default function PrintAdmission({ student, properties }: Props) {
 
   return (
     <ActionIcon
-      variant='outline'
+      // variant='outline'
       color='gray'
       disabled={isGenerating}
       title='Print Admission Letter'

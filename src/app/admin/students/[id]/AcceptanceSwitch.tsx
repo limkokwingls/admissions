@@ -110,8 +110,6 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
             <ActionIcon
               variant='light'
               color={isAccepted ? 'green' : 'gray'}
-              size='lg'
-              radius='md'
               onClick={open}
               disabled={isPending}
               loading={isPending}
