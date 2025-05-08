@@ -8,6 +8,7 @@ import {
   Text as PDFText,
   StyleSheet,
   View,
+  Image,
 } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
@@ -38,9 +39,9 @@ const styles = StyleSheet.create({
   page: {
     paddingTop: 140,
     paddingBottom: 60,
-    paddingHorizontal: 50,
+    paddingHorizontal: 80,
     fontFamily: 'Tahoma',
-    fontSize: 11,
+    fontSize: 10,
     lineHeight: 1.5,
   },
   topRow: {
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   noteListItem: {
     flexDirection: 'row',
-    fontSize: 10,
+    fontSize: 9,
   },
   noteListNumber: {
     width: 20,
@@ -84,12 +85,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   signatureName: {
-    marginTop: 10,
     fontWeight: 'bold',
-    fontSize: 11,
+    fontSize: 10,
   },
   registrarTitle: {
-    fontSize: 11,
+    fontSize: 10,
+  },
+  signatureImage: {
+    zIndex: 1,
+    marginTop: -5,
+    width: 150,
   },
 });
 
@@ -196,7 +201,11 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
         </PDFText>
 
         <View style={styles.signatureSection}>
-          <PDFText>Yours sincerely,</PDFText>
+          <PDFText style={{ zIndex: 100 }}>Yours sincerely,</PDFText>
+          <Image
+            style={styles.signatureImage}
+            src={'/images/signature_small.jpg'}
+          />
           <PDFText style={styles.signatureName}>{registrarNameText}</PDFText>
           <PDFText style={styles.registrarTitle}>{registrarTitleText}</PDFText>
         </View>
