@@ -78,22 +78,19 @@ export default async function StudentDetails({ params }: Props) {
           <Title order={5} mb='md' c='dimmed' size='sm'>
             Analytics
           </Title>
-          <Flex gap='lg'>
+          <SimpleGrid cols={2}>
             <Box>
               <Group gap='xs'>
-                <ThemeIcon color='blue' variant='light' size='sm'>
-                  <IconEye size={14} />
-                </ThemeIcon>
                 <Text size='sm' fw={500}>
                   Page Visits
                 </Text>
               </Group>
-              <Group ml={24} mt={4}>
+              <Group mt={4}>
                 <Text size='sm' fw={700}>
                   {pageVisit?.visitCount || 0}
                 </Text>
                 {pageVisit?.lastVisitedAt && (
-                  <Text size='xs' color='dimmed'>
+                  <Text size='xs' c='dimmed'>
                     Last:{' '}
                     {formatDistanceToNow(new Date(pageVisit.lastVisitedAt), {
                       addSuffix: true,
@@ -105,19 +102,16 @@ export default async function StudentDetails({ params }: Props) {
 
             <Box>
               <Group gap='xs'>
-                <ThemeIcon color='teal' variant='light' size='sm'>
-                  <IconFileDownload size={14} />
-                </ThemeIcon>
                 <Text size='sm' fw={500}>
                   Letter Downloads
                 </Text>
               </Group>
-              <Group ml={24} mt={4}>
+              <Group mt={4}>
                 <Text size='sm' fw={700}>
                   {letterDownload?.downloadCount || 0}
                 </Text>
                 {letterDownload?.lastDownloadedAt && (
-                  <Text size='xs' color='dimmed'>
+                  <Text size='xs' c='dimmed'>
                     Last:{' '}
                     {formatDistanceToNow(
                       new Date(letterDownload.lastDownloadedAt),
@@ -129,7 +123,7 @@ export default async function StudentDetails({ params }: Props) {
                 )}
               </Group>
             </Box>
-          </Flex>
+          </SimpleGrid>
         </Paper>
       </DetailsViewBody>
     </DetailsView>
