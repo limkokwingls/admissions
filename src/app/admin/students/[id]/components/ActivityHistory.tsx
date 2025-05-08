@@ -20,13 +20,13 @@ type Props = {
   studentId: string;
 };
 
-export default function StudentHistoryTimeline({ studentId }: Props) {
+export default function ActivityHistory({ studentId }: Props) {
   const {
     data: historyItems,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['student-history', studentId],
+    queryKey: ['studentHistory', studentId],
     queryFn: async () => {
       return await getHistoryByStudentId(studentId);
     },

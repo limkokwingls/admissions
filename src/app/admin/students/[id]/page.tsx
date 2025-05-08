@@ -1,3 +1,4 @@
+import ActivityHistory from '@/app/admin/students/[id]/components/ActivityHistory';
 import {
   DetailsView,
   DetailsViewBody,
@@ -6,30 +7,25 @@ import {
 } from '@/components/adease';
 import { students } from '@/db/schema';
 import { extractReference } from '@/lib/utils';
-import { deleteStudent, getStudent } from '@/server/students/actions';
 import {
-  getPageVisitByStudentId,
   getLetterDownloadByStudentId,
+  getPageVisitByStudentId,
 } from '@/server/analytics/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
+import { deleteStudent, getStudent } from '@/server/students/actions';
 import {
   Badge,
   Box,
   Divider,
   Group,
+  Paper,
   SimpleGrid,
   Text,
-  Card,
   Title,
-  Paper,
-  Flex,
-  ThemeIcon,
 } from '@mantine/core';
+import { formatDistanceToNow } from 'date-fns';
 import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
-import { formatDistanceToNow } from 'date-fns';
-import { IconEye, IconFileDownload } from '@tabler/icons-react';
-import { getCurrentProperties } from '@/server/properties/actions';
-import StudentHistoryTimeline from '@/app/admin/students/[id]/components/StudentHistoryTimeline';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -130,7 +126,7 @@ export default async function StudentDetails({ params }: Props) {
         </Paper>
 
         <Paper withBorder p='md' radius='md' shadow='xs' mt='xl'>
-          <StudentHistoryTimeline studentId={student.id} />
+          <ActivityHistory studentId={student.id} />
         </Paper>
       </DetailsViewBody>
     </DetailsView>
