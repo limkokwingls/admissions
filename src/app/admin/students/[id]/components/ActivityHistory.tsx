@@ -2,9 +2,12 @@
 
 import { getHistoryByStudentId } from '@/server/history/actions';
 import {
+  Accordion,
+  AccordionControl,
+  AccordionItem,
+  AccordionPanel,
   Alert,
   Avatar,
-  Box,
   Flex,
   Group,
   Loader,
@@ -71,68 +74,71 @@ export default function ActivityHistory({ studentId }: Props) {
   }
 
   return (
-    <Box>
-      <Text fw={500} size='sm' mb='md' c='dimmed'>
-        Activity History
-      </Text>
+    <Accordion variant='separated'>
+      <AccordionItem value='activity-history'>
+        <AccordionControl>Activity History</AccordionControl>
+        <AccordionPanel>
+          <Stack gap='xs'>
+            {historyItems.map((item) => {
+              const formattedDate = item.performedAt
+                ? format(new Date(item.performedAt), 'dd MMM yyyy')
+                : 'Unknown date';
 
-      <Stack gap='xs'>
-        {historyItems.map((item) => {
-          const formattedDate = item.performedAt
-            ? format(new Date(item.performedAt), 'dd MMM yyyy')
-            : 'Unknown date';
+              const formattedTime = item.performedAt
+                ? format(new Date(item.performedAt), 'HH:mm')
+                : '';
 
-          const formattedTime = item.performedAt
-            ? format(new Date(item.performedAt), 'HH:mm')
-            : '';
+              let actionDescription = '';
+              if (item.action === 'acceptance_changed') {
+                actionDescription = `changed status from ${item.oldValue === 'true' ? 'Accepted' : 'Not Accepted'} to ${item.newValue === 'true' ? 'Accepted' : 'Not Accepted'}`;
+              } else {
+                actionDescription = 'printed admission letter';
+              }
 
-          let actionDescription = '';
-          if (item.action === 'acceptance_changed') {
-            actionDescription = `changed status from ${item.oldValue === 'true' ? 'Accepted' : 'Not Accepted'} to ${item.newValue === 'true' ? 'Accepted' : 'Not Accepted'}`;
-          } else {
-            actionDescription = 'printed admission letter';
-          }
-
-          return (
-            <Paper key={item.id} withBorder p='md' radius='md' shadow='xs'>
-              <Group justify='apart' mb={4}>
-                <Group gap='xs'>
-                  <Avatar
-                    src={item.performedBy?.image}
-                    radius='xl'
-                    size='sm'
-                    color={
-                      item.action === 'acceptance_changed' ? 'blue' : 'green'
-                    }
-                  >
-                    {item.performedBy?.name?.charAt(0) || '?'}
-                  </Avatar>
-                  <div>
-                    <Group gap={4}>
-                      <Text fw={500} size='sm'>
-                        {item.performedBy?.name || 'Unknown user'}
-                      </Text>
-                      <Text size='xs' c='dimmed'>
-                        {actionDescription}
-                      </Text>
+              return (
+                <Paper key={item.id} withBorder p='md' radius='md' shadow='xs'>
+                  <Group justify='apart' mb={4}>
+                    <Group gap='xs'>
+                      <Avatar
+                        src={item.performedBy?.image}
+                        radius='xl'
+                        size='sm'
+                        color={
+                          item.action === 'acceptance_changed'
+                            ? 'blue'
+                            : 'green'
+                        }
+                      >
+                        {item.performedBy?.name?.charAt(0) || '?'}
+                      </Avatar>
+                      <div>
+                        <Group gap={4}>
+                          <Text fw={500} size='sm'>
+                            {item.performedBy?.name || 'Unknown user'}
+                          </Text>
+                          <Text size='xs' c='dimmed'>
+                            {actionDescription}
+                          </Text>
+                        </Group>
+                        <Group gap={4}>
+                          <Text size='xs' c='dimmed'>
+                            {formattedDate}
+                          </Text>
+                          {formattedTime && (
+                            <Text size='xs' c='dimmed'>
+                              at {formattedTime}
+                            </Text>
+                          )}
+                        </Group>
+                      </div>
                     </Group>
-                    <Group gap={4}>
-                      <Text size='xs' c='dimmed'>
-                        on {formattedDate}
-                      </Text>
-                      {formattedTime && (
-                        <Text size='xs' c='dimmed'>
-                          at {formattedTime}
-                        </Text>
-                      )}
-                    </Group>
-                  </div>
-                </Group>
-              </Group>
-            </Paper>
-          );
-        })}
-      </Stack>
-    </Box>
+                  </Group>
+                </Paper>
+              );
+            })}
+          </Stack>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
   );
 }

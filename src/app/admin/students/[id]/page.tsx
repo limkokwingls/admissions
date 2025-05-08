@@ -1,4 +1,3 @@
-import ActivityHistory from '@/app/admin/students/[id]/components/ActivityHistory';
 import {
   DetailsView,
   DetailsViewBody,
@@ -26,6 +25,7 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
+import ActivityHistory from './components/ActivityHistory';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -125,9 +125,7 @@ export default async function StudentDetails({ params }: Props) {
           </SimpleGrid>
         </Paper>
 
-        <Paper withBorder p='md' radius='md' shadow='xs' mt='xl'>
-          <ActivityHistory studentId={student.id} />
-        </Paper>
+        <ActivityHistory studentId={student.id} />
       </DetailsViewBody>
     </DetailsView>
   );
