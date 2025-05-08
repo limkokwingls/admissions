@@ -9,11 +9,11 @@ import {
   Document,
   Font,
   Page,
-  PDFDownloadLink,
   StyleSheet,
   Text as PDFText,
   View,
   Image,
+  pdf,
 } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
@@ -119,7 +119,6 @@ type Props = {
 
 function AdmissionLetterPDF({ student, properties }: Props) {
   const currentDate = format(new Date(), 'dd/MM/yyyy');
-  // Fixed: Using a hardcoded program duration since it's not available in the student object
   const programDuration = '4 YEARS';
   const programName =
     student.program?.name || 'BSC IN BUSINESS INFORMATION TECHNOLOGY';
@@ -205,7 +204,6 @@ function AdmissionLetterPDF({ student, properties }: Props) {
         </PDFText>
 
         <View style={styles.signature}>
-          {/* Using the exact path provided by the user */}
           <Image
             src='/images/signature_small.jpg'
             style={styles.signatureImage}
@@ -229,25 +227,72 @@ export default function PrintAdmission({ student, properties }: Props) {
     );
   }
 
+  const handlePrint = async () => {
+    setIsGenerating(true);
+    try {
+      const blob = await pdf(
+        <AdmissionLetterPDF student={student} properties={properties} />,
+      ).toBlob();
+      const url = URL.createObjectURL(blob);
+
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+
+      iframe.onload = () => {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+
+          const handleAfterPrint = () => {
+            URL.revokeObjectURL(url);
+            if (iframe.parentNode) {
+              iframe.parentNode.removeChild(iframe);
+            }
+            setIsGenerating(false);
+            if (iframe.contentWindow) {
+              iframe.contentWindow.removeEventListener(
+                'afterprint',
+                handleAfterPrint,
+              );
+            }
+          };
+
+          iframe.contentWindow.addEventListener('afterprint', handleAfterPrint);
+        } else {
+          console.error('Failed to access iframe content window.');
+          URL.revokeObjectURL(url);
+          if (iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+          }
+          setIsGenerating(false);
+        }
+      };
+
+      iframe.onerror = () => {
+        console.error('Failed to load PDF in iframe.');
+        URL.revokeObjectURL(url);
+        if (iframe.parentNode) {
+          iframe.parentNode.removeChild(iframe);
+        }
+        setIsGenerating(false);
+      };
+    } catch (error) {
+      console.error('Error generating PDF for printing:', error);
+      setIsGenerating(false);
+    }
+  };
+
   return (
-    <PDFDownloadLink
-      document={
-        <AdmissionLetterPDF student={student} properties={properties} />
-      }
-      fileName={`admission-letter-${student.surname}-${student.names}.pdf`}
-      style={{ textDecoration: 'none' }}
-      onClick={() => setIsGenerating(true)}
+    <ActionIcon
+      variant='outline'
+      color='gray'
+      disabled={isGenerating}
+      title='Print Admission Letter'
+      onClick={handlePrint}
     >
-      {({ loading }) => (
-        <ActionIcon
-          variant='outline'
-          color='gray'
-          disabled={loading || isGenerating}
-          title='Print Admission Letter'
-        >
-          <IconPrinter size={'1rem'} />
-        </ActionIcon>
-      )}
-    </PDFDownloadLink>
+      <IconPrinter size={'1rem'} />
+    </ActionIcon>
   );
 }
