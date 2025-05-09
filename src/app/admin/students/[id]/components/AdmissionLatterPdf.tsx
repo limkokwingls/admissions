@@ -204,7 +204,7 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
           <PDFText style={{ zIndex: 100 }}>Yours sincerely,</PDFText>
           <Image
             style={styles.signatureImage}
-            src={'/images/signature_small.jpg'}
+            src={'/images/signature_small.png'}
           />
           <PDFText style={styles.signatureName}>{registrarNameText}</PDFText>
           <PDFText style={styles.registrarTitle}>{registrarTitleText}</PDFText>
