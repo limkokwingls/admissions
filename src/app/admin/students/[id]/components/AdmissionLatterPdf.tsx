@@ -1,6 +1,8 @@
 'use client';
 import { getCurrentProperties } from '@/server/properties/actions';
 import { getStudent } from '@/server/students/actions';
+import { extractReference } from '@/lib/utils';
+import { PROGRAM_DATA } from '@/lib/constants';
 import {
   Document,
   Font,
@@ -104,15 +106,20 @@ type Props = {
 };
 
 export default function AdmissionLetterPDF({ student, properties }: Props) {
-  const letterDate = '30/01/2025';
-  const referenceNumber = 'LUCT/FICT/BSCBIT/P/P1';
+  const letterDate = format(new Date(), 'dd/MM/yyyy');
+  const referenceNumber = extractReference(student);
   const programName = student.program?.name;
   const commencementDate = format(
     new Date(properties?.registrationDateFrom || ''),
     'dd MMM yyyy',
   );
-  const studyDuration = '4 YEARS';
-  const tuitionFeeText = 'M42,300.00 per annum';
+
+  const isProgramDiploma = student.program?.name
+    ?.toLowerCase()
+    .includes('diploma');
+  const programType = isProgramDiploma ? 'diploma' : 'degree';
+  const studyDuration = `${PROGRAM_DATA[programType].years} YEARS`;
+  const tuitionFeeText = `${PROGRAM_DATA[programType].yearFee} per annum`;
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';

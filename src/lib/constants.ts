@@ -7,6 +7,7 @@ type Installment = {
 
 type ProgramInfo = {
   years: number;
+  yearFee: string;
   semesterFee: string;
   installments: {
     semester1: Installment[];
@@ -17,6 +18,7 @@ type ProgramInfo = {
 export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
   diploma: {
     years: 3,
+    yearFee: 'M28,250.00',
     semesterFee: 'M14,125.00',
     installments: {
       semester1: [
@@ -33,6 +35,7 @@ export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
   },
   degree: {
     years: 4,
+    yearFee: 'M42,300.00',
     semesterFee: 'M21,150.00',
     installments: {
       semester1: [
