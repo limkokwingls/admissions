@@ -25,26 +25,23 @@ class StudentService {
   }
 
   async createOrUpdate(data: Student) {
-    return withAuth(async () => {
-      const existingStudent =
-        await this.repository.findByUniqueIdentifiers(data);
+    const existingStudent = await this.repository.findByUniqueIdentifiers(data);
 
-      if (existingStudent) {
-        const updateData = {
-          ...data,
-          id: existingStudent.id,
-        };
-        if (!existingStudent.no) {
-          updateData.no = data.no;
-        }
-        if (!existingStudent.phoneNumber) {
-          updateData.phoneNumber = data.phoneNumber;
-        }
-        return this.repository.update(existingStudent.id, updateData);
-      } else {
-        return this.repository.create(data);
+    if (existingStudent) {
+      const updateData = {
+        ...data,
+        id: existingStudent.id,
+      };
+      if (!existingStudent.no) {
+        updateData.no = data.no;
       }
-    }, []);
+      if (!existingStudent.phoneNumber) {
+        updateData.phoneNumber = data.phoneNumber;
+      }
+      return this.repository.update(existingStudent.id, updateData);
+    } else {
+      return this.repository.create(data);
+    }
   }
 
   async update(id: string, data: Student) {
