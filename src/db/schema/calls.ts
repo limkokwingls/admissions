@@ -10,6 +10,10 @@ import { sql } from 'drizzle-orm';
 import { students } from './students';
 import { users } from './auth';
 
+export const callStatusEnum = ['pending', 'accepted', 'rejected'] as const;
+
+export type CallStatus = (typeof callStatusEnum)[number];
+
 export const calls = sqliteTable(
   'calls',
   {
@@ -23,6 +27,7 @@ export const calls = sqliteTable(
     calledBy: text()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    status: text({ enum: callStatusEnum }).notNull().default('pending'),
     lastCallAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
     createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   },

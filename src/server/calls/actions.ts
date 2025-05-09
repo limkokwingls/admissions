@@ -1,18 +1,21 @@
 'use server';
 
-
-import { calls } from '@/db/schema';
-import { callsService as service} from './service';
+import { calls, CallStatus } from '@/db/schema';
+import { callsService as service } from './service';
+import { eq } from 'drizzle-orm';
 
 type Call = typeof calls.$inferInsert;
-
 
 export async function getCall(id: string) {
   return service.get(id);
 }
 
-export async function getCalls(page: number = 1, search = '') {
-  return service.getAll({ page, search });
+export async function getCalls(
+  status: CallStatus,
+  page: number = 1,
+  search = '',
+) {
+  return service.getAll({ page, search, filter: eq(calls.status, status) });
 }
 
 export async function createCall(call: Call) {
