@@ -153,12 +153,12 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
             const result = await createOrUpdateStudent(student);
             const action = result.id !== student.id ? 'Updated' : 'Imported';
             console.log(
-              `[${sheetName}] ${action} student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()}`,
+              `[${sheetName}] ${action} student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()} - Status: ${student.status}`,
             );
           } catch (error) {
             console.error(
               chalk.red(
-                `[${sheetName}] Error importing student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()}:`,
+                `[${sheetName}] Error importing student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()} - Status: ${student.status}:`,
               ),
               error,
             );

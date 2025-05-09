@@ -24,21 +24,20 @@ export default class StudentRepository extends BaseRepository<
 
   async findByUniqueIdentifiers(student: typeof students.$inferInsert) {
     if (student.candidateNo) {
-      const existingByCandidate = await db.query.students.findFirst({
+      const found = await db.query.students.findFirst({
         where: eq(students.candidateNo, student.candidateNo),
       });
-      if (existingByCandidate) return existingByCandidate;
+      if (found) return found;
     }
 
-    if (student.surname && student.names && student.phoneNumber) {
-      const existingByNameAndPhone = await db.query.students.findFirst({
+    if (student.surname && student.names) {
+      const found = await db.query.students.findFirst({
         where: and(
           eq(students.surname, student.surname),
           eq(students.names, student.names),
-          eq(students.phoneNumber, student.phoneNumber),
         ),
       });
-      if (existingByNameAndPhone) return existingByNameAndPhone;
+      if (found) return found;
     }
 
     return null;
