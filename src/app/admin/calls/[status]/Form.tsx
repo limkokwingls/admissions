@@ -6,6 +6,7 @@ import { TextInput, NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { DateInput } from '@mantine/dates';
+import StudentInput from '@/components/StudentInput';
 
 type Call = typeof calls.$inferInsert;
 
@@ -41,7 +42,7 @@ export default function CallForm({
     >
       {(form) => (
         <>
-          <TextInput label='Student' {...form.getInputProps('student')} />
+          <StudentInput {...form.getInputProps('studentId')} />
           <NumberInput
             label='Call Count'
             {...form.getInputProps('callCount')}

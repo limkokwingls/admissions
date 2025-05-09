@@ -6,6 +6,7 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getCall, deleteCall } from '@/server/calls/actions';
+import { format } from 'date-fns';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,15 +15,15 @@ type Props = {
 export default async function CallDetails({ params }: Props) {
   const { id } = await params;
   const call = await getCall(id);
-  
+
   if (!call) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Call'} 
+      <DetailsViewHeader
+        title={'Call'}
         queryKey={['calls']}
         handleDelete={async () => {
           'use server';
@@ -33,7 +34,9 @@ export default async function CallDetails({ params }: Props) {
         <FieldView label='Student'>{call.student}</FieldView>
         <FieldView label='Call Count'>{call.callCount}</FieldView>
         <FieldView label='Called By'>{call.calledBy}</FieldView>
-        <FieldView label='Last Call At'>{call.lastCallAt}</FieldView>
+        <FieldView label='Last Call At'>
+          {call.lastCallAt ? format(call.lastCallAt, 'yyyy-MM-dd') : '-'}
+        </FieldView>
       </DetailsViewBody>
     </DetailsView>
   );
