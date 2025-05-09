@@ -1,7 +1,8 @@
 'use client';
-import { properties, students } from '@/db/schema';
 import { formatNames } from '@/lib/utils';
-import { updateStudent } from '@/server/students/actions';
+import { trackAcceptanceChange } from '@/server/history/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
+import { getStudent, updateStudent } from '@/server/students/actions';
 import {
   ActionIcon,
   Box,
@@ -25,9 +26,6 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
 import PrintAdmission from './components/PrintAdmission';
-import { getCurrentProperties } from '@/server/properties/actions';
-import { getStudent } from '@/server/students/actions';
-import { trackAcceptanceChange } from '@/server/history/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -53,15 +51,13 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
 
     startTransition(async () => {
       try {
-        // Update student acceptance status
         await updateStudent(student.id, {
           ...student,
           accepted: status,
         });
-        
-        // Track the acceptance change in history
+
         await trackAcceptanceChange(student.id, previousStatus, status);
-        
+
         queryClient.invalidateQueries({
           queryKey: ['students'],
         });
@@ -91,7 +87,7 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
 
   return (
     <>
-      <Card shadow='sm' padding='xs' radius='md' withBorder>
+      <Card shadow='sm' padding='md' radius='md' withBorder>
         <Group justify='space-between' wrap='nowrap'>
           <Group gap='xs'>
             {isAccepted ? (
