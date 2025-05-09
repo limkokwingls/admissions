@@ -17,8 +17,15 @@ import {
 import { modals } from '@mantine/modals';
 import {
   Icon,
+  IconCheck,
   IconChevronRight,
+  IconCircleCheck,
+  IconCircleX,
+  IconCross,
+  IconForbid,
+  IconHourglass,
   IconLogout2,
+  IconPhone,
   IconSchool,
   IconSettings,
   IconUsers,
@@ -63,6 +70,28 @@ const navigation: NavItem[] = [
     label: 'Properties',
     href: '/admin/properties',
     icon: IconSettings,
+  },
+  {
+    label: 'Calls',
+    href: '/admin/calls',
+    icon: IconPhone,
+    children: [
+      {
+        label: 'Pending',
+        href: '/admin/calls/pending',
+        icon: IconHourglass,
+      },
+      {
+        label: 'Accepted',
+        href: '/admin/calls/accepted',
+        icon: IconCircleCheck,
+      },
+      {
+        label: 'Rejected',
+        href: '/admin/calls/rejected',
+        icon: IconForbid,
+      },
+    ],
   },
 ];
 
