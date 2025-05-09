@@ -14,30 +14,20 @@ export default function WaitlistedCard({ student, properties }: Props) {
     <>
       <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
         <div className='p-6'>
-          <div className='mb-4'>
-            <h3 className='text-lg font-bold text-neutral-900 dark:text-white'>
-              NMDS Sponsorship
+          <div className='mb-4 flex items-center gap-7'>
+            <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-2 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 md:block'>
+              <AlertCircle className='h-5 w-5' />
+            </div>
+            <h3 className='text-lg font-bold text-red-600 dark:text-red-400'>
+              Not Sponsored
             </h3>
           </div>
 
           <div className='space-y-4'>
             <div className='flex items-start gap-4'>
-              <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-2 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 md:block'>
-                <AlertCircle className='h-5 w-5' />
-              </div>
               <div className='flex-1'>
-                <h4 className='text-lg font-semibold text-red-600 dark:text-red-400'>
-                  Not Sponsored
-                </h4>
-                <div className='mt-3'>
-                  <p className='text-sm text-neutral-700 dark:text-neutral-300'>
-                    You have been placed on the NMDS sponsorship waiting list
-                    based on your academic performance. NMDS sponsors a limited
-                    number of students annually, and positions are highly
-                    competitive.
-                  </p>
-
-                  <div className='mt-4 rounded-md bg-white/80 p-4 dark:bg-neutral-800/50'>
+                <div className='mt-1'>
+                  <div className='mt-2 rounded-md bg-white/80 p-4 dark:bg-neutral-800/50'>
                     <h5 className='font-medium text-neutral-900 dark:text-white'>
                       What this means:
                     </h5>
@@ -67,8 +57,7 @@ export default function WaitlistedCard({ student, properties }: Props) {
                           The Registry Office will contact you directly by call
                           if a sponsorship opportunity becomes available.
                           Students are strongly advised to explore alternative
-                          financing options rather than waiting for possible
-                          NMDS sponsorship.
+                          financing options
                         </span>
                       </li>
                     </ul>

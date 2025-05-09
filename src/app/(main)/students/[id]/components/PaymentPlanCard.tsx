@@ -80,7 +80,7 @@ export default async function PaymentPlanCard({ level, properties }: Props) {
                   title='Important Payment Information'
                 >
                   <p className='mt-2 text-sm text-neutral-600 dark:text-neutral-400'>
-                    Your {program} program takes {info.years} years to complete,
+                    A {program} program takes {info.years} years to complete,
                     with 2 semesters per year. Each semester costs{' '}
                     {info.semesterFee}.
                     {paymentDates.privatePaymentDateFrom &&
