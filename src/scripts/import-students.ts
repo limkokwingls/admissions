@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import * as XLSX from 'xlsx';
 import { students } from '../db/schema';
+import chalk from 'chalk';
 
 type Student = typeof students.$inferInsert;
 type ExcelRow = Record<string, string | number | null | undefined>;
@@ -52,7 +53,7 @@ async function processWorksheet(
   const { programName, status } = extractSheetMetadata(data);
 
   if (!programName) {
-    console.error(`Could not find program name in sheet: ${sheetName}`);
+    console.error(chalk.red(`Could not find program name in sheet: ${sheetName}`));
     return [];
   }
 
@@ -62,7 +63,7 @@ async function processWorksheet(
 
   if (!programId) {
     console.error(
-      `Program "${programName}" not found in database. Please create it first.`,
+      chalk.red(`Program "${programName}" not found in database. Please create it first.`),
     );
     return [];
   }
@@ -77,7 +78,7 @@ async function processWorksheet(
   }
 
   if (headerRowIndex === -1) {
-    console.error(`Could not find header row in sheet: ${sheetName}`);
+    console.error(chalk.red(`Could not find header row in sheet: ${sheetName}`));
     return [];
   }
 
@@ -150,7 +151,7 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
             );
           } catch (error) {
             console.error(
-              `Error importing student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}:`,
+              chalk.red(`Error importing student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}:`),
               error,
             );
           }
@@ -164,7 +165,7 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
 
     console.log('Import completed');
   } catch (error) {
-    console.error('Error importing students:', error);
+    console.error(chalk.red('Error importing students:'), error);
   }
 }
 
@@ -183,7 +184,7 @@ async function main() {
     : path.resolve(process.cwd(), filePath);
 
   if (!fs.existsSync(resolvedPath)) {
-    console.error(`Error: File not found: ${resolvedPath}`);
+    console.error(chalk.red(`Error: File not found: ${resolvedPath}`));
     console.log('\nUsage: pnpm import-students <path-to-excel-file>');
     process.exit(1);
   }
@@ -195,6 +196,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error('Unhandled error during import:', err);
+  console.error(chalk.red('Unhandled error during import:'), err);
   process.exit(1);
 });
