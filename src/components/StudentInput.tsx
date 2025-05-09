@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+'use client';
+
 import { Select } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { searchStudent } from '@/server/students/actions';
+import { useState } from 'react';
 
-type StudentInputProps = {
-  value?: string | null;
-  onChange?: (value: string | null) => void;
+type StudentSelectValue = string | null;
+
+export interface StudentSelectProps {
+  value?: StudentSelectValue;
+  onChange?: (value: StudentSelectValue) => void;
   name?: string;
   label?: string;
-  error?: string;
+  error?: React.ReactNode;
   required?: boolean;
   disabled?: boolean;
   description?: string;
-  defaultValue?: string | null;
-  onFocus?: () => void;
-  onBlur?: () => void;
-};
+}
 
 export default function StudentInput({
   value,
@@ -26,25 +27,22 @@ export default function StudentInput({
   required,
   disabled,
   description,
-  defaultValue,
-  onFocus,
-  onBlur,
-}: StudentInputProps) {
+}: StudentSelectProps) {
   const [searchValue, setSearchValue] = useState('');
 
   const { data, isLoading } = useQuery({
     queryKey: ['students', searchValue],
     queryFn: () => searchStudent(searchValue),
-    enabled: searchValue.length > 2, // Only search when at least 3 characters are typed
+    enabled: !!searchValue,
   });
 
   const selectData = [];
 
-  if (data?.items && Array.isArray(data.items)) {
+  if (data && data.items && Array.isArray(data.items)) {
     for (const student of data.items) {
       selectData.push({
-        value: String(student.id),
-        label: `${student.candidateNo || ''} - ${student.surname} ${student.names}`,
+        value: student.id,
+        label: `${student.no} - ${student.names}`,
       });
     }
   }
@@ -58,10 +56,9 @@ export default function StudentInput({
   return (
     <Select
       label={label}
-      placeholder='Search for a student...'
+      placeholder='Type to search for a student'
       data={selectData}
       value={value}
-      defaultValue={defaultValue}
       onChange={handleChange}
       searchable
       clearable
@@ -70,14 +67,11 @@ export default function StudentInput({
       name={name}
       error={error}
       required={required}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       description={description}
-      comboboxProps={{
-        withinPortal: true,
-        position: 'bottom',
-      }}
-      onFocus={onFocus}
-      onBlur={onBlur}
+      nothingFoundMessage={
+        searchValue && !isLoading ? 'No students found' : 'Type to search'
+      }
     />
   );
 }
