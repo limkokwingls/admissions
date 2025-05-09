@@ -14,7 +14,6 @@ import {
 } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
-// Using Open Sans from Google Fonts as a replacement for Tahoma (similar sans-serif font)
 Font.register({
   family: 'Tahoma',
   fonts: [
@@ -36,7 +35,6 @@ Font.register({
   ],
 });
 
-// Styles for PDF document
 const styles = StyleSheet.create({
   page: {
     paddingTop: 140,
@@ -113,11 +111,8 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
     new Date(properties?.registrationDateFrom || ''),
     'dd MMM yyyy',
   );
+  const programType = student.program?.level as keyof typeof PROGRAM_DATA;
 
-  const isProgramDiploma = student.program?.name
-    ?.toLowerCase()
-    .includes('diploma');
-  const programType = isProgramDiploma ? 'diploma' : 'degree';
   const studyDuration = `${PROGRAM_DATA[programType].years} YEARS`;
   const tuitionFeeText = `${PROGRAM_DATA[programType].yearFee} per annum`;
   const contactPhoneNumber = '22315767';
