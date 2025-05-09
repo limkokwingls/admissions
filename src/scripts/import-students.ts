@@ -53,7 +53,9 @@ async function processWorksheet(
   const { programName, status } = extractSheetMetadata(data);
 
   if (!programName) {
-    console.error(chalk.red(`Could not find program name in sheet: ${sheetName}`));
+    console.error(
+      chalk.red(`Could not find program name in sheet: ${sheetName}`),
+    );
     return [];
   }
 
@@ -63,7 +65,9 @@ async function processWorksheet(
 
   if (!programId) {
     console.error(
-      chalk.red(`Program "${programName}" not found in database. Please create it first.`),
+      chalk.red(
+        `Program "${programName}" not found in database. Please create it first.`,
+      ),
     );
     return [];
   }
@@ -78,7 +82,9 @@ async function processWorksheet(
   }
 
   if (headerRowIndex === -1) {
-    console.error(chalk.red(`Could not find header row in sheet: ${sheetName}`));
+    console.error(
+      chalk.red(`Could not find header row in sheet: ${sheetName}`),
+    );
     return [];
   }
 
@@ -147,11 +153,13 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
             const result = await createOrUpdateStudent(student);
             const action = result.id !== student.id ? 'Updated' : 'Imported';
             console.log(
-              `${action} student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}`,
+              `[${sheetName}] ${action} student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()}`,
             );
           } catch (error) {
             console.error(
-              chalk.red(`Error importing student ${i + 1}/${studentsData.length}: ${student.surname} ${student.names}:`),
+              chalk.red(
+                `[${sheetName}] Error importing student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()}:`,
+              ),
               error,
             );
           }
