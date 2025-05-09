@@ -2,7 +2,6 @@ import {
   sqliteTable,
   integer,
   text,
-  primaryKey,
   index,
 } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';

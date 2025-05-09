@@ -1,13 +1,15 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout, NewLink } from '@/components/adease';
-import { getCalls } from '@/server/calls/actions';
 import { CallStatus } from '@/db/schema';
+import { getCalls } from '@/server/calls/actions';
 
 type Props = {
-  params: { status: string };
-} & PropsWithChildren;
+  params: {
+    status: string;
+  };
+  children: React.ReactNode;
+};
 
 export default function Layout({ children, params }: Props) {
   const { status } = params;

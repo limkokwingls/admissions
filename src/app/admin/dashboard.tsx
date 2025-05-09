@@ -17,11 +17,8 @@ import {
 import { modals } from '@mantine/modals';
 import {
   Icon,
-  IconCheck,
   IconChevronRight,
   IconCircleCheck,
-  IconCircleX,
-  IconCross,
   IconForbid,
   IconHourglass,
   IconLogout2,

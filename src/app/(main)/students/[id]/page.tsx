@@ -55,7 +55,7 @@ export default async function StudentPage({ params }: Props) {
                     Disclaimer
                   </h4>
                   <p className='mt-2 text-sm text-neutral-600 dark:text-neutral-400'>
-                    Limkokwing University of Creative Technology does not bear any duty or responsibility for the sponsorship or non-sponsorship of any student. Sponsorship decisions are made independently by the National Manpower Development Secretariat (NMDS) based on their own criteria and available resources. The University's role is limited to providing academic programs and communicating admission status.
+                    Limkokwing University of Creative Technology does not bear any duty or responsibility for the sponsorship or non-sponsorship of any student. Sponsorship decisions are made independently by the National Manpower Development Secretariat (NMDS) based on their own criteria and available resources. The University&apos;s role is limited to providing academic programs and communicating admission status.
                   </p>
                 </div>
               </div>

@@ -188,6 +188,7 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
             <Text style={styles.addressText}>registry@limkokwing.ac.ls</Text>
           </View>
           <View style={styles.headerRight}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image does not support alt */}
             <Image src='/images/logo.png' style={styles.logo} />
           </View>
         </View>

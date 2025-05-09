@@ -21,7 +21,6 @@ type Props = {
 
 export default function CallForm({
   onSubmit,
-  status,
   defaultValues,
   title,
 }: Props) {

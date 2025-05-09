@@ -204,7 +204,8 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
 
         <View style={styles.signatureSection}>
           <PDFText style={{ zIndex: 100 }}>Yours sincerely,</PDFText>
-          <Image
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image does not support alt */}
+<Image
             style={styles.signatureImage}
             src={'/images/signature_small.png'}
           />

@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { ActionType, studentHistory } from '@/db/schema/history';
 import { eq, desc } from 'drizzle-orm';
-import BaseRepository, { QueryOptions } from '../base/BaseRepository';
+import BaseRepository from '../base/BaseRepository';
 
 class StudentHistoryRepository extends BaseRepository<
   typeof studentHistory,
