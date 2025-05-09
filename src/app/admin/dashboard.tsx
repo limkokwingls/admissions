@@ -73,7 +73,6 @@ const navigation: NavItem[] = [
   },
   {
     label: 'Calls',
-    href: '/admin/calls',
     icon: IconPhone,
     children: [
       {

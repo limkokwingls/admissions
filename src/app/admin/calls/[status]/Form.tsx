@@ -2,32 +2,32 @@
 
 import { calls } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { TextInput, NumberInput, DateInput } from '@mantine/core';
+import { TextInput, NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import { DateInput } from '@mantine/dates';
 
 type Call = typeof calls.$inferInsert;
-
 
 type Props = {
   onSubmit: (values: Call) => Promise<Call>;
   defaultValues?: Call;
   onSuccess?: (value: Call) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
 
 export default function CallForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  
+
   return (
-    <Form 
+    <Form
       title={title}
-      action={onSubmit} 
+      action={onSubmit}
       queryKey={['calls']}
-      schema={createInsertSchema(calls)} 
+      schema={createInsertSchema(calls)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/calls/${id}`);
@@ -36,9 +36,15 @@ export default function CallForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => (
         <>
           <TextInput label='Student' {...form.getInputProps('student')} />
-          <NumberInput label='Call Count' {...form.getInputProps('callCount')} />
+          <NumberInput
+            label='Call Count'
+            {...form.getInputProps('callCount')}
+          />
           <TextInput label='Called By' {...form.getInputProps('calledBy')} />
-          <DateInput label='Last Call At' {...form.getInputProps('lastCallAt')} />
+          <DateInput
+            label='Last Call At'
+            {...form.getInputProps('lastCallAt')}
+          />
         </>
       )}
     </Form>

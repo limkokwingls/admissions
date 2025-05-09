@@ -1,0 +1,1 @@
+ALTER TABLE `calls` ADD `status` text DEFAULT 'pending' NOT NULL;
