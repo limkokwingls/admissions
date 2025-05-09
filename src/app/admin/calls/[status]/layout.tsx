@@ -16,7 +16,9 @@ export default async function Layout({ children, params }: Props) {
       path={'/admin/calls'}
       queryKey={['calls']}
       getData={() => getCalls(status as CallStatus)}
-      actionIcons={[<NewLink key={'new-link'} href='/admin/calls/new' />]}
+      actionIcons={[
+        <NewLink key={'new-link'} href={`/admin/calls/${status}/new`} />,
+      ]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >
       {children}

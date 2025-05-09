@@ -1,6 +1,6 @@
 'use client';
 
-import { calls } from '@/db/schema';
+import { calls, CallStatus } from '@/db/schema';
 import { Form } from '@/components/adease';
 import { TextInput, NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
@@ -11,6 +11,7 @@ type Call = typeof calls.$inferInsert;
 
 type Props = {
   onSubmit: (values: Call) => Promise<Call>;
+  status: CallStatus;
   defaultValues?: Call;
   onSuccess?: (value: Call) => void;
   onError?: (
@@ -19,7 +20,12 @@ type Props = {
   title?: string;
 };
 
-export default function CallForm({ onSubmit, defaultValues, title }: Props) {
+export default function CallForm({
+  onSubmit,
+  status,
+  defaultValues,
+  title,
+}: Props) {
   const router = useRouter();
 
   return (
@@ -30,7 +36,7 @@ export default function CallForm({ onSubmit, defaultValues, title }: Props) {
       schema={createInsertSchema(calls)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/calls/${id}`);
+        router.push(`/admin/calls/pending/${id}`);
       }}
     >
       {(form) => (
