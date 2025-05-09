@@ -1,12 +1,11 @@
 'use client';
 
-import { calls, CallStatus } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { TextInput, NumberInput } from '@mantine/core';
+import StudentInput from '@/components/StudentInput';
+import { calls, CallStatus } from '@/db/schema';
+import { NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
-import { DateInput } from '@mantine/dates';
-import StudentInput from '@/components/StudentInput';
 
 type Call = typeof calls.$inferInsert;
 
@@ -43,15 +42,6 @@ export default function CallForm({
       {(form) => (
         <>
           <StudentInput {...form.getInputProps('studentId')} />
-          <NumberInput
-            label='Call Count'
-            {...form.getInputProps('callCount')}
-          />
-          <TextInput label='Called By' {...form.getInputProps('calledBy')} />
-          <DateInput
-            label='Last Call At'
-            {...form.getInputProps('lastCallAt')}
-          />
         </>
       )}
     </Form>

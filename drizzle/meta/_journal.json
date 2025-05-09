@@ -113,6 +113,13 @@
       "when": 1746780594683,
       "tag": "0015_swift_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1746784513995,
+      "tag": "0016_simple_swordsman",
+      "breakpoints": true
     }
   ]
 }

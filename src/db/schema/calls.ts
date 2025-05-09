@@ -23,12 +23,10 @@ export const calls = sqliteTable(
     studentId: text()
       .notNull()
       .references(() => students.id, { onDelete: 'cascade' }),
-    callCount: integer().notNull().default(1),
-    calledBy: text()
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+    callCount: integer(),
+    calledBy: text().references(() => users.id, { onDelete: 'cascade' }),
     status: text({ enum: callStatusEnum }).notNull().default('pending'),
-    lastCallAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
+    lastCallAt: integer({ mode: 'timestamp' }),
     createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   },
   (table) => {
