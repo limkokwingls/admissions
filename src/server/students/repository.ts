@@ -55,7 +55,10 @@ export default class StudentRepository extends BaseRepository<
         if (containsNumber) {
           const wildcardTerm = '%' + term + '%';
 
-          return or(sql`${students.candidateNo} LIKE ${wildcardTerm}`);
+          return or(
+            sql`${students.candidateNo} LIKE ${wildcardTerm}`,
+            sql`${students.phoneNumber} LIKE ${wildcardTerm}`,
+          );
         } else {
           const interleaved = term.split('').join('%');
           const wildcardTerm = '%' + term + '%';
