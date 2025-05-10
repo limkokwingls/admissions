@@ -50,35 +50,35 @@ export default class StudentRepository extends BaseRepository<
       const searchTerms = params.search.trim().split(/\s+/);
 
       const conditions = searchTerms.map((term) => {
-        const interleaved = term.split('').join('%');
+        const containsNumber = /\d/.test(term);
 
-        const wildcardTerm = '%' + term + '%';
+        if (containsNumber) {
+          const wildcardTerm = '%' + term + '%';
 
-        const substitutionPatterns = [
-          wildcardTerm,
-          '%' + interleaved + '%',
-          ...this.generateVowelSubstitutions(term),
-          ...this.generateConsonantSubstitutions(term),
-        ];
+          return or(sql`${students.candidateNo} LIKE ${wildcardTerm}`);
+        } else {
+          const interleaved = term.split('').join('%');
+          const wildcardTerm = '%' + term + '%';
 
-        const fieldConditions = [
-          ...substitutionPatterns.map(
-            (pattern) => sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`,
-          ),
-          ...substitutionPatterns.map(
-            (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
-          ),
-          ...substitutionPatterns.map(
-            (pattern) =>
-              sql`LOWER(${students.candidateNo}) LIKE LOWER(${pattern})`,
-          ),
-          ...substitutionPatterns.map(
-            (pattern) =>
-              sql`LOWER(${students.phoneNumber}) LIKE LOWER(${pattern})`,
-          ),
-        ];
+          const substitutionPatterns = [
+            wildcardTerm,
+            '%' + interleaved + '%',
+            ...this.generateVowelSubstitutions(term),
+            ...this.generateConsonantSubstitutions(term),
+          ];
 
-        return or(...fieldConditions);
+          const fieldConditions = [
+            ...substitutionPatterns.map(
+              (pattern) =>
+                sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`,
+            ),
+            ...substitutionPatterns.map(
+              (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
+            ),
+          ];
+
+          return or(...fieldConditions);
+        }
       });
 
       if (conditions.length > 0) {

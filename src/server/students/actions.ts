@@ -21,10 +21,6 @@ export async function createStudent(student: Student) {
   return service.create(student);
 }
 
-export async function createOrUpdateStudent(student: Student) {
-  return service.createOrUpdate(student);
-}
-
 export async function updateStudent(id: string, student: Student) {
   return service.update(id, student);
 }
