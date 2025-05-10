@@ -150,7 +150,7 @@ async function processWorksheet(
       continue;
     }
 
-    let rowStatus = String(row[columnIndices['ROW STATUS']] || '').trim();
+    const rowStatus = String(row[columnIndices['ROW STATUS']] || '').trim();
     if (rowStatus.toLowerCase() !== 'recommended') {
       console.log(
         chalk.yellow(
