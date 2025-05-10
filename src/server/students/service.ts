@@ -1,8 +1,10 @@
 import { students } from '@/db/schema';
+import { confirm } from '@inquirer/prompts';
 import StudentRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { exit } from 'process';
+import chalk from 'chalk';
 
 type Student = typeof students.$inferInsert;
 
@@ -27,6 +29,23 @@ class StudentService {
 
   async createOrUpdate(data: Student) {
     const existingStudent = await this.repository.findByUniqueIdentifiers(data);
+
+    if (!existingStudent && !data.phoneNumber) {
+      console.log(
+        chalk.red(
+          `No phone number provided for student: ${data.surname} ${data.names}, Did you import the correct sheet?`,
+        ),
+      );
+
+      const shouldContinue = await confirm({
+        message: 'Do you want to continue?',
+        default: false,
+      });
+
+      if (!shouldContinue) {
+        process.exit(1);
+      }
+    }
 
     if (existingStudent) {
       const updateData = {
