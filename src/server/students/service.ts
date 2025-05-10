@@ -2,6 +2,7 @@ import { students } from '@/db/schema';
 import StudentRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
+import { exit } from 'process';
 
 type Student = typeof students.$inferInsert;
 
@@ -29,15 +30,10 @@ class StudentService {
 
     if (existingStudent) {
       const updateData = {
-        ...data,
-        id: existingStudent.id,
+        ...existingStudent,
+        no: data.no,
+        status: data.status,
       };
-      if (!existingStudent.no) {
-        updateData.no = data.no;
-      }
-      if (!existingStudent.phoneNumber) {
-        updateData.phoneNumber = data.phoneNumber;
-      }
       return this.repository.update(existingStudent.id, updateData);
     } else {
       return this.repository.create(data);
