@@ -20,7 +20,8 @@ export default function Page() {
           2025 Student Admissions
         </h2>
         <p className='mx-auto max-w-md text-sm text-background/50'>
-          Enter your full names or phone number to find your admission details
+          Search by your full names, phone number or candidate number to find
+          your admission details
         </p>
       </div>
 
