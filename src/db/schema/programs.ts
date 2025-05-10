@@ -16,6 +16,8 @@ export const facultyRelations = relations(faculties, ({ many }) => ({
   programs: many(programs),
 }));
 
+//TODO: -1	BHRA	BA in Human Resource Management (ADV),
+//TODO: I should probably make code the primary key sot that BHRA and BHR can have the same id
 export const programs = sqliteTable('programs', {
   id: integer('id').primaryKey(),
   code: text().notNull(),
