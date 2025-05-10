@@ -72,6 +72,7 @@ async function handleCreateOrUpdateStudent(data: Student, sheetName: string) {
   if (existingStudent) {
     const updateData = {
       ...existingStudent,
+      programId: data.programId,
       no: data.no,
       status: data.status,
     };
