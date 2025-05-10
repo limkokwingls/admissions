@@ -213,6 +213,20 @@ export default function ProgramsManager({ facultyId }: Props) {
               placeholder='Enter program name'
               required
               {...form.getInputProps('name')}
+              onChange={(event) => {
+                const newName = event.currentTarget.value;
+                form.getInputProps('name').onChange(newName);
+
+                let level: Program['level'] = 'degree';
+                if (newName.toLowerCase().startsWith('diploma')) {
+                  level = 'diploma';
+                } else if (newName.toLowerCase().startsWith('certificate')) {
+                  level = 'certificate';
+                } else {
+                  level = 'degree';
+                }
+                form.setFieldValue('level', level);
+              }}
             />
             <Select
               label='Level'
