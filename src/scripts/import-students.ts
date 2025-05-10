@@ -53,10 +53,11 @@ async function processWorksheet(
   const { programName, status } = extractSheetMetadata(data);
 
   if (!programName) {
-    console.error(
-      chalk.red(`Could not find program name in sheet: ${sheetName}`),
-    );
-    return [];
+    throw new Error(`Could not find program name in sheet: ${sheetName}`);
+  }
+
+  if (!status) {
+    throw new Error(`Could not find status in sheet: ${sheetName}`);
   }
 
   console.log(`Found program: "${programName}" with status: ${status}`);
@@ -64,12 +65,9 @@ async function processWorksheet(
   const programId = await findProgramByName(programName);
 
   if (!programId) {
-    console.error(
-      chalk.red(
-        `Program "${programName}" not found in database. Please create it first.`,
-      ),
+    throw new Error(
+      `Program "${programName}" not found in database. Please create it first.`,
     );
-    return [];
   }
 
   let headerRowIndex = -1;
