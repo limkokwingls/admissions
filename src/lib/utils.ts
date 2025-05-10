@@ -17,15 +17,13 @@ export function formatNames(name: string): string {
   return name
     .toLowerCase()
     .split(' ')
-    .map((part) =>
-      part
-        .split(/('|-)/g)
-        .map((segment, index) =>
-          index % 2 === 0
-            ? segment.charAt(0).toUpperCase() + segment.slice(1)
-            : segment,
-        )
-        .join(''),
-    )
+    .map((part) => {
+      if (!part) return part;
+
+      const firstChar = part.charAt(0).toUpperCase();
+      const restOfString = part.slice(1);
+
+      return firstChar + restOfString;
+    })
     .join(' ');
 }
