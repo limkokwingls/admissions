@@ -128,10 +128,15 @@ async function processWorksheet(
     if (value === 'NO') columnIndices['NO'] = key;
     else if (value === 'SURNAME') columnIndices['SURNAME'] = key;
     else if (value === 'OTHER NAMES') columnIndices['OTHER NAMES'] = key;
-    else if (value === 'EDUCATION/CONTACT #' || value === 'CONTACT #')
+    else if (value === 'CONTACT NO' || value === 'CONTACT #')
       columnIndices['CONTACT #'] = key;
-    else if (value === 'CERTIFICATE #' || value === 'CANDIDATE #')
+    else if (
+      value === 'CERTIFICATE #' ||
+      value === 'CANDIDATE #' ||
+      value === 'CANDIDATE NO'
+    )
       columnIndices['CANDIDATE #'] = key;
+    else if (value === 'STATUS') columnIndices['ROW STATUS'] = key;
   }
 
   console.log('Column indices found:', columnIndices);
@@ -144,13 +149,22 @@ async function processWorksheet(
       continue;
     }
 
+    let rowStatus = String(row[columnIndices['ROW STATUS']] || '').trim();
+    if (rowStatus.toLowerCase() !== 'recommended') {
+      console.log(
+        chalk.yellow(
+          `Row Status row ${i + 1} in sheet ${sheetName} is ${rowStatus}`,
+        ),
+      );
+    }
+
     const studentData: Student = {
       no: Number(row[columnIndices['NO']]),
       surname: String(row[columnIndices['SURNAME']] || '').trim(),
       names: String(row[columnIndices['OTHER NAMES']] || '').trim(),
       phoneNumber: String(row[columnIndices['CONTACT #']] || '').trim(),
       candidateNo: String(row[columnIndices['CANDIDATE #']] || '').trim(),
-      status,
+      status: rowStatus.toUpperCase() === 'DQ' ? 'DQ' : status,
       programId,
     };
 
