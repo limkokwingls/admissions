@@ -1,11 +1,12 @@
 import { findProgramByName } from '@/server/programs/actions';
-import { createOrUpdateStudent } from '@/server/students/actions';
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import * as XLSX from 'xlsx';
 import { students } from '../db/schema';
 import chalk from 'chalk';
+import { confirm } from '@inquirer/prompts';
+import StudentRepository from '@/server/students/repository';
 
 type Student = typeof students.$inferInsert;
 type ExcelRow = Record<string, string | number | null | undefined>;
@@ -44,6 +45,40 @@ function extractSheetMetadata(data: ExcelRow[]) {
   }
 
   return { programName, status };
+}
+
+async function handleCreateOrUpdateStudent(data: Student, sheetName: string) {
+  const repository = new StudentRepository();
+  const existingStudent = await repository.findByUniqueIdentifiers(data);
+
+  if (!existingStudent && !data.phoneNumber) {
+    console.log(
+      chalk.red(
+        `No phone number provided for student: ${data.surname} ${data.names} in sheet: '${sheetName}'`,
+        'Did you import the correct sheet?',
+      ),
+    );
+
+    const shouldContinue = await confirm({
+      message: 'Do you want to continue?',
+      default: true,
+    });
+
+    if (!shouldContinue) {
+      process.exit(1);
+    }
+  }
+
+  if (existingStudent) {
+    const updateData = {
+      ...existingStudent,
+      no: data.no,
+      status: data.status,
+    };
+    return repository.update(existingStudent.id, updateData);
+  } else {
+    return repository.create(data);
+  }
 }
 
 async function processWorksheet(
@@ -148,7 +183,10 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
         for (let i = 0; i < studentsData.length; i++) {
           const student = studentsData[i];
           try {
-            const result = await createOrUpdateStudent(student);
+            const result = await handleCreateOrUpdateStudent(
+              student,
+              sheetName,
+            );
             const action = result.id !== student.id ? 'Updated' : 'Imported';
             console.log(
               `[${sheetName}] ${action} student ${i + 1}/${studentsData.length}: ${student.surname.trim()} ${student.names.trim()}`,
