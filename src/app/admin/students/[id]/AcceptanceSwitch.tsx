@@ -102,24 +102,26 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
             </Box>
           </Group>
 
-          <Group>
-            {isAccepted ? (
-              <PrintAdmission
-                key='print'
-                student={student}
-                properties={properties}
-              />
-            ) : null}
-            <ActionIcon
-              variant='light'
-              color={isAccepted ? 'green' : 'gray'}
-              onClick={open}
-              disabled={isPending}
-              loading={isPending}
-            >
-              <IconEdit size={'1rem'} />
-            </ActionIcon>
-          </Group>
+          {student.status == 'Admitted' && (
+            <Group>
+              {isAccepted ? (
+                <PrintAdmission
+                  key='print'
+                  student={student}
+                  properties={properties}
+                />
+              ) : null}
+              <ActionIcon
+                variant='light'
+                color={isAccepted ? 'green' : 'gray'}
+                onClick={open}
+                disabled={isPending}
+                loading={isPending}
+              >
+                <IconEdit size={'1rem'} />
+              </ActionIcon>
+            </Group>
+          )}
         </Group>
       </Card>
 
