@@ -3,7 +3,8 @@ import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'Limkokwing Admissions',
-  description: '2025/2026 Fist Year Limkokwing Admissions',
+  description:
+    '2025/2026 Fist Year Admissions, Limkokwing University of Creative Technology Lesotho',
   icons: {
     icon: '/images/logo.png',
   },
