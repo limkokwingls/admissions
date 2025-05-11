@@ -78,9 +78,7 @@ export default async function StudentPage({ params }: Props) {
                     non-sponsorship of any student. Sponsorship decisions are
                     made independently by the National Manpower Development
                     Secretariat (NMDS) based on their own criteria and available
-                    resources. The University&apos;s role is limited to
-                    providing academic programs and communicating admission
-                    status.
+                    resources.
                   </p>
                 </div>
               </div>
