@@ -25,7 +25,7 @@ class StudentService {
   }
 
   async update(id: string, data: Student) {
-    return withAuth(async () => this.repository.update(id, data), []);
+    return withAuth(async () => this.repository.update(id, data), ['registry']);
   }
 
   async delete(id: string) {

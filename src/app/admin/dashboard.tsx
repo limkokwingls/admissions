@@ -1,6 +1,7 @@
 'use client';
 
 import { Shell } from '@/components/adease';
+import { UserRole } from '@/db/schema';
 import {
   ActionIcon,
   Avatar,
@@ -45,6 +46,7 @@ export type NavItem = {
   icon: Icon;
   children?: NavItem[];
   notificationCount?: NotificationConfig;
+  roles?: UserRole[];
 };
 
 const navigation: NavItem[] = [
@@ -57,6 +59,7 @@ const navigation: NavItem[] = [
     label: 'Students',
     href: '/admin/students',
     icon: IconUsersGroup,
+    roles: ['registry', 'admin'],
   },
   {
     label: 'Faculties',
@@ -189,6 +192,17 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
 function ItemDisplay({ item }: { item: NavItem }) {
   const pathname = usePathname();
   const Icon = item.icon;
+  const { data: session } = useSession();
+
+  if (
+    item.roles &&
+    (!session?.user?.role ||
+      !item.roles.includes(session.user.role as UserRole))
+  ) {
+    if (session?.user?.role !== 'admin') {
+      return null;
+    }
+  }
 
   const navLink = (
     <NavLink
