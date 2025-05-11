@@ -9,32 +9,40 @@ type LetterDownload = typeof letterDownloads.$inferInsert;
 class AnalyticsService {
   constructor(
     private readonly pageVisitsRepo = pageVisitsRepository,
-    private readonly letterDownloadsRepo = letterDownloadsRepository
+    private readonly letterDownloadsRepo = letterDownloadsRepository,
   ) {}
 
-  // Page Visits
   async getPageVisit(id: string) {
-    return withAuth(async () => this.pageVisitsRepo.findById(id), []);
+    return withAuth(async () => this.pageVisitsRepo.findById(id), ['registry']);
   }
 
   async getPageVisitByStudentId(studentId: string) {
-    return withAuth(async () => this.pageVisitsRepo.findByStudentId(studentId), []);
+    return withAuth(
+      async () => this.pageVisitsRepo.findByStudentId(studentId),
+      ['registry'],
+    );
   }
 
   async getAllPageVisits(params: QueryOptions<typeof pageVisits>) {
-    return withAuth(async () => this.pageVisitsRepo.query(params), []);
+    return withAuth(
+      async () => this.pageVisitsRepo.query(params),
+      ['registry'],
+    );
   }
 
   async incrementPageVisit(studentId: string) {
-    return withAuth(async () => this.pageVisitsRepo.incrementVisit(studentId), []);
+    return withAuth(
+      async () => this.pageVisitsRepo.incrementVisit(studentId),
+      ['all'],
+    );
   }
 
   async createPageVisit(data: PageVisit) {
-    return withAuth(async () => this.pageVisitsRepo.create(data), []);
+    return withAuth(async () => this.pageVisitsRepo.create(data), ['all']);
   }
 
   async updatePageVisit(id: string, data: Partial<PageVisit>) {
-    return withAuth(async () => this.pageVisitsRepo.update(id, data), []);
+    return withAuth(async () => this.pageVisitsRepo.update(id, data), ['all']);
   }
 
   async deletePageVisit(id: string) {
@@ -43,27 +51,42 @@ class AnalyticsService {
 
   // Letter Downloads
   async getLetterDownload(id: string) {
-    return withAuth(async () => this.letterDownloadsRepo.findById(id), []);
+    return withAuth(
+      async () => this.letterDownloadsRepo.findById(id),
+      ['registry'],
+    );
   }
 
   async getLetterDownloadByStudentId(studentId: string) {
-    return withAuth(async () => this.letterDownloadsRepo.findByStudentId(studentId), []);
+    return withAuth(
+      async () => this.letterDownloadsRepo.findByStudentId(studentId),
+      ['registry'],
+    );
   }
 
   async getAllLetterDownloads(params: QueryOptions<typeof letterDownloads>) {
-    return withAuth(async () => this.letterDownloadsRepo.query(params), []);
+    return withAuth(
+      async () => this.letterDownloadsRepo.query(params),
+      ['registry'],
+    );
   }
 
   async incrementLetterDownload(studentId: string) {
-    return withAuth(async () => this.letterDownloadsRepo.incrementDownload(studentId), []);
+    return withAuth(
+      async () => this.letterDownloadsRepo.incrementDownload(studentId),
+      ['all'],
+    );
   }
 
   async createLetterDownload(data: LetterDownload) {
-    return withAuth(async () => this.letterDownloadsRepo.create(data), []);
+    return withAuth(async () => this.letterDownloadsRepo.create(data), ['all']);
   }
 
   async updateLetterDownload(id: string, data: Partial<LetterDownload>) {
-    return withAuth(async () => this.letterDownloadsRepo.update(id, data), []);
+    return withAuth(
+      async () => this.letterDownloadsRepo.update(id, data),
+      ['all'],
+    );
   }
 
   async deleteLetterDownload(id: string) {
