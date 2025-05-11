@@ -212,25 +212,35 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
 
         <View style={styles.greeting}>
           <Text>
-            Dear {student.names} {student.surname}
+            Dear{' '}
+            <Text style={{ fontWeight: 'bold' }}>
+              {student.names} {student.surname}
+            </Text>
           </Text>
         </View>
 
         <View style={styles.content}>
           <Text>
             Congratulations! We are pleased to inform you that you have been
-            accepted to study {student.program?.name} at Limkokwing University.
-            Please complete the attached form and submit it to the Registry
-            Department together with the confirmation receipt of the acceptance
-            fee of M{properties.acceptanceFee.toFixed(2)} on or before{' '}
-            {new Date(properties.acceptanceDeadline).toLocaleDateString(
-              'en-GB',
-              {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              },
-            )}
+            accepted to study{' '}
+            <Text style={{ fontWeight: 'bold' }}>{student.program?.name}</Text>{' '}
+            at Limkokwing University. Please complete the attached form and
+            submit it to the Registry Department together with the confirmation
+            receipt of the acceptance fee of
+            <Text style={{ fontWeight: 'bold' }}>
+              M{properties.acceptanceFee.toFixed(2)}
+            </Text>{' '}
+            on or before{' '}
+            <Text style={{ fontWeight: 'bold' }}>
+              {new Date(properties.acceptanceDeadline).toLocaleDateString(
+                'en-GB',
+                {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                },
+              )}
+            </Text>
             . Kindly note that failure to return the completed form and
             confirmation receipt by the stipulated deadline will result in your
             slot being allocated to another candidate.
@@ -307,7 +317,8 @@ function AcceptanceLetterPDF({ student, properties }: Props) {
             <View style={styles.noteItem}>
               <Text style={{ width: 20 }}>1.</Text>
               <Text>
-                I Enclose a bank receipt of the acceptance Fee of M500.00 (
+                I Enclose a bank receipt of the acceptance Fee of M
+                {properties.acceptanceFee.toFixed(2)} (
                 <Text style={{ fontWeight: 'bold' }}>NON-REFUNDABLE</Text>)
               </Text>
             </View>
