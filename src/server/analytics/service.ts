@@ -2,6 +2,9 @@ import { letterDownloads, pageVisits } from '@/db/schema';
 import { pageVisitsRepository, letterDownloadsRepository } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
+import { students } from '@/db/schema/students';
+import { db } from '@/db';
+import { inArray } from 'drizzle-orm';
 
 type PageVisit = typeof pageVisits.$inferInsert;
 type LetterDownload = typeof letterDownloads.$inferInsert;
@@ -48,6 +51,49 @@ class AnalyticsService {
   async deletePageVisit(id: string) {
     return withAuth(async () => this.pageVisitsRepo.delete(id), []);
   }
+  
+  async getTotalVisits() {
+    return withAuth(
+      async () => this.pageVisitsRepo.getTotalVisits(),
+      ['registry'],
+    );
+  }
+
+  async getDailyVisits(days: number = 30) {
+    return withAuth(
+      async () => this.pageVisitsRepo.getDailyVisits(days),
+      ['registry'],
+    );
+  }
+
+  async getTopVisitors(limit: number = 10) {
+    return withAuth(
+      async () => {
+        const topVisitors = await this.pageVisitsRepo.getTopVisitors(limit);
+        
+        // Fetch student names for the top visitors
+        const studentIds = topVisitors.map(visitor => visitor.studentId);
+        const studentsData = await db.query.students.findMany({
+          where: inArray(students.id, studentIds),
+          columns: {
+            id: true,
+            surname: true,
+            names: true,
+          },
+        });
+        
+        // Map student names to visitors
+        return topVisitors.map(visitor => {
+          const student = studentsData.find(s => s.id === visitor.studentId);
+          return {
+            ...visitor,
+            studentName: student ? `${student.surname} ${student.names}` : 'Unknown',
+          };
+        });
+      },
+      ['registry'],
+    );
+  }
 
   // Letter Downloads
   async getLetterDownload(id: string) {
@@ -91,6 +137,49 @@ class AnalyticsService {
 
   async deleteLetterDownload(id: string) {
     return withAuth(async () => this.letterDownloadsRepo.delete(id), []);
+  }
+  
+  async getTotalDownloads() {
+    return withAuth(
+      async () => this.letterDownloadsRepo.getTotalDownloads(),
+      ['registry'],
+    );
+  }
+
+  async getDailyDownloads(days: number = 30) {
+    return withAuth(
+      async () => this.letterDownloadsRepo.getDailyDownloads(days),
+      ['registry'],
+    );
+  }
+
+  async getTopDownloaders(limit: number = 10) {
+    return withAuth(
+      async () => {
+        const topDownloaders = await this.letterDownloadsRepo.getTopDownloaders(limit);
+        
+        // Fetch student names for the top downloaders
+        const studentIds = topDownloaders.map(downloader => downloader.studentId);
+        const studentsData = await db.query.students.findMany({
+          where: inArray(students.id, studentIds),
+          columns: {
+            id: true,
+            surname: true,
+            names: true,
+          },
+        });
+        
+        // Map student names to downloaders
+        return topDownloaders.map(downloader => {
+          const student = studentsData.find(s => s.id === downloader.studentId);
+          return {
+            ...downloader,
+            studentName: student ? `${student.surname} ${student.names}` : 'Unknown',
+          };
+        });
+      },
+      ['registry'],
+    );
   }
 }
 
