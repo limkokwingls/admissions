@@ -233,29 +233,88 @@ async function importStudentsFromExcel(filePath: string): Promise<void> {
   }
 }
 
+async function processDirectory(directoryPath: string): Promise<void> {
+  console.log(`Processing directory: ${directoryPath}`);
+  const files = fs.readdirSync(directoryPath);
+  const excelFiles = files.filter((file) => {
+    const ext = path.extname(file).toLowerCase();
+    return ext === '.xlsx' || ext === '.xls';
+  });
+
+  if (excelFiles.length === 0) {
+    console.log(
+      chalk.yellow(`No Excel files found in directory: ${directoryPath}`),
+    );
+    return;
+  }
+
+  console.log(`Found ${excelFiles.length} Excel files to process`);
+
+  for (const file of excelFiles) {
+    const filePath = path.join(directoryPath, file);
+    console.log(chalk.blue(`\nProcessing file: ${file}`));
+    await importStudentsFromExcel(filePath);
+  }
+}
+
 async function main() {
   const args = process.argv.slice(2);
+  let option = '--file';
+  let targetPath = '';
 
-  if (args.length < 1) {
-    console.log('\nUsage: pnpm import-students <path-to-excel-file>');
-    console.log('\nExample: pnpm import-students ./data/students.xlsx\n');
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--file' || args[i] === '--dir') {
+      option = args[i];
+      if (i + 1 < args.length) {
+        targetPath = args[i + 1];
+        i++;
+      }
+    } else if (!targetPath) {
+      targetPath = args[i];
+    }
+  }
+
+  if (!targetPath) {
+    console.log(
+      '\nUsage: pnpm import-students [--file <path-to-excel-file> | --dir <directory-path>]',
+    );
+    console.log('\nExamples:');
+    console.log('  pnpm import-students --file ./data/students.xlsx');
+    console.log('  pnpm import-students --dir ./data/students/');
+    console.log(
+      '  pnpm import-students ./data/students.xlsx  (legacy format, equivalent to --file)\n',
+    );
     process.exit(1);
   }
 
-  const filePath = args[0];
-  const resolvedPath = path.isAbsolute(filePath)
-    ? filePath
-    : path.resolve(process.cwd(), filePath);
+  const resolvedPath = path.isAbsolute(targetPath)
+    ? targetPath
+    : path.resolve(process.cwd(), targetPath);
 
   if (!fs.existsSync(resolvedPath)) {
-    console.error(chalk.red(`Error: File not found: ${resolvedPath}`));
-    console.log('\nUsage: pnpm import-students <path-to-excel-file>');
+    console.error(chalk.red(`Error: Path not found: ${resolvedPath}`));
     process.exit(1);
   }
 
   console.log('Starting student import process...');
-  await importStudentsFromExcel(resolvedPath);
-  console.log('Student import process completed.');
+
+  if (option === '--dir') {
+    const stats = fs.statSync(resolvedPath);
+    if (!stats.isDirectory()) {
+      console.error(chalk.red(`Error: ${resolvedPath} is not a directory`));
+      process.exit(1);
+    }
+    await processDirectory(resolvedPath);
+  } else {
+    const stats = fs.statSync(resolvedPath);
+    if (!stats.isFile()) {
+      console.error(chalk.red(`Error: ${resolvedPath} is not a file`));
+      process.exit(1);
+    }
+    await importStudentsFromExcel(resolvedPath);
+  }
+
+  console.log(chalk.green('\nStudent import process completed.'));
   process.exit(0);
 }
 
