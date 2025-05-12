@@ -43,13 +43,7 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import {
-  IconArrowDownRight,
-  IconArrowUpRight,
-  IconDownload,
-  IconEye,
-  IconUser,
-} from '@tabler/icons-react';
+import { IconDownload, IconEye, IconUser } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import {
@@ -105,9 +99,7 @@ export default function AnalyticsDashboard() {
     queryFn: () => getTopDownloaders(5),
   });
 
-  const visitsTrend = totalVisits && totalVisits > 100 ? 'up' : 'neutral';
-  const downloadsTrend =
-    totalDownloads && totalDownloads > 50 ? 'up' : 'neutral';
+  // Trends have been removed
 
   return (
     <Stack gap='xl'>
@@ -143,8 +135,6 @@ export default function AnalyticsDashboard() {
               loading={loadingTotalVisits}
               icon={<IconEye size={22} stroke={1.5} />}
               color='blue'
-              trend={visitsTrend}
-              trendValue='+12.3% from last month'
               compact
             />
             <StatCard
@@ -168,8 +158,6 @@ export default function AnalyticsDashboard() {
               loading={loadingTotalDownloads}
               icon={<IconDownload size={22} stroke={1.5} />}
               color='green'
-              trend={downloadsTrend}
-              trendValue='+5.7% from last month'
               compact
             />
             <StatCard
@@ -223,8 +211,7 @@ function StatCard({
   loading,
   icon,
   color = 'blue',
-  trend,
-  trendValue,
+
   compact = false,
 }: {
   title: string;
@@ -232,39 +219,10 @@ function StatCard({
   loading: boolean;
   icon: React.ReactNode;
   color?: string;
-  trend?: 'up' | 'down' | 'neutral';
-  trendValue?: string;
+
   compact?: boolean;
 }) {
-  const getTrendIcon = () => {
-    if (!trend || !trendValue) return null;
-
-    return (
-      <Group gap={4} align='center'>
-        {trend === 'up' ? (
-          <IconArrowUpRight
-            size={16}
-            color='var(--mantine-color-green-6)'
-            stroke={2.5}
-          />
-        ) : trend === 'down' ? (
-          <IconArrowDownRight
-            size={16}
-            color='var(--mantine-color-red-6)'
-            stroke={2.5}
-          />
-        ) : null}
-        <Text size='sm' c={getTrendColor(trend)}>
-          {trendValue}
-        </Text>
-      </Group>
-    );
-  };
-
-  const getTrendColor = (trend?: 'up' | 'down' | 'neutral') => {
-    if (!trend) return 'dimmed';
-    return trend === 'up' ? 'green.6' : trend === 'down' ? 'red.6' : 'dimmed';
-  };
+  // Trend functions have been removed
 
   if (compact) {
     return (
@@ -285,14 +243,6 @@ function StatCard({
           <Text fw={700} size='xl'>
             {value}
           </Text>
-        )}
-        {trend && trendValue && (
-          <Group gap='xs' mt='xs'>
-            {getTrendIcon()}
-            <Text size='xs' c={getTrendColor(trend)}>
-              {trendValue}
-            </Text>
-          </Group>
         )}
       </Paper>
     );
@@ -323,15 +273,6 @@ function StatCard({
           {icon}
         </ThemeIcon>
       </Group>
-
-      {trend && trendValue && (
-        <Group gap='xs' mt='md'>
-          {getTrendIcon()}
-          <Text size='sm' c={getTrendColor(trend)}>
-            {trendValue}
-          </Text>
-        </Group>
-      )}
     </Card>
   );
 }
