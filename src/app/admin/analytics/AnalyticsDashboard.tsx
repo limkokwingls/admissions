@@ -7,6 +7,25 @@ import {
   getTotalDownloads,
   getTotalVisits,
 } from '@/server/analytics/actions';
+
+interface DateCount {
+  date: string;
+  count: number;
+}
+
+interface ChartDataPoint {
+  date: string;
+  visits: number;
+  downloads: number;
+}
+
+interface TopUser {
+  studentId: string;
+  studentName: string;
+  visits?: number;
+  downloads?: number;
+  [key: string]: string | number | undefined;
+}
 import {
   Badge,
   Box,
@@ -41,6 +60,118 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+export default function AnalyticsDashboard() {
+  const { data: dailyVisits, isLoading: loadingVisits } = useQuery({
+    queryKey: ['analytics', 'daily-visits'],
+    queryFn: () => getDailyVisits(30),
+  });
+
+  const { data: dailyDownloads, isLoading: loadingDownloads } = useQuery({
+    queryKey: ['analytics', 'daily-downloads'],
+    queryFn: () => getDailyDownloads(30),
+  });
+
+  const { data: totalVisits, isLoading: loadingTotalVisits } = useQuery({
+    queryKey: ['analytics', 'total-visits'],
+    queryFn: () => getTotalVisits(),
+  });
+
+  const { data: totalDownloads, isLoading: loadingTotalDownloads } = useQuery({
+    queryKey: ['analytics', 'total-downloads'],
+    queryFn: () => getTotalDownloads(),
+  });
+
+  const { data: topVisitors, isLoading: loadingTopVisitors } = useQuery({
+    queryKey: ['analytics', 'top-visitors'],
+    queryFn: () => getTopVisitors(5),
+  });
+
+  const { data: topDownloaders, isLoading: loadingTopDownloaders } = useQuery({
+    queryKey: ['analytics', 'top-downloaders'],
+    queryFn: () => getTopDownloaders(5),
+  });
+
+  const visitsTrend = totalVisits && totalVisits > 100 ? 'up' : 'neutral';
+  const downloadsTrend =
+    totalDownloads && totalDownloads > 50 ? 'up' : 'neutral';
+
+  return (
+    <Stack gap='xl'>
+      <Paper
+        p='xl'
+        radius='md'
+        withBorder
+        styles={{
+          root: {
+            borderColor: 'var(--mantine-color-blue-1)',
+            background:
+              'linear-gradient(to right, var(--mantine-color-blue-0), var(--mantine-color-indigo-0))',
+          },
+        }}
+      >
+        <Title order={1} mb='xs' c='blue.9'>
+          Analytics Dashboard
+        </Title>
+        <Text size='lg' c='dimmed' mb='md' style={{ maxWidth: '42rem' }}>
+          Track student engagement and application metrics to optimize the
+          admissions process
+        </Text>
+      </Paper>
+
+      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
+        <StatCard
+          title='Total Page Visits'
+          value={totalVisits?.toLocaleString() || '0'}
+          loading={loadingTotalVisits}
+          icon={<IconEye size={22} stroke={1.5} />}
+          color='blue'
+          trend={visitsTrend}
+          trendValue='+12.3% from last month'
+        />
+        <StatCard
+          title='Total Downloads'
+          value={totalDownloads?.toLocaleString() || '0'}
+          loading={loadingTotalDownloads}
+          icon={<IconDownload size={22} stroke={1.5} />}
+          color='green'
+          trend={downloadsTrend}
+          trendValue='+5.7% from last month'
+        />
+      </SimpleGrid>
+
+      <Card withBorder p='lg' radius='md' shadow='sm'>
+        <LineChartCard
+          title='Page Visits & Download Activity'
+          description='Daily metrics over the last 30 days'
+          data={combineChartData(dailyVisits || [], dailyDownloads || [])}
+          series={[
+            { dataKey: 'visits', color: '#3b82f6', name: 'Page Visits' },
+            { dataKey: 'downloads', color: '#10b981', name: 'Downloads' },
+          ]}
+          loading={loadingVisits || loadingDownloads}
+        />
+      </Card>
+
+      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing='md'>
+        <TopUsersCard
+          title='Top Visitors'
+          description='Students with the most page visits'
+          data={topVisitors || []}
+          loading={loadingTopVisitors}
+          valueKey='visits'
+        />
+        <TopUsersCard
+          title='Top Downloaders'
+          description='Students with the most letter downloads'
+          data={topDownloaders || []}
+          loading={loadingTopDownloaders}
+          valueKey='downloads'
+        />
+      </SimpleGrid>
+    </Stack>
+  );
+}
 
 function StatCard({
   title,
@@ -127,7 +258,7 @@ function LineChartCard({
   description,
 }: {
   title: string;
-  data: any[];
+  data: ChartDataPoint[];
   series: Array<{
     dataKey: string;
     color: string;
@@ -217,7 +348,7 @@ function TopUsersCard({
   description,
 }: {
   title: string;
-  data: any[];
+  data: TopUser[];
   loading: boolean;
   valueKey: string;
   description?: string;
@@ -317,7 +448,7 @@ function TopUsersCard({
                 <Progress
                   value={Math.min(
                     100,
-                    (item[valueKey] / (data[0]?.[valueKey] || 1)) * 100,
+                    ((item[valueKey] as number) / ((data[0]?.[valueKey] as number) || 1)) * 100,
                   )}
                   color={valueKey === 'visits' ? 'blue' : 'green'}
                   size='xs'
@@ -332,14 +463,11 @@ function TopUsersCard({
   );
 }
 
-// Helper function to combine chart data
-function combineChartData(visitsData: any[], downloadsData: any[]) {
-  const combinedData: any[] = [];
+function combineChartData(visitsData: DateCount[], downloadsData: DateCount[]) {
+  const combinedData: ChartDataPoint[] = [];
 
-  // Create a map of dates for quick lookup
-  const dateMap = new Map();
+  const dateMap = new Map<string, ChartDataPoint>();
 
-  // Process visits data
   visitsData.forEach((visit) => {
     dateMap.set(visit.date, {
       date: visit.date,
@@ -348,11 +476,12 @@ function combineChartData(visitsData: any[], downloadsData: any[]) {
     });
   });
 
-  // Process downloads data
   downloadsData.forEach((download) => {
     if (dateMap.has(download.date)) {
       const entry = dateMap.get(download.date);
-      entry.downloads = download.count;
+      if (entry) {
+        entry.downloads = download.count;
+      }
     } else {
       dateMap.set(download.date, {
         date: download.date,
@@ -362,128 +491,10 @@ function combineChartData(visitsData: any[], downloadsData: any[]) {
     }
   });
 
-  // Convert map to array and sort by date
   dateMap.forEach((value) => combinedData.push(value));
   combinedData.sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 
   return combinedData;
-}
-
-export default function AnalyticsDashboard() {
-  // Fetch analytics data
-  const { data: dailyVisits, isLoading: loadingVisits } = useQuery({
-    queryKey: ['analytics', 'daily-visits'],
-    queryFn: () => getDailyVisits(30),
-  });
-
-  const { data: dailyDownloads, isLoading: loadingDownloads } = useQuery({
-    queryKey: ['analytics', 'daily-downloads'],
-    queryFn: () => getDailyDownloads(30),
-  });
-
-  const { data: totalVisits, isLoading: loadingTotalVisits } = useQuery({
-    queryKey: ['analytics', 'total-visits'],
-    queryFn: () => getTotalVisits(),
-  });
-
-  const { data: totalDownloads, isLoading: loadingTotalDownloads } = useQuery({
-    queryKey: ['analytics', 'total-downloads'],
-    queryFn: () => getTotalDownloads(),
-  });
-
-  const { data: topVisitors, isLoading: loadingTopVisitors } = useQuery({
-    queryKey: ['analytics', 'top-visitors'],
-    queryFn: () => getTopVisitors(5),
-  });
-
-  const { data: topDownloaders, isLoading: loadingTopDownloaders } = useQuery({
-    queryKey: ['analytics', 'top-downloaders'],
-    queryFn: () => getTopDownloaders(5),
-  });
-
-  // Calculate trends (mock data - in a real implementation, you'd compare with previous period)
-  const visitsTrend = totalVisits && totalVisits > 100 ? 'up' : 'neutral';
-  const downloadsTrend =
-    totalDownloads && totalDownloads > 50 ? 'up' : 'neutral';
-
-  return (
-    <Stack gap='xl'>
-      <Paper
-        p='xl'
-        radius='md'
-        withBorder
-        styles={{
-          root: {
-            borderColor: 'var(--mantine-color-blue-1)',
-            background:
-              'linear-gradient(to right, var(--mantine-color-blue-0), var(--mantine-color-indigo-0))',
-          },
-        }}
-      >
-        <Title order={1} mb='xs' c='blue.9'>
-          Analytics Dashboard
-        </Title>
-        <Text size='lg' c='dimmed' mb='md' style={{ maxWidth: '42rem' }}>
-          Track student engagement and application metrics to optimize the
-          admissions process
-        </Text>
-      </Paper>
-
-      {/* Stats Overview */}
-      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
-        <StatCard
-          title='Total Page Visits'
-          value={totalVisits?.toLocaleString() || '0'}
-          loading={loadingTotalVisits}
-          icon={<IconEye size={22} stroke={1.5} />}
-          color='blue'
-          trend={visitsTrend}
-          trendValue='+12.3% from last month'
-        />
-        <StatCard
-          title='Total Downloads'
-          value={totalDownloads?.toLocaleString() || '0'}
-          loading={loadingTotalDownloads}
-          icon={<IconDownload size={22} stroke={1.5} />}
-          color='green'
-          trend={downloadsTrend}
-          trendValue='+5.7% from last month'
-        />
-      </SimpleGrid>
-
-      {/* Combined Chart */}
-      <Card withBorder p='lg' radius='md' shadow='sm'>
-        <LineChartCard
-          title='Page Visits & Download Activity'
-          description='Daily metrics over the last 30 days'
-          data={combineChartData(dailyVisits || [], dailyDownloads || [])}
-          series={[
-            { dataKey: 'visits', color: '#3b82f6', name: 'Page Visits' },
-            { dataKey: 'downloads', color: '#10b981', name: 'Downloads' },
-          ]}
-          loading={loadingVisits || loadingDownloads}
-        />
-      </Card>
-
-      {/* Top Users */}
-      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing='md'>
-        <TopUsersCard
-          title='Top Visitors'
-          description='Students with the most page visits'
-          data={topVisitors || []}
-          loading={loadingTopVisitors}
-          valueKey='visits'
-        />
-        <TopUsersCard
-          title='Top Downloaders'
-          description='Students with the most letter downloads'
-          data={topDownloaders || []}
-          loading={loadingTopDownloaders}
-          valueKey='downloads'
-        />
-      </SimpleGrid>
-    </Stack>
-  );
 }

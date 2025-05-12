@@ -28,6 +28,7 @@ import {
   IconSettings,
   IconUsers,
   IconUsersGroup,
+  IconChartLine,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { signOut, useSession } from 'next-auth/react';
@@ -91,6 +92,11 @@ const navigation: NavItem[] = [
         icon: IconForbid,
       },
     ],
+  },
+  {
+    label: 'Analytics',
+    href: '/admin/analytics',
+    icon: IconChartLine,
   },
 ];
 
