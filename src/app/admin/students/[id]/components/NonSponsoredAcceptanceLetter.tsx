@@ -15,14 +15,14 @@ import {
 import { format } from 'date-fns';
 
 Font.register({
-  family: 'Roboto',
+  family: 'Tahoma',
   fonts: [
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
+      src: 'https://db.onlinewebfonts.com/t/5a7f3b16ff01a4d704613209efd93595.ttf',
       fontWeight: 'normal',
     },
     {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
+      src: 'https://db.onlinewebfonts.com/t/b1d9d2bcdc4fef95e95f67fe228a11da.ttf',
       fontWeight: 'bold',
     },
   ],
@@ -31,14 +31,15 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     padding: 50,
-    fontFamily: 'Roboto',
+    fontFamily: 'Tahoma',
+    lineHeight: 1.4,
   },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
-    borderBottom: '1pt solid black',
-    paddingBottom: 10,
+    marginBottom: 10,
+    borderBottom: '1pt solid #333',
+    paddingBottom: 8,
   },
   headerLeft: {
     width: '60%',
@@ -49,12 +50,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   universityName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 6,
+    color: '#000000',
   },
   addressText: {
     fontSize: 10,
+    color: '#333333',
+    lineHeight: 1.2,
     marginBottom: 0,
   },
   logo: {
@@ -67,23 +71,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   headerText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 6,
+    textTransform: 'uppercase',
+    color: '#000000',
+    letterSpacing: 1,
   },
   date: {
-    fontSize: 12,
-    marginBottom: 15,
+    fontSize: 11,
+    marginBottom: 12,
     textAlign: 'left',
+    color: '#333333',
   },
   reference: {
-    fontSize: 12,
-    marginBottom: 15,
+    fontSize: 11,
+    marginBottom: 12,
     textAlign: 'right',
+    color: '#333333',
   },
   greeting: {
     fontSize: 12,
-    marginBottom: 8,
+    marginBottom: 12,
+    fontWeight: 'bold',
   },
   content: {
     fontSize: 12,
@@ -91,23 +101,30 @@ const styles = StyleSheet.create({
     lineHeight: 1.3,
   },
   paragraph: {
-    marginBottom: 12,
+    marginBottom: 14,
     textAlign: 'justify',
-    fontSize: 12,
+    fontSize: 11.5,
+    lineHeight: 1.5,
   },
   boldText: {
     fontWeight: 'bold',
+    color: '#000000',
   },
   indentSection: {
     marginLeft: 20,
-    marginBottom: 12,
+    marginBottom: 14,
+    padding: 4,
+    borderLeft: '1pt solid #555555',
+    fontSize: 15,
   },
   noteList: {
     marginLeft: 20,
+    marginTop: 5,
   },
   noteListItem: {
     flexDirection: 'row',
-    fontSize: 9,
+    fontSize: 10,
+    marginBottom: 4,
   },
   noteListNumber: {
     width: 20,
@@ -116,69 +133,88 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   paymentOptions: {
-    marginTop: 15,
-    marginBottom: 15,
+    marginTop: 12,
+    marginBottom: 14,
+    padding: 4,
   },
   paymentOptionTitle: {
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 6,
+    color: '#000000',
+    fontSize: 12,
   },
   paymentOptionItem: {
     marginLeft: 20,
-    marginBottom: 5,
+    marginBottom: 2,
+    fontSize: 11,
   },
   bankDetails: {
-    marginTop: 15,
-    marginBottom: 15,
+    marginTop: 14,
+    marginBottom: 14,
+    padding: 4,
+    borderTop: '0.5pt solid #aaaaaa',
+    borderBottom: '0.5pt solid #aaaaaa',
   },
   bankDetailsTitle: {
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 6,
+    color: '#000000',
+    fontSize: 12,
   },
   bankRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   bankLabel: {
-    width: 100,
+    width: 120,
     fontWeight: 'bold',
+    fontSize: 11,
   },
   bankValue: {
     flex: 1,
+    fontSize: 11,
   },
   signatureSection: {
     marginTop: 30,
+    borderTop: '0.5pt solid #aaaaaa',
+    paddingTop: 10,
   },
   signatureName: {
     fontWeight: 'bold',
-    fontSize: 10,
+    fontSize: 11,
+    color: '#000000',
   },
   registrarTitle: {
     fontSize: 10,
+    color: '#333333',
   },
   signatureImage: {
     zIndex: 1,
     marginTop: -5,
+    marginBottom: 5,
     width: 150,
   },
 });
 
 type Props = {
-  student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;  
+  student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
   properties: Awaited<ReturnType<typeof getCurrentProperties>>;
 };
 
-export default function NonSponsoredAcceptanceLetter({ student, properties }: Props) {
+export default function NonSponsoredAcceptanceLetter({
+  student,
+  properties,
+}: Props) {
   const letterDate = format(new Date(), 'dd/MM/yyyy');
   const referenceNumber = extractReference(student);
   const programName = student.program?.name;
-  const registrationDateFrom = properties?.registrationDateFrom 
+  const registrationDateFrom = properties?.registrationDateFrom
     ? format(new Date(properties.registrationDateFrom), 'dd MMM yyyy')
     : 'the scheduled registration date';
   const registrationDateTo = properties?.registrationDateTo
     ? format(new Date(properties.registrationDateTo), 'dd MMM yyyy')
     : '';
-  const registrationPeriod = registrationDateTo 
+  const registrationPeriod = registrationDateTo
     ? `${registrationDateFrom} to ${registrationDateTo}`
     : registrationDateFrom;
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
@@ -205,8 +241,12 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
             <PDFText style={styles.addressText}>P.O. Box 8971</PDFText>
             <PDFText style={styles.addressText}>Maseru Maseru 0101</PDFText>
             <PDFText style={styles.addressText}>Lesotho</PDFText>
-            <PDFText style={styles.addressText}>+(266) 22315767 | Ext. 116</PDFText>
-            <PDFText style={styles.addressText}>registry@limkokwing.ac.ls</PDFText>
+            <PDFText style={styles.addressText}>
+              +(266) 22315767 | Ext. 116
+            </PDFText>
+            <PDFText style={styles.addressText}>
+              registry@limkokwing.ac.ls
+            </PDFText>
           </View>
           <View style={styles.headerRight}>
             {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image does not support alt */}
@@ -215,7 +255,17 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
         </View>
 
         <View style={styles.header}>
-          <PDFText style={styles.headerText}>NON-SPONSORED ACCEPTANCE LETTER</PDFText>
+          <PDFText style={styles.headerText}>
+            NON-SPONSORED ACCEPTANCE LETTER
+          </PDFText>
+          <View
+            style={{
+              borderBottom: '1pt solid #555555',
+              width: 120,
+              marginHorizontal: 'auto',
+              marginTop: 2,
+            }}
+          />
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -226,7 +276,7 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
         <View style={styles.greeting}>
           <PDFText>
             Dear{' '}
-            <PDFText style={{ fontWeight: 'bold' }}>
+            <PDFText style={{ fontWeight: 'bold', color: '#000000' }}>
               {student.names} {student.surname}
             </PDFText>
           </PDFText>
@@ -236,9 +286,8 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
           Congratulations! We are pleased to inform you that you have been
           accepted for enrolment in{' '}
           <PDFText style={styles.boldText}>{programName}</PDFText> at Limkokwing
-          University of Creative Technology, Lesotho. The
-          duration of the study is{' '}
-          <PDFText style={styles.boldText}>{studyDuration}</PDFText>.
+          University of Creative Technology, Lesotho. The duration of the study
+          is <PDFText style={styles.boldText}>{studyDuration}</PDFText>.
         </PDFText>
 
         <PDFText style={styles.paragraph}>
@@ -254,18 +303,23 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
         <View style={styles.paymentOptions}>
           <PDFText style={styles.paymentOptionTitle}>Payment Options:</PDFText>
           <PDFText style={styles.paymentOptionItem}>
-            1. Full Payment: Pay the entire annual tuition fee before registration to receive a 5% discount.
+            1. Full Payment: Pay the entire annual tuition fee before
+            registration to receive a 5% discount.
           </PDFText>
           <PDFText style={styles.paymentOptionItem}>
-            2. Semester Payment: Pay 50% of the annual tuition fee at the beginning of each semester.
+            2. Semester Payment: Pay 50% of the annual tuition fee at the
+            beginning of each semester.
           </PDFText>
           <PDFText style={styles.paymentOptionItem}>
-            3. Installment Plan: Pay 40% of the semester fee during registration and the remaining 60% in two equal monthly installments.
+            3. Installment Plan: Pay 40% of the semester fee during registration
+            and the remaining 60% in two equal monthly installments.
           </PDFText>
         </View>
 
         <PDFText style={styles.paragraph}>
-          <PDFText style={styles.boldText}>Important:</PDFText> All payments must be made during the registration period ({registrationPeriod}). Late registration will incur additional fees.
+          <PDFText style={styles.boldText}>Important:</PDFText> All payments
+          must be made during the registration period ({registrationPeriod}).
+          Late registration will incur additional fees.
         </PDFText>
 
         <View style={styles.bankDetails}>
@@ -276,7 +330,9 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
           </View>
           <View style={styles.bankRow}>
             <PDFText style={styles.bankLabel}>Account Name:</PDFText>
-            <PDFText style={styles.bankValue}>Limkokwing University of Creative Technology</PDFText>
+            <PDFText style={styles.bankValue}>
+              Limkokwing University of Creative Technology
+            </PDFText>
           </View>
           <View style={styles.bankRow}>
             <PDFText style={styles.bankLabel}>Account Number:</PDFText>
@@ -288,7 +344,9 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
           </View>
           <View style={styles.bankRow}>
             <PDFText style={styles.bankLabel}>Reference:</PDFText>
-            <PDFText style={styles.bankValue}>{student.id || referenceNumber} - {student.surname}</PDFText>
+            <PDFText style={styles.bankValue}>
+              {student.id || referenceNumber} - {student.surname}
+            </PDFText>
           </View>
         </View>
 
@@ -312,7 +370,8 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
             <View style={styles.noteListItem}>
               <PDFText style={styles.noteListNumber}>iii)</PDFText>
               <PDFText style={styles.noteListText}>
-                You will be eligible for registration upon proof of payment of the required fees.
+                You will be eligible for registration upon proof of payment of
+                the required fees.
               </PDFText>
             </View>
             <View style={styles.noteListItem}>
@@ -336,7 +395,9 @@ export default function NonSponsoredAcceptanceLetter({ student, properties }: Pr
         </PDFText>
 
         <View style={styles.signatureSection}>
-          <PDFText style={{ zIndex: 100 }}>Yours sincerely,</PDFText>
+          <PDFText style={{ zIndex: 100, marginBottom: 10, fontSize: 11 }}>
+            Yours sincerely,
+          </PDFText>
           {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image does not support alt */}
           <Image
             style={styles.signatureImage}
