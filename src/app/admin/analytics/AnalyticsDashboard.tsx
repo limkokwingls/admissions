@@ -1,52 +1,46 @@
 'use client';
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import {
+  getDailyDownloads,
+  getDailyVisits,
+  getTopDownloaders,
+  getTopVisitors,
+  getTotalDownloads,
+  getTotalVisits,
+} from '@/server/analytics/actions';
+import {
+  Badge,
+  Box,
   Card,
-  Title,
-  Text,
   Group,
+  Tooltip as MantineTooltip,
+  Paper,
+  Progress,
+  SimpleGrid,
   Skeleton,
   Stack,
-  Badge,
-  Container,
-  Paper,
+  Text,
   ThemeIcon,
-  Tooltip as MantineTooltip,
-  SimpleGrid,
-  Box,
-  Progress,
+  Title,
 } from '@mantine/core';
 import {
-  LineChart,
+  IconArrowDownRight,
+  IconArrowUpRight,
+  IconDownload,
+  IconEye,
+  IconUser,
+} from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
+import {
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
 } from 'recharts';
-import {
-  IconEye,
-  IconDownload,
-  IconUser,
-  IconArrowUpRight,
-  IconArrowDownRight,
-} from '@tabler/icons-react';
-import {
-  getDailyVisits,
-  getDailyDownloads,
-  getTotalVisits,
-  getTotalDownloads,
-  getTopVisitors,
-  getTopDownloaders,
-} from '@/server/analytics/actions';
 
 function StatCard({
   title,

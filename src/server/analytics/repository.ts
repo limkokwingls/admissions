@@ -1,9 +1,12 @@
-import BaseRepository from '@/server/base/BaseRepository';
-import { letterDownloads, pageVisits } from '@/db/schema';
 import { db } from '@/db';
-import { eq, sql, count, avg, max, desc, asc, gte, between } from 'drizzle-orm';
+import { letterDownloads, pageVisits } from '@/db/schema';
+import BaseRepository from '@/server/base/BaseRepository';
+import { count, desc, eq, sql } from 'drizzle-orm';
 
-export class PageVisitsRepository extends BaseRepository<typeof pageVisits, 'id'> {
+export class PageVisitsRepository extends BaseRepository<
+  typeof pageVisits,
+  'id'
+> {
   constructor() {
     super(pageVisits, 'id');
   }
@@ -73,7 +76,10 @@ export class PageVisitsRepository extends BaseRepository<typeof pageVisits, 'id'
   }
 }
 
-export class LetterDownloadsRepository extends BaseRepository<typeof letterDownloads, 'id'> {
+export class LetterDownloadsRepository extends BaseRepository<
+  typeof letterDownloads,
+  'id'
+> {
   constructor() {
     super(letterDownloads, 'id');
   }
