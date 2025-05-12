@@ -99,26 +99,13 @@ export default function AnalyticsDashboard() {
     queryFn: () => getTopDownloaders(5),
   });
 
-  // Trends have been removed
-
   return (
     <Stack gap='xl'>
-      <Paper
-        p='xl'
-        radius='md'
-        withBorder
-        styles={{
-          root: {
-            borderColor: 'var(--mantine-color-blue-1)',
-            background:
-              'linear-gradient(to right, var(--mantine-color-blue-0), var(--mantine-color-indigo-0))',
-          },
-        }}
-      >
-        <Title order={1} mb='xs' c='blue.9'>
+      <Paper p='lg' radius='md' withBorder>
+        <Title order={2} mb='xs'>
           Analytics Dashboard
         </Title>
-        <Text size='lg' c='dimmed' mb='md' style={{ maxWidth: '42rem' }}>
+        <Text size='sm' c='dimmed' mb='md'>
           Student engagement and application metrics
         </Text>
       </Paper>

@@ -97,6 +97,7 @@ const navigation: NavItem[] = [
     label: 'Analytics',
     href: '/admin/analytics',
     icon: IconChartLine,
+    roles: ['registry'],
   },
 ];
 
