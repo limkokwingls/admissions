@@ -46,6 +46,13 @@ export class PageVisitsRepository extends BaseRepository<
     return result[0]?.total || 0;
   }
 
+  async getUniqueVisitors() {
+    const result = await db
+      .select({ count: sql<number>`count(distinct ${pageVisits.studentId})` })
+      .from(pageVisits);
+    return result[0]?.count || 0;
+  }
+
   async getDailyVisits(days: number = 30) {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
@@ -117,6 +124,13 @@ export class LetterDownloadsRepository extends BaseRepository<
       .select({ total: sql<number>`sum(${letterDownloads.downloadCount})` })
       .from(letterDownloads);
     return result[0]?.total || 0;
+  }
+
+  async getUniqueDownloaders() {
+    const result = await db
+      .select({ count: sql<number>`count(distinct ${letterDownloads.studentId})` })
+      .from(letterDownloads);
+    return result[0]?.count || 0;
   }
 
   async getDailyDownloads(days: number = 30) {

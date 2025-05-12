@@ -68,9 +68,12 @@ export async function deleteLetterDownload(id: string) {
   return service.deleteLetterDownload(id);
 }
 
-// Analytics Dashboard Actions
 export async function getTotalVisits() {
   return service.getTotalVisits();
+}
+
+export async function getUniqueVisitors() {
+  return service.getUniqueVisitors();
 }
 
 export async function getDailyVisits(days: number = 30) {
@@ -83,6 +86,10 @@ export async function getTopVisitors(limit: number = 10) {
 
 export async function getTotalDownloads() {
   return service.getTotalDownloads();
+}
+
+export async function getUniqueDownloaders() {
+  return service.getUniqueDownloaders();
 }
 
 export async function getDailyDownloads(days: number = 30) {

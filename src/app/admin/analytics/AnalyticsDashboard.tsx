@@ -6,6 +6,8 @@ import {
   getTopVisitors,
   getTotalDownloads,
   getTotalVisits,
+  getUniqueVisitors,
+  getUniqueDownloaders,
 } from '@/server/analytics/actions';
 
 interface DateCount {
@@ -77,10 +79,21 @@ export default function AnalyticsDashboard() {
     queryFn: () => getTotalVisits(),
   });
 
+  const { data: uniqueVisitors, isLoading: loadingUniqueVisitors } = useQuery({
+    queryKey: ['analytics', 'unique-visitors'],
+    queryFn: () => getUniqueVisitors(),
+  });
+
   const { data: totalDownloads, isLoading: loadingTotalDownloads } = useQuery({
     queryKey: ['analytics', 'total-downloads'],
     queryFn: () => getTotalDownloads(),
   });
+
+  const { data: uniqueDownloaders, isLoading: loadingUniqueDownloaders } =
+    useQuery({
+      queryKey: ['analytics', 'unique-downloaders'],
+      queryFn: () => getUniqueDownloaders(),
+    });
 
   const { data: topVisitors, isLoading: loadingTopVisitors } = useQuery({
     queryKey: ['analytics', 'top-visitors'],
@@ -114,30 +127,61 @@ export default function AnalyticsDashboard() {
           Analytics Dashboard
         </Title>
         <Text size='lg' c='dimmed' mb='md' style={{ maxWidth: '42rem' }}>
-          Track student engagement and application metrics to optimize the
-          admissions process
+          Student engagement and application metrics
         </Text>
       </Paper>
 
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
-        <StatCard
-          title='Total Page Visits'
-          value={totalVisits?.toLocaleString() || '0'}
-          loading={loadingTotalVisits}
-          icon={<IconEye size={22} stroke={1.5} />}
-          color='blue'
-          trend={visitsTrend}
-          trendValue='+12.3% from last month'
-        />
-        <StatCard
-          title='Total Downloads'
-          value={totalDownloads?.toLocaleString() || '0'}
-          loading={loadingTotalDownloads}
-          icon={<IconDownload size={22} stroke={1.5} />}
-          color='green'
-          trend={downloadsTrend}
-          trendValue='+5.7% from last month'
-        />
+        <Card withBorder p='lg' radius='md' shadow='sm'>
+          <Title order={3} fw={600} mb='md'>
+            Page Visits
+          </Title>
+          <Group grow gap='md'>
+            <StatCard
+              title='Total Visits'
+              value={totalVisits?.toLocaleString() || '0'}
+              loading={loadingTotalVisits}
+              icon={<IconEye size={22} stroke={1.5} />}
+              color='blue'
+              trend={visitsTrend}
+              trendValue='+12.3% from last month'
+              compact
+            />
+            <StatCard
+              title='Unique Visitors'
+              value={uniqueVisitors?.toLocaleString() || '0'}
+              loading={loadingUniqueVisitors}
+              icon={<IconUser size={22} stroke={1.5} />}
+              color='indigo'
+              compact
+            />
+          </Group>
+        </Card>
+        <Card withBorder p='lg' radius='md' shadow='sm'>
+          <Title order={3} fw={600} mb='md'>
+            Downloads
+          </Title>
+          <Group grow gap='md'>
+            <StatCard
+              title='Total Downloads'
+              value={totalDownloads?.toLocaleString() || '0'}
+              loading={loadingTotalDownloads}
+              icon={<IconDownload size={22} stroke={1.5} />}
+              color='green'
+              trend={downloadsTrend}
+              trendValue='+5.7% from last month'
+              compact
+            />
+            <StatCard
+              title='Unique Downloaders'
+              value={uniqueDownloaders?.toLocaleString() || '0'}
+              loading={loadingUniqueDownloaders}
+              icon={<IconUser size={22} stroke={1.5} />}
+              color='teal'
+              compact
+            />
+          </Group>
+        </Card>
       </SimpleGrid>
 
       <Card withBorder p='lg' radius='md' shadow='sm'>
@@ -181,6 +225,7 @@ function StatCard({
   color = 'blue',
   trend,
   trendValue,
+  compact = false,
 }: {
   title: string;
   value: number | string;
@@ -189,6 +234,7 @@ function StatCard({
   color?: string;
   trend?: 'up' | 'down' | 'neutral';
   trendValue?: string;
+  compact?: boolean;
 }) {
   const getTrendIcon = () => {
     if (!trend || !trendValue) return null;
@@ -208,44 +254,84 @@ function StatCard({
             stroke={2.5}
           />
         ) : null}
-        <Text
-          size='sm'
-          c={trend === 'up' ? 'green.6' : trend === 'down' ? 'red.6' : 'dimmed'}
-        >
+        <Text size='sm' c={getTrendColor(trend)}>
           {trendValue}
         </Text>
       </Group>
     );
   };
 
+  const getTrendColor = (trend?: 'up' | 'down' | 'neutral') => {
+    if (!trend) return 'dimmed';
+    return trend === 'up' ? 'green.6' : trend === 'down' ? 'red.6' : 'dimmed';
+  };
+
+  if (compact) {
+    return (
+      <Paper p='md' radius='md' withBorder>
+        <Group justify='space-between' align='center' mb='xs'>
+          <Group gap='xs'>
+            <ThemeIcon size={32} radius='md' color={color} variant='light'>
+              {icon}
+            </ThemeIcon>
+            <Text size='sm' fw={500}>
+              {title}
+            </Text>
+          </Group>
+        </Group>
+        {loading ? (
+          <Skeleton height={28} width={80} mt='sm' radius='sm' />
+        ) : (
+          <Text fw={700} size='xl'>
+            {value}
+          </Text>
+        )}
+        {trend && trendValue && (
+          <Group gap='xs' mt='xs'>
+            {getTrendIcon()}
+            <Text size='xs' c={getTrendColor(trend)}>
+              {trendValue}
+            </Text>
+          </Group>
+        )}
+      </Paper>
+    );
+  }
+
   return (
-    <Card withBorder p='lg' radius='md' style={{ flex: 1 }} shadow='sm'>
-      <Group justify='space-between' align='flex-start'>
-        <Stack gap='xs'>
-          <Text
-            size='sm'
-            c='dimmed'
-            fw={600}
-            tt='uppercase'
-            styles={{ root: { letterSpacing: 1 } }}
-          >
+    <Card withBorder p='lg' radius='md' shadow='sm'>
+      <Group justify='space-between' align='flex-start' mb='md'>
+        <div>
+          <Text size='sm' fw={500} c='dimmed'>
             {title}
           </Text>
           {loading ? (
-            <Skeleton height={36} width={100} mt={4} radius='sm' />
+            <Skeleton height={36} width={90} mt='sm' radius='sm' />
           ) : (
-            <Box>
-              <Title order={3} fw={700}>
-                {value}
-              </Title>
-              {getTrendIcon()}
-            </Box>
+            <Text fw={700} size='2rem'>
+              {value}
+            </Text>
           )}
-        </Stack>
-        <ThemeIcon size={42} radius='xl' color={color} variant='light'>
+        </div>
+        <ThemeIcon
+          size={56}
+          radius='md'
+          color={color}
+          variant='light'
+          style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
+        >
           {icon}
         </ThemeIcon>
       </Group>
+
+      {trend && trendValue && (
+        <Group gap='xs' mt='md'>
+          {getTrendIcon()}
+          <Text size='sm' c={getTrendColor(trend)}>
+            {trendValue}
+          </Text>
+        </Group>
+      )}
     </Card>
   );
 }
@@ -448,7 +534,9 @@ function TopUsersCard({
                 <Progress
                   value={Math.min(
                     100,
-                    ((item[valueKey] as number) / ((data[0]?.[valueKey] as number) || 1)) * 100,
+                    ((item[valueKey] as number) /
+                      ((data[0]?.[valueKey] as number) || 1)) *
+                      100,
                   )}
                   color={valueKey === 'visits' ? 'blue' : 'green'}
                   size='xs'

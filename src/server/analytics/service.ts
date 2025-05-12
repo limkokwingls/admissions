@@ -59,6 +59,13 @@ class AnalyticsService {
     );
   }
 
+  async getUniqueVisitors() {
+    return withAuth(
+      async () => this.pageVisitsRepo.getUniqueVisitors(),
+      ['registry'],
+    );
+  }
+
   async getDailyVisits(days: number = 30) {
     return withAuth(
       async () => this.pageVisitsRepo.getDailyVisits(days),
@@ -142,6 +149,13 @@ class AnalyticsService {
   async getTotalDownloads() {
     return withAuth(
       async () => this.letterDownloadsRepo.getTotalDownloads(),
+      ['registry'],
+    );
+  }
+
+  async getUniqueDownloaders() {
+    return withAuth(
+      async () => this.letterDownloadsRepo.getUniqueDownloaders(),
       ['registry'],
     );
   }
