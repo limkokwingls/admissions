@@ -13,6 +13,7 @@ import {
   Paper,
   Switch,
   Text,
+  Tooltip,
   rem,
   useMantineTheme,
 } from '@mantine/core';
@@ -26,6 +27,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
 import PrintAdmission from './components/PrintAdmission';
+import PrintNonSponsoredAcceptance from './components/PrintNonSponsoredAcceptance';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -101,6 +103,18 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
               </Text>
             </Box>
           </Group>
+
+          {student.status === 'Wait Listed' && (
+            <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
+              <span>
+                <PrintNonSponsoredAcceptance
+                  key='print-non-sponsored'
+                  student={student}
+                  properties={properties}
+                />
+              </span>
+            </Tooltip>
+          )}
 
           {student.status == 'Admitted' && (
             <Group>

@@ -57,11 +57,13 @@ class HistoryService {
     });
   }
 
-  async trackAdmissionPrinted(studentId: string, performedBy: string) {
+  async trackAdmissionPrinted(studentId: string, performedBy: string, letterType?: string) {
     return this.createHistoryEntry({
       studentId,
       action: 'admission_printed',
       performedBy,
+      // Store the letter type in the newValue field if provided
+      newValue: letterType ? letterType : undefined,
     });
   }
 

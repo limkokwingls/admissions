@@ -50,14 +50,14 @@ export async function trackAcceptanceChange(
   return service.trackAcceptanceChange(studentId, oldValue, newValue, userId);
 }
 
-export async function trackAdmissionPrinted(studentId: string) {
+export async function trackAdmissionPrinted(studentId: string, letterType?: string) {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
     throw new Error('User not authenticated');
   }
 
-  return service.trackAdmissionPrinted(studentId, userId);
+  return service.trackAdmissionPrinted(studentId, userId, letterType);
 }
 
 export async function updateHistoryEntry(
