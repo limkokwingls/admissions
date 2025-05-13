@@ -15,14 +15,14 @@ class HistoryService {
   async getHistoryByStudentId(studentId: string) {
     return withAuth(
       async () => this.studentHistoryRepo.findByStudentId(studentId),
-      [],
+      ['registry'],
     );
   }
 
   async getHistoryByAction(action: ActionType) {
     return withAuth(
       async () => this.studentHistoryRepo.findByAction(action),
-      [],
+      ['registry'],
     );
   }
 
@@ -30,16 +30,22 @@ class HistoryService {
     return withAuth(
       async () =>
         this.studentHistoryRepo.findByStudentIdAndAction(studentId, action),
-      [],
+      ['registry'],
     );
   }
 
   async getAllHistory(params: QueryOptions<typeof studentHistory>) {
-    return withAuth(async () => this.studentHistoryRepo.query(params), []);
+    return withAuth(
+      async () => this.studentHistoryRepo.query(params),
+      ['registry'],
+    );
   }
 
   async createHistoryEntry(data: StudentHistory) {
-    return withAuth(async () => this.studentHistoryRepo.create(data), []);
+    return withAuth(
+      async () => this.studentHistoryRepo.create(data),
+      ['registry'],
+    );
   }
 
   async trackAcceptanceChange(
@@ -57,7 +63,11 @@ class HistoryService {
     });
   }
 
-  async trackAdmissionPrinted(studentId: string, performedBy: string, letterType?: string) {
+  async trackAdmissionPrinted(
+    studentId: string,
+    performedBy: string,
+    letterType?: string,
+  ) {
     return this.createHistoryEntry({
       studentId,
       action: 'admission_printed',
