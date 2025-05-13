@@ -85,8 +85,9 @@ export default function SponsoredCard({ student, properties }: Props) {
                         4
                       </span>
                       <span className='text-neutral-700 dark:text-neutral-300'>
-                        Return the completed acceptance letter along with proof
-                        of payment to the Registry office by the deadline.
+                        Bring the completed acceptance letter along with proof
+                        of payment and your identity document to the Registry
+                        office on or before the deadline.
                       </span>
                     </li>
                   </ol>
@@ -115,7 +116,10 @@ export default function SponsoredCard({ student, properties }: Props) {
                     <div className='text-sm'>Loading acceptance letter...</div>
                   }
                 >
-                  <AcceptanceLetterButton student={student} properties={properties} />
+                  <AcceptanceLetterButton
+                    student={student}
+                    properties={properties}
+                  />
                 </Suspense>
               </div>
             </div>
