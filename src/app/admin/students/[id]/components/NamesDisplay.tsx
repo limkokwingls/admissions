@@ -2,10 +2,18 @@
 
 import { useState } from 'react';
 import { getStudent, updateStudentNames } from '@/server/students/actions';
-import { ActionIcon, Button, Group, Modal, TextInput } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Modal,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconEdit } from '@tabler/icons-react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { notifications } from '@mantine/notifications';
 
 type Props = {
   student: Awaited<ReturnType<typeof getStudent>>;
@@ -16,8 +24,12 @@ type FormValues = {
   surname: string;
 };
 
-export default function NamesUpdate({ student }: Props) {
+export default function NamesDisplay({ student }: Props) {
   const [opened, setOpened] = useState(false);
+  const [displayedNames, setDisplayedNames] = useState({
+    names: student?.names || '',
+    surname: student?.surname || '',
+  });
   const queryClient = useQueryClient();
 
   const form = useForm<FormValues>({
@@ -31,31 +43,52 @@ export default function NamesUpdate({ student }: Props) {
     },
   });
 
-  const handleSubmit = async (values: FormValues) => {
-    if (!student?.id) return;
-
-    try {
-      await updateStudentNames(student.id, values);
-      await queryClient.invalidateQueries({
-        queryKey: ['student', student.id],
+  const mutation = useMutation({
+    mutationFn: (values: FormValues) =>
+      updateStudentNames(student?.id || '', values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['student', student?.id],
       });
+      setDisplayedNames(form.values);
       setOpened(false);
       form.reset();
-    } catch (error) {
+      notifications.show({
+        title: 'Success',
+        message: `Name updated to ${form.values.surname} ${form.values.names}`,
+        color: 'green',
+      });
+    },
+    onError: (error) => {
       console.error('Failed to update student names:', error);
-    }
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to update student names',
+        color: 'red',
+      });
+    },
+  });
+
+  const handleSubmit = async (values: FormValues) => {
+    if (!student?.id) return;
+    mutation.mutate(values);
   };
 
   return (
     <>
-      <ActionIcon
-        variant='subtle'
-        color='blue'
-        onClick={() => setOpened(true)}
-        title='Update student names'
-      >
-        <IconEdit size={16} />
-      </ActionIcon>
+      <Group gap='xs'>
+        <Text>
+          {displayedNames.surname} {displayedNames.names}
+        </Text>
+        <ActionIcon
+          variant='subtle'
+          color='gray'
+          onClick={() => setOpened(true)}
+          title='Update student names'
+        >
+          <IconEdit size={16} />
+        </ActionIcon>
+      </Group>
 
       <Modal
         opened={opened}
@@ -82,7 +115,9 @@ export default function NamesUpdate({ student }: Props) {
             <Button variant='outline' onClick={() => setOpened(false)}>
               Cancel
             </Button>
-            <Button type='submit'>Save Changes</Button>
+            <Button type='submit' loading={mutation.isPending}>
+              Save Changes
+            </Button>
           </Group>
         </form>
       </Modal>

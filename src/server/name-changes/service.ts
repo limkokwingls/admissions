@@ -9,31 +9,31 @@ class NameChangeService {
   constructor(private readonly repository = new NameChangeRepository()) {}
 
   async first() {
-    return withAuth(async () => this.repository.findFirst(), []);
+    return withAuth(async () => this.repository.findFirst(), ['registry']);
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['registry']);
   }
 
   async getAll(params: QueryOptions<typeof nameChanges>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['registry']);
   }
 
   async create(data: NameChange) {
-    return withAuth(async () => this.repository.create(data), []);
+    return withAuth(async () => this.repository.create(data), ['registry']);
   }
 
   async update(id: string, data: NameChange) {
-    return withAuth(async () => this.repository.update(id, data), []);
+    return withAuth(async () => this.repository.update(id, data), ['registry']);
   }
 
   async delete(id: string) {
-    return withAuth(async () => this.repository.delete(id), []);
+    return withAuth(async () => this.repository.delete(id), ['registry']);
   }
 
   async count() {
-    return withAuth(async () => this.repository.count(), []);
+    return withAuth(async () => this.repository.count(), ['registry']);
   }
 }
 

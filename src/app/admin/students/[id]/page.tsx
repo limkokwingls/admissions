@@ -28,7 +28,7 @@ import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 import ActivityHistory from './components/ActivityHistory';
 import ReceptDisplay from './components/ReceptDisplay';
-import NamesUpdate from './components/NamesUpdate';
+import NamesDisplay from './components/NamesDisplay';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -61,12 +61,7 @@ export default async function StudentDetails({ params }: Props) {
         <AcceptanceSwitch student={student} properties={properties} />
         <Box mt={'xl'}>
           <Flex justify='space-between' align='center'>
-            <Group>
-              <Text>
-                {student.surname} {student.names}
-              </Text>
-              <NamesUpdate student={student} />
-            </Group>
+            <NamesDisplay student={student} />
             <Badge variant='light' color={getBadgeColor(student.status)}>
               {student.status}
             </Badge>

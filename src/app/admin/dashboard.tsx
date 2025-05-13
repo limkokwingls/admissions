@@ -55,6 +55,7 @@ const navigation: NavItem[] = [
     label: 'Users',
     href: '/admin/users',
     icon: IconUsers,
+    roles: ['admin'],
   },
   {
     label: 'Students',
@@ -72,11 +73,13 @@ const navigation: NavItem[] = [
     label: 'Faculties',
     href: '/admin/faculties',
     icon: IconSchool,
+    roles: ['admin'],
   },
   {
     label: 'Properties',
     href: '/admin/properties',
     icon: IconSettings,
+    roles: ['admin'],
   },
   {
     label: 'Calls',
