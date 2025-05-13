@@ -54,8 +54,8 @@ export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
 
 export const BANK_DETAILS = [
   { label: 'Bank', value: 'Standard Lesotho Bank' },
-  { label: 'Account No', value: '9080019987451' },
-  { label: 'Branch', value: 'City Branch (051)' },
+  { label: 'Account No', value: '9080003987813' },
+  { label: 'Branch', value: 'City Branch (060667)' },
   { label: 'Account Type', value: 'Current Account' },
   { label: 'Swift Code', value: 'SBICLSMX' },
 ];
