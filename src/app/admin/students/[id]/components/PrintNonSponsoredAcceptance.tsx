@@ -6,7 +6,6 @@ import { pdf } from '@react-pdf/renderer';
 import { IconFileInvoice } from '@tabler/icons-react';
 import { useState } from 'react';
 import NonSponsoredAcceptanceLetter from './NonSponsoredAcceptanceLetter';
-import { trackAdmissionPrinted } from '@/server/history/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;

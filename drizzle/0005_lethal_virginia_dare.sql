@@ -1,1 +1,0 @@
-ALTER TABLE `students` ADD `accepted` integer DEFAULT false NOT NULL;

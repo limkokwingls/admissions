@@ -1,1 +1,0 @@
-ALTER TABLE `student_history` ALTER COLUMN "performed_by" TO "performed_by" text NOT NULL REFERENCES users(id) ON DELETE cascade ON UPDATE no action;

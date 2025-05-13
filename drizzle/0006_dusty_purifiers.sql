@@ -1,1 +1,0 @@
-ALTER TABLE `programs` ADD `level` text DEFAULT 'diploma' NOT NULL;

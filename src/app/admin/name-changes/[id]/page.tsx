@@ -14,15 +14,15 @@ type Props = {
 export default async function NameChangeDetails({ params }: Props) {
   const { id } = await params;
   const nameChange = await getNameChange(id);
-  
+
   if (!nameChange) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Name Change'} 
+      <DetailsViewHeader
+        title={'Name Change'}
         queryKey={['nameChanges']}
         handleDelete={async () => {
           'use server';
@@ -30,7 +30,7 @@ export default async function NameChangeDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Student'>{nameChange.student}</FieldView>
+        <FieldView label='Student'>{nameChange.studentId}</FieldView>
         <FieldView label='Old Name'>{nameChange.oldName}</FieldView>
         <FieldView label='New Name'>{nameChange.newName}</FieldView>
       </DetailsViewBody>
