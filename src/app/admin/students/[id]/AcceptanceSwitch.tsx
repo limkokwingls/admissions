@@ -10,6 +10,7 @@ import {
   Card,
   Group,
   Modal,
+  NumberInput,
   Paper,
   Switch,
   Text,
@@ -23,6 +24,7 @@ import {
   IconCircleCheck,
   IconEdit,
   IconExclamationCircle,
+  IconReceipt,
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
@@ -40,6 +42,8 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
   const [tempIsAccepted, setTempIsAccepted] = useState<boolean>(
     student.accepted,
   );
+  const [receiptNo, setReceiptNo] = useState<string>(student.receiptNo || '');
+  const [receiptError, setReceiptError] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
@@ -49,6 +53,13 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
   function update() {
     const status = tempIsAccepted;
     const previousStatus = isAccepted;
+
+    if (status && !receiptNo.trim()) {
+      setReceiptError('Receipt number is required when accepting a student');
+      return;
+    }
+
+    setReceiptError('');
     setIsAccepted(status);
 
     startTransition(async () => {
@@ -56,6 +67,7 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
         await updateStudent(student.id, {
           ...student,
           accepted: status,
+          receiptNo: receiptNo.trim() || null,
         });
 
         await trackAcceptanceChange(student.id, previousStatus, status);
@@ -163,11 +175,38 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
           disabled={isPending}
         />
 
+        {tempIsAccepted && (
+          <Box mt='md'>
+            <NumberInput
+              required
+              label='Receipt Number'
+              placeholder='Receipt Number'
+              value={receiptNo}
+              prefix='SR-'
+              onChange={(value) => {
+                if (value) {
+                  setReceiptNo(`SR-${value}`);
+                } else {
+                  setReceiptNo(value?.toString().replace('SR-', ''));
+                }
+                setReceiptError('');
+              }}
+              error={receiptError}
+              disabled={isPending}
+              leftSection={<IconReceipt size={16} />}
+              leftSectionPointerEvents='none'
+              data-autofocus
+            />
+          </Box>
+        )}
+
         <Group justify='flex-end' mt='lg'>
           <Button
             variant='default'
             onClick={() => {
               setTempIsAccepted(isAccepted);
+              setReceiptNo(student.receiptNo || '');
+              setReceiptError('');
               close();
             }}
             disabled={isPending}

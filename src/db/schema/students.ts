@@ -15,6 +15,7 @@ export const students = sqliteTable(
     surname: text().notNull(),
     names: text().notNull(),
     candidateNo: text(),
+    receiptNo: text(),
     phoneNumber: text().notNull(),
     status: text({ enum: statusEnum }).notNull(),
     accepted: integer({ mode: 'boolean' }).notNull().default(false),
@@ -29,6 +30,7 @@ export const students = sqliteTable(
       surnameIdx: index('surname_idx').on(table.surname),
       namesIdx: index('names_idx').on(table.names),
       candidateNoIdx: index('candidate_no_idx').on(table.candidateNo),
+      receiptNoIdx: index('receipt_no_idx').on(table.receiptNo),
       phoneNumberIdx: index('phone_number_idx').on(table.phoneNumber),
     };
   },
