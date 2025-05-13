@@ -1,6 +1,7 @@
 'use server';
 
 import { students } from '@/db/schema';
+import { createNameChange } from '../name-changes/actions';
 import { studentsService as service } from './service';
 
 type Student = typeof students.$inferInsert;
@@ -27,4 +28,25 @@ export async function updateStudent(id: string, student: Student) {
 
 export async function deleteStudent(id: string) {
   return service.delete(id);
+}
+
+export async function updateStudentNames(
+  id: string,
+  data: Pick<Student, 'names' | 'surname'>,
+) {
+  const student = await getStudent(id);
+  if (!student) {
+    throw new Error('Student not found');
+  }
+
+  await service.update(id, {
+    ...student,
+    ...data,
+  });
+
+  await createNameChange({
+    studentId: id,
+    oldName: `${student.surname} ${student.names}`,
+    newName: `${data.surname} ${data.names}`,
+  });
 }

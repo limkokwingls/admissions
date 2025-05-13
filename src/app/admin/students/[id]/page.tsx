@@ -16,6 +16,7 @@ import {
   Badge,
   Box,
   Divider,
+  Flex,
   Group,
   Paper,
   SimpleGrid,
@@ -27,6 +28,7 @@ import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 import ActivityHistory from './components/ActivityHistory';
 import ReceptDisplay from './components/ReceptDisplay';
+import NamesUpdate from './components/NamesUpdate';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -58,14 +60,17 @@ export default async function StudentDetails({ params }: Props) {
       <DetailsViewBody gap={'lg'}>
         <AcceptanceSwitch student={student} properties={properties} />
         <Box mt={'xl'}>
-          <Group justify='space-between' align='center'>
-            <Text>
-              {student.surname} {student.names}
-            </Text>
+          <Flex justify='space-between' align='center'>
+            <Group>
+              <Text>
+                {student.surname} {student.names}
+              </Text>
+              <NamesUpdate student={student} />
+            </Group>
             <Badge variant='light' color={getBadgeColor(student.status)}>
               {student.status}
             </Badge>
-          </Group>
+          </Flex>
           <Divider mt={5} />
         </Box>
         <FieldView label='Program'>{student.program?.name}</FieldView>
