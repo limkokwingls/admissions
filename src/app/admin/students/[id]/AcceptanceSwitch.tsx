@@ -75,6 +75,9 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
         queryClient.invalidateQueries({
           queryKey: ['students'],
         });
+        queryClient.invalidateQueries({
+          queryKey: ['student'],
+        });
         notifications.show({
           title: status ? 'Accepted' : 'Not Accepted',
           message: `Acceptance status updated to ${status ? 'accepted' : 'not accepted'}`,

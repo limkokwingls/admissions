@@ -26,6 +26,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { notFound } from 'next/navigation';
 import AcceptanceSwitch from './AcceptanceSwitch';
 import ActivityHistory from './components/ActivityHistory';
+import ReceptDisplay from './components/ReceptDisplay';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -122,6 +123,7 @@ export default async function StudentDetails({ params }: Props) {
                 )}
               </Group>
             </Box>
+            <ReceptDisplay studentId={id} />
           </SimpleGrid>
         </Paper>
 
