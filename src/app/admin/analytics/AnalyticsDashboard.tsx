@@ -339,6 +339,8 @@ function LineChartCard({
                 borderRadius: '8px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                 border: 'none',
+                backgroundColor: 'var(--mantine-color-dark-6)',
+                color: 'var(--mantine-color-white)',
               }}
             />
             <Legend

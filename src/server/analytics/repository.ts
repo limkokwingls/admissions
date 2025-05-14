@@ -62,7 +62,7 @@ export class PageVisitsRepository extends BaseRepository<
     const result = await db
       .select({
         date: sql<string>`date(${pageVisits.lastVisitedAt}, 'unixepoch')`,
-        count: count(),
+        count: sql<number>`sum(${pageVisits.visitCount})`,
       })
       .from(pageVisits)
       .where(sql`${pageVisits.lastVisitedAt} >= ${startTimestamp}`)
@@ -129,7 +129,9 @@ export class LetterDownloadsRepository extends BaseRepository<
 
   async getUniqueDownloaders() {
     const result = await db
-      .select({ count: sql<number>`count(distinct ${letterDownloads.studentId})` })
+      .select({
+        count: sql<number>`count(distinct ${letterDownloads.studentId})`,
+      })
       .from(letterDownloads);
     return result[0]?.count || 0;
   }
@@ -142,7 +144,7 @@ export class LetterDownloadsRepository extends BaseRepository<
     const result = await db
       .select({
         date: sql<string>`date(${letterDownloads.lastDownloadedAt}, 'unixepoch')`,
-        count: count(),
+        count: sql<number>`sum(${letterDownloads.downloadCount})`,
       })
       .from(letterDownloads)
       .where(sql`${letterDownloads.lastDownloadedAt} >= ${startTimestamp}`)
@@ -166,9 +168,7 @@ export class LetterDownloadsRepository extends BaseRepository<
 
 export class StudentsAnalyticsRepository {
   async getTotalStudents() {
-    const result = await db
-      .select({ count: count() })
-      .from(students);
+    const result = await db.select({ count: count() }).from(students);
     return result[0]?.count || 0;
   }
 
