@@ -92,6 +92,7 @@ export default function PrintNonSponsoredAcceptance({
   return (
     <ActionIcon
       color='blue'
+      variant='light'
       disabled={isGenerating}
       title='Print Non-Sponsored Acceptance Letter'
       onClick={handlePrint}

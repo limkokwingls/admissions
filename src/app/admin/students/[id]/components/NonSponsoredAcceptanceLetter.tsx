@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     lineHeight: 1.5,
   },
+
   boldText: {
     fontWeight: 'bold',
     color: '#000000',
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 14,
     padding: 4,
+    paddingLeft: 15,
     borderLeft: '1pt solid #555555',
     fontSize: 12,
   },
@@ -176,8 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   signatureSection: {
-    marginTop: 520,
-    borderTop: '0.5pt solid #aaaaaa',
+    marginTop: 480,
     paddingTop: 10,
   },
   signatureName: {
@@ -209,23 +210,17 @@ export default function NonSponsoredAcceptanceLetter({
   const letterDate = format(new Date(), 'dd/MM/yyyy');
   const referenceNumber = extractReference(student);
   const programName = student.program?.name;
-  const registrationDateFrom = properties?.registrationDateFrom
-    ? format(new Date(properties.registrationDateFrom), 'dd MMM yyyy')
-    : 'the scheduled registration date';
   const registrationDateTo = properties?.registrationDateTo
     ? format(new Date(properties.registrationDateTo), 'dd MMM yyyy')
     : '';
-  const registrationPeriod = registrationDateTo
-    ? `${registrationDateFrom} to ${registrationDateTo}`
-    : registrationDateFrom;
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
   const acceptanceLetterDate = format(
     properties?.privatePaymentDate || new Date(),
-    'dd MM yyyy',
+    'dd MMM yyyy',
   );
 
   const studyDuration = `${PROGRAM_DATA[programType]?.years || '4'} YEARS`;
-  const tuitionFeePerYear = PROGRAM_DATA[programType]?.yearFee || 'M25,000';
+  const tuitionFeePerYear = PROGRAM_DATA[programType]?.yearFee || 'M##,###';
   const tuitionFeeText = `${tuitionFeePerYear} per annum`;
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
@@ -261,7 +256,7 @@ export default function NonSponsoredAcceptanceLetter({
 
         <View style={styles.header}>
           <PDFText style={styles.headerText}>
-            ACCEPTANCE LETTER (NON-SPONSORED)
+            ACCEPTANCE LETTER (SELF-SPONSORED)
           </PDFText>
           <View
             style={{
@@ -331,12 +326,6 @@ export default function NonSponsoredAcceptanceLetter({
           <View style={styles.bankRow}>
             <PDFText style={styles.bankLabel}>Branch Code:</PDFText>
             <PDFText style={styles.bankValue}>060367</PDFText>
-          </View>
-          <View style={styles.bankRow}>
-            <PDFText style={styles.bankLabel}>Reference:</PDFText>
-            <PDFText style={styles.bankValue}>
-              {student.id || referenceNumber} - {student.surname}
-            </PDFText>
           </View>
         </View>
 
