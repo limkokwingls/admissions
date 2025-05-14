@@ -1,5 +1,12 @@
-import { NothingSelected } from '@/components/adease'; 
+import React from 'react';
+import Filters from './Filters';
+import CollectionsTable from './CollectionsTable';
 
-export default function Page() {
-  return <NothingSelected title='Students' />;
+export default function page() {
+  return (
+    <>
+      <Filters />
+      <CollectionsTable />
+    </>
+  );
 }
