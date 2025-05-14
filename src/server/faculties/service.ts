@@ -17,7 +17,7 @@ class FacultyService {
   }
 
   async findAll(params: QueryOptions<typeof faculties>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['registry']);
   }
 
   async create(data: Faculty) {

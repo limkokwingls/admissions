@@ -29,6 +29,7 @@ import {
   IconUsers,
   IconUsersGroup,
   IconChartLine,
+  IconFileInvoice,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { signOut, useSession } from 'next-auth/react';
@@ -101,6 +102,12 @@ const navigation: NavItem[] = [
         icon: IconForbid,
       },
     ],
+  },
+  {
+    label: 'Reports',
+    href: '/admin/reports/collection',
+    icon: IconFileInvoice,
+    roles: ['admin', 'registry'],
   },
   {
     label: 'Analytics',
