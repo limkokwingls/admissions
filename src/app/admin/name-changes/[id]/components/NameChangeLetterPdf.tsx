@@ -1,20 +1,18 @@
 'use client';
 
-import { format } from 'date-fns';
+import { getNameChange } from '@/server/name-changes/actions';
 import {
   Document,
+  Image,
   Page,
-  View,
   Text as PDFText,
   StyleSheet,
-  Image,
+  View,
 } from '@react-pdf/renderer';
-import { getNameChange } from '@/server/name-changes/actions';
-import { getCurrentProperties } from '@/server/properties/actions';
+import { format } from 'date-fns';
 
 type Props = {
   nameChange: NonNullable<Awaited<ReturnType<typeof getNameChange>>>;
-  properties?: Awaited<ReturnType<typeof getCurrentProperties>>;
 };
 
 const styles = StyleSheet.create({
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function NameChangeLetterPDF({ nameChange, properties }: Props) {
+export default function NameChangeLetterPDF({ nameChange }: Props) {
   const letterDate = format(new Date(), 'dd MMMM yyyy');
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';
   const registrarTitleText = 'Registrar';

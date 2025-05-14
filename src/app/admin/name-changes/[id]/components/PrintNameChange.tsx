@@ -31,7 +31,7 @@ export default function PrintNameChange({ nameChange, properties }: Props) {
       await trackNameChangePrinted(nameChange.id);
 
       const blob = await pdf(
-        <NameChangeLetterPDF nameChange={nameChange} properties={properties} />,
+        <NameChangeLetterPDF nameChange={nameChange} />,
       ).toBlob();
       const url = URL.createObjectURL(blob);
 
