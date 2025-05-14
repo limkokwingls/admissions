@@ -50,3 +50,12 @@ export async function updateStudentNames(
     newName: `${data.surname} ${data.names}`,
   });
 }
+
+export async function getAcceptedStudentsByFaculty(
+  facultyId: number,
+  programId?: number,
+  page: number = 1,
+  search: string = ''
+) {
+  return service.getAcceptedByFaculty({ facultyId, programId, page, search });
+}

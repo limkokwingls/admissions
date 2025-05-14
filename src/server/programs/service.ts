@@ -28,7 +28,7 @@ class ProgramService {
           size: 50,
           filter: eq(programs.facultyId, facultyId),
         }),
-      [],
+      ['registry'],
     );
   }
 

@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { students } from '@/db/schema';
+import { programs, students } from '@/db/schema';
 import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
 import { and, eq, or, sql } from 'drizzle-orm';
 
@@ -182,6 +182,93 @@ export default class StudentRepository extends BaseRepository<
     }
 
     return patterns;
+  }
+  
+  async getAcceptedByFaculty(params: { facultyId: number; programId?: number; page: number; search: string }) {
+    const { facultyId, programId, page = 1, search = '' } = params;
+    
+    let filter = and(eq(students.accepted, true));
+    
+    // Add search filter if provided
+    if (search) {
+      const searchTerms = search.trim().split(/\s+/);
+
+      const conditions = searchTerms.map((term) => {
+        const containsNumber = /\d/.test(term);
+
+        if (containsNumber) {
+          const wildcardTerm = '%' + term + '%';
+
+          return or(
+            sql`${students.candidateNo} LIKE ${wildcardTerm}`,
+            sql`${students.phoneNumber} LIKE ${wildcardTerm}`,
+            sql`${students.receiptNo} LIKE ${wildcardTerm}`,
+          );
+        } else {
+          const interleaved = term.split('').join('%');
+          const wildcardTerm = '%' + term + '%';
+
+          const substitutionPatterns = [
+            wildcardTerm,
+            '%' + interleaved + '%',
+            ...this.generateVowelSubstitutions(term),
+            ...this.generateConsonantSubstitutions(term),
+          ];
+
+          const fieldConditions = [
+            ...substitutionPatterns.map(
+              (pattern) =>
+                sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`,
+            ),
+            ...substitutionPatterns.map(
+              (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
+            ),
+          ];
+
+          return or(...fieldConditions);
+        }
+      });
+
+      if (conditions.length > 0) {
+        filter = and(filter, conditions.length === 1 ? conditions[0] : and(...conditions));
+      }
+    }
+    
+    // Get students with program information
+    const studentsWithPrograms = await db.query.students.findMany({
+      where: filter,
+      with: {
+        program: true
+      },
+    });
+    
+    // Filter students by faculty and program
+    const filteredStudents = studentsWithPrograms
+      .filter(student => {
+        if (!student.program) return false;
+        if (student.program.facultyId !== facultyId) return false;
+        if (programId && student.program.id !== programId) return false;
+        return true;
+      })
+      .slice((page - 1) * 10, page * 10);
+    
+    // Get total count for pagination
+    const totalCount = studentsWithPrograms.filter(student => {
+      if (!student.program) return false;
+      if (student.program.facultyId !== facultyId) return false;
+      if (programId && student.program.id !== programId) return false;
+      return true;
+    }).length;
+    
+    return {
+      data: filteredStudents,
+      meta: {
+        page,
+        size: 10,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / 10),
+      },
+    };
   }
 }
 

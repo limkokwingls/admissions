@@ -105,7 +105,7 @@ const navigation: NavItem[] = [
   },
   {
     label: 'Reports',
-    href: '/admin/reports/collection',
+    href: '/admin/reports/collections',
     icon: IconFileInvoice,
     roles: ['admin', 'registry'],
   },

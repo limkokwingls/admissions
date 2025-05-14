@@ -35,6 +35,10 @@ class StudentService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+  
+  async getAcceptedByFaculty(params: { facultyId: number; programId?: number; page: number; search: string }) {
+    return withAuth(async () => this.repository.getAcceptedByFaculty(params), ['all']);
+  }
 }
 
 export const studentsService = new StudentService();
