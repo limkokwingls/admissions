@@ -1,5 +1,5 @@
 import { letterDownloads, pageVisits } from '@/db/schema';
-import { pageVisitsRepository, letterDownloadsRepository } from './repository';
+import { pageVisitsRepository, letterDownloadsRepository, studentsAnalyticsRepository } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { students } from '@/db/schema/students';
@@ -13,6 +13,7 @@ class AnalyticsService {
   constructor(
     private readonly pageVisitsRepo = pageVisitsRepository,
     private readonly letterDownloadsRepo = letterDownloadsRepository,
+    private readonly studentsAnalyticsRepo = studentsAnalyticsRepository,
   ) {}
 
   async getPageVisit(id: string) {
@@ -192,6 +193,20 @@ class AnalyticsService {
           };
         });
       },
+      ['registry'],
+    );
+  }
+
+  async getTotalStudents() {
+    return withAuth(
+      async () => this.studentsAnalyticsRepo.getTotalStudents(),
+      ['registry'],
+    );
+  }
+
+  async getTotalAdmittedStudents() {
+    return withAuth(
+      async () => this.studentsAnalyticsRepo.getTotalAdmittedStudents(),
       ['registry'],
     );
   }

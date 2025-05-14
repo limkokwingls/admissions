@@ -99,3 +99,11 @@ export async function getDailyDownloads(days: number = 30) {
 export async function getTopDownloaders(limit: number = 10) {
   return service.getTopDownloaders(limit);
 }
+
+export async function getTotalStudents() {
+  return service.getTotalStudents();
+}
+
+export async function getTotalAdmittedStudents() {
+  return service.getTotalAdmittedStudents();
+}

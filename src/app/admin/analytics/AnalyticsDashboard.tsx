@@ -8,6 +8,8 @@ import {
   getTotalVisits,
   getUniqueVisitors,
   getUniqueDownloaders,
+  getTotalStudents,
+  getTotalAdmittedStudents,
 } from '@/server/analytics/actions';
 
 interface DateCount {
@@ -78,6 +80,11 @@ export default function AnalyticsDashboard() {
     queryFn: () => getUniqueVisitors(),
   });
 
+  const { data: totalStudents, isLoading: loadingTotalStudents } = useQuery({
+    queryKey: ['analytics', 'total-students'],
+    queryFn: () => getTotalStudents(),
+  });
+
   const { data: totalDownloads, isLoading: loadingTotalDownloads } = useQuery({
     queryKey: ['analytics', 'total-downloads'],
     queryFn: () => getTotalDownloads(),
@@ -87,6 +94,12 @@ export default function AnalyticsDashboard() {
     useQuery({
       queryKey: ['analytics', 'unique-downloaders'],
       queryFn: () => getUniqueDownloaders(),
+    });
+    
+  const { data: totalAdmittedStudents, isLoading: loadingTotalAdmittedStudents } =
+    useQuery({
+      queryKey: ['analytics', 'total-admitted-students'],
+      queryFn: () => getTotalAdmittedStudents(),
     });
 
   const { data: topVisitors, isLoading: loadingTopVisitors } = useQuery({
@@ -126,8 +139,8 @@ export default function AnalyticsDashboard() {
             />
             <StatCard
               title='Unique Visitors'
-              value={uniqueVisitors?.toLocaleString() || '0'}
-              loading={loadingUniqueVisitors}
+              value={`${uniqueVisitors?.toLocaleString() || '0'}/${totalStudents?.toLocaleString() || '0'}`}
+              loading={loadingUniqueVisitors || loadingTotalStudents}
               icon={<IconUser size={22} stroke={1.5} />}
               color='indigo'
               compact
@@ -149,8 +162,8 @@ export default function AnalyticsDashboard() {
             />
             <StatCard
               title='Unique Downloaders'
-              value={uniqueDownloaders?.toLocaleString() || '0'}
-              loading={loadingUniqueDownloaders}
+              value={`${uniqueDownloaders?.toLocaleString() || '0'}/${totalAdmittedStudents?.toLocaleString() || '0'}`}
+              loading={loadingUniqueDownloaders || loadingTotalAdmittedStudents}
               icon={<IconUser size={22} stroke={1.5} />}
               color='teal'
               compact

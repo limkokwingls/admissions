@@ -1,5 +1,6 @@
 import { db } from '@/db';
 import { letterDownloads, pageVisits } from '@/db/schema';
+import { students } from '@/db/schema/students';
 import BaseRepository from '@/server/base/BaseRepository';
 import { count, desc, eq, sql } from 'drizzle-orm';
 
@@ -163,5 +164,23 @@ export class LetterDownloadsRepository extends BaseRepository<
   }
 }
 
+export class StudentsAnalyticsRepository {
+  async getTotalStudents() {
+    const result = await db
+      .select({ count: count() })
+      .from(students);
+    return result[0]?.count || 0;
+  }
+
+  async getTotalAdmittedStudents() {
+    const result = await db
+      .select({ count: count() })
+      .from(students)
+      .where(eq(students.status, 'Admitted'));
+    return result[0]?.count || 0;
+  }
+}
+
 export const pageVisitsRepository = new PageVisitsRepository();
 export const letterDownloadsRepository = new LetterDownloadsRepository();
+export const studentsAnalyticsRepository = new StudentsAnalyticsRepository();
