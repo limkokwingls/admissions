@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import { students } from './students';
 import { users } from './auth';
 
-const actionsEnum = ['acceptance_changed', 'admission_printed'] as const;
+const actionsEnum = ['acceptance_changed', 'admission_printed', 'name_change_printed'] as const;
 export type ActionType = (typeof actionsEnum)[number];
 
 export const studentHistory = sqliteTable(

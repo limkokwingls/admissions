@@ -10,8 +10,12 @@ export default function Layout({ children }: PropsWithChildren) {
       path={'/admin/name-changes'}
       queryKey={['nameChanges']}
       getData={getNameChanges}
-      actionIcons={[<NewLink key={'new-link'} href='/admin/name-changes/new' />]}
-      renderItem={(it) => <ListItem id={it.id} label={it.id} />}
+      actionIcons={[
+        <NewLink key={'new-link'} href='/admin/name-changes/new' />,
+      ]}
+      renderItem={(it) => (
+        <ListItem id={it.id} label={it.newName} description={it.oldName} />
+      )}
     >
       {children}
     </ListLayout>

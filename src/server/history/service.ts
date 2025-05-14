@@ -77,6 +77,20 @@ class HistoryService {
     });
   }
 
+  async trackNameChangePrinted(
+    studentId: string,
+    performedBy: string,
+    nameChangeId: string,
+  ) {
+    return this.createHistoryEntry({
+      studentId,
+      action: 'name_change_printed',
+      performedBy,
+      // Store the name change ID in the newValue field
+      newValue: nameChangeId,
+    });
+  }
+
   async updateHistoryEntry(id: string, data: Partial<StudentHistory>) {
     return withAuth(async () => this.studentHistoryRepo.update(id, data), []);
   }

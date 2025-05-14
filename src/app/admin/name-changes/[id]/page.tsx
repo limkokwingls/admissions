@@ -6,6 +6,9 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getNameChange, deleteNameChange } from '@/server/name-changes/actions';
+import { getCurrentProperties } from '@/server/properties/actions';
+import PrintNameChange from './components/PrintNameChange';
+import { Group, Tooltip } from '@mantine/core';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,6 +17,7 @@ type Props = {
 export default async function NameChangeDetails({ params }: Props) {
   const { id } = await params;
   const nameChange = await getNameChange(id);
+  const properties = await getCurrentProperties();
 
   if (!nameChange) {
     return notFound();
@@ -28,6 +32,11 @@ export default async function NameChangeDetails({ params }: Props) {
           'use server';
           await deleteNameChange(id);
         }}
+        actions={[
+          <Tooltip key="print-name-change" label="Print Name Change Letter">
+            <PrintNameChange nameChange={nameChange} properties={properties} />
+          </Tooltip>
+        ]}
       />
       <DetailsViewBody>
         <FieldView label='Student'>{nameChange.studentId}</FieldView>

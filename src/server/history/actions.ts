@@ -60,6 +60,16 @@ export async function trackAdmissionPrinted(studentId: string, letterType?: stri
   return service.trackAdmissionPrinted(studentId, userId, letterType);
 }
 
+export async function trackNameChangePrinted(studentId: string, nameChangeId: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+
+  return service.trackNameChangePrinted(studentId, userId, nameChangeId);
+}
+
 export async function updateHistoryEntry(
   id: string,
   data: Partial<StudentHistory>,
