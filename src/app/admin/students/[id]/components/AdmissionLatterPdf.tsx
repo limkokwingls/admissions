@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   signatureSection: {
-    marginTop: 30,
+    marginTop: 20,
   },
   signatureName: {
     fontWeight: 'bold',
@@ -205,7 +205,7 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
         <View style={styles.signatureSection}>
           <PDFText style={{ zIndex: 100 }}>Yours sincerely,</PDFText>
           {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf/renderer Image does not support alt */}
-<Image
+          <Image
             style={styles.signatureImage}
             src={'/images/signature_small.png'}
           />
