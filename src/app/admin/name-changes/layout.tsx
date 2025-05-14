@@ -14,7 +14,11 @@ export default function Layout({ children }: PropsWithChildren) {
         <NewLink key={'new-link'} href='/admin/name-changes/new' />,
       ]}
       renderItem={(it) => (
-        <ListItem id={it.id} label={it.newName} description={it.oldName} />
+        <ListItem
+          id={it.id}
+          label={it.newName}
+          description={`Old: ${it.oldName}`}
+        />
       )}
     >
       {children}
