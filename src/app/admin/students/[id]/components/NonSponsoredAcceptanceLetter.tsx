@@ -67,13 +67,14 @@ const styles = StyleSheet.create({
     objectFit: 'contain',
   },
   header: {
-    marginBottom: 15,
+    marginBottom: 25,
     textAlign: 'center',
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 6,
+    marginTop: 20,
+    marginBottom: 20,
     textTransform: 'uppercase',
     color: '#000000',
     letterSpacing: 1,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     padding: 4,
     borderLeft: '1pt solid #555555',
-    fontSize: 15,
+    fontSize: 12,
   },
   noteList: {
     marginLeft: 20,
@@ -163,19 +164,19 @@ const styles = StyleSheet.create({
   },
   bankRow: {
     flexDirection: 'row',
-    marginBottom: 6,
+    marginBottom: 1,
   },
   bankLabel: {
     width: 120,
     fontWeight: 'bold',
-    fontSize: 11,
+    fontSize: 10,
   },
   bankValue: {
     flex: 1,
-    fontSize: 11,
+    fontSize: 10,
   },
   signatureSection: {
-    marginTop: 30,
+    marginTop: 520,
     borderTop: '0.5pt solid #aaaaaa',
     paddingTop: 10,
   },
@@ -218,6 +219,10 @@ export default function NonSponsoredAcceptanceLetter({
     ? `${registrationDateFrom} to ${registrationDateTo}`
     : registrationDateFrom;
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
+  const acceptanceLetterDate = format(
+    properties?.privatePaymentDate || new Date(),
+    'dd MM yyyy',
+  );
 
   const studyDuration = `${PROGRAM_DATA[programType]?.years || '4'} YEARS`;
   const tuitionFeePerYear = PROGRAM_DATA[programType]?.yearFee || 'M25,000';
@@ -256,7 +261,7 @@ export default function NonSponsoredAcceptanceLetter({
 
         <View style={styles.header}>
           <PDFText style={styles.headerText}>
-            NON-SPONSORED ACCEPTANCE LETTER
+            ACCEPTANCE LETTER (NON-SPONSORED)
           </PDFText>
           <View
             style={{
@@ -300,26 +305,11 @@ export default function NonSponsoredAcceptanceLetter({
           <PDFText>{tuitionFeeText}</PDFText>
         </View>
 
-        <View style={styles.paymentOptions}>
-          <PDFText style={styles.paymentOptionTitle}>Payment Options:</PDFText>
-          <PDFText style={styles.paymentOptionItem}>
-            1. Full Payment: Pay the entire annual tuition fee before
-            registration to receive a 5% discount.
-          </PDFText>
-          <PDFText style={styles.paymentOptionItem}>
-            2. Semester Payment: Pay 50% of the annual tuition fee at the
-            beginning of each semester.
-          </PDFText>
-          <PDFText style={styles.paymentOptionItem}>
-            3. Installment Plan: Pay 40% of the semester fee during registration
-            and the remaining 60% in two equal monthly installments.
-          </PDFText>
-        </View>
-
         <PDFText style={styles.paragraph}>
-          <PDFText style={styles.boldText}>Important:</PDFText> All payments
-          must be made during the registration period ({registrationPeriod}).
-          Late registration will incur additional fees.
+          <PDFText style={styles.boldText}>
+            Important: All payments must strictly be made between the following
+            dates: {acceptanceLetterDate} and {registrationDateTo}.
+          </PDFText>
         </PDFText>
 
         <View style={styles.bankDetails}>
@@ -347,39 +337,6 @@ export default function NonSponsoredAcceptanceLetter({
             <PDFText style={styles.bankValue}>
               {student.id || referenceNumber} - {student.surname}
             </PDFText>
-          </View>
-        </View>
-
-        <View style={styles.indentSection}>
-          <PDFText style={styles.boldText}>*NOTE:</PDFText>
-          <View style={styles.noteList}>
-            <View style={styles.noteListItem}>
-              <PDFText style={styles.noteListNumber}>i)</PDFText>
-              <PDFText style={styles.noteListText}>
-                The above fees are subject to change without prior notice.
-              </PDFText>
-            </View>
-            <View style={styles.noteListItem}>
-              <PDFText style={styles.noteListNumber}>ii)</PDFText>
-              <PDFText style={styles.noteListText}>
-                All first-year students{' '}
-                <PDFText style={styles.boldText}>must</PDFText> attend
-                orientation.
-              </PDFText>
-            </View>
-            <View style={styles.noteListItem}>
-              <PDFText style={styles.noteListNumber}>iii)</PDFText>
-              <PDFText style={styles.noteListText}>
-                You will be eligible for registration upon proof of payment of
-                the required fees.
-              </PDFText>
-            </View>
-            <View style={styles.noteListItem}>
-              <PDFText style={styles.noteListNumber}>iv)</PDFText>
-              <PDFText style={styles.noteListText}>
-                Please bring the original payment receipt during registration.
-              </PDFText>
-            </View>
           </View>
         </View>
 
