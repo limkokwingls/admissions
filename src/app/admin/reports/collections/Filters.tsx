@@ -4,16 +4,7 @@ import React, { useEffect } from 'react';
 import { useQueryState } from 'nuqs';
 import { getFaculties } from '@/server/faculties/actions';
 import { getProgramsForFaculty } from '@/server/programs/actions';
-import {
-  Paper,
-  Grid,
-  Select,
-  TextInput,
-  Button,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Paper, Grid, Select, Button, Stack, Text } from '@mantine/core';
 
 type Faculty = {
   id: number;
@@ -31,27 +22,21 @@ type Program = {
 export default function Filters() {
   const [facultyId, setFacultyId] = useQueryState('facultyId');
   const [programId, setProgramId] = useQueryState('programId');
-  const [search, setSearch] = useQueryState('search', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
 
   const [faculties, setFaculties] = React.useState<Faculty[]>([]);
   const [programs, setPrograms] = React.useState<Program[]>([]);
-  const [searchInput, setSearchInput] = React.useState(search || '');
 
   useEffect(() => {
     const loadFaculties = async () => {
       const result = await getFaculties(1, '');
       if (result && result.items) {
         setFaculties(result.items);
-
-        if (!facultyId && result.items.length > 0) {
-          setFacultyId(String(result.items[0].id));
-        }
       }
     };
 
     loadFaculties();
-  }, [facultyId, setFacultyId]);
+  }, []);
 
   useEffect(() => {
     const loadPrograms = async () => {
@@ -61,22 +46,18 @@ export default function Filters() {
           setPrograms(result.items);
           setProgramId(null);
         }
+      } else {
+        setPrograms([]);
+        setProgramId(null);
       }
     };
 
     loadPrograms();
   }, [facultyId, setProgramId]);
 
-  const handleSearch = () => {
-    setSearch(searchInput);
-    setPage('1');
-  };
-
   const handleFacultyChange = (value: string | null) => {
-    if (value) {
-      setFacultyId(value);
-      setPage('1');
-    }
+    setFacultyId(value);
+    setPage('1');
   };
 
   const handleProgramChange = (value: string | null) => {
@@ -85,35 +66,36 @@ export default function Filters() {
   };
 
   const handleClearFilters = () => {
+    setFacultyId(null);
     setProgramId(null);
-    setSearch('');
-    setSearchInput('');
     setPage('1');
   };
 
   return (
     <Paper shadow='xs' p='md' mb='md'>
       <Grid>
-        <Grid.Col span={{ base: 12, md: 3 }}>
+        <Grid.Col span={{ base: 12, md: 4 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Faculty
             </Text>
             <Select
               placeholder='Select Faculty'
-              data={faculties.map((faculty) => ({
-                value: String(faculty.id),
-                label: faculty.name,
-              }))}
-              value={facultyId || null}
+              data={[
+                { value: '', label: 'All Faculties' },
+                ...faculties.map((faculty) => ({
+                  value: String(faculty.id),
+                  label: faculty.name,
+                })),
+              ]}
+              value={facultyId || ''}
               onChange={handleFacultyChange}
               searchable
-              clearable={false}
             />
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 3 }}>
+        <Grid.Col span={{ base: 12, md: 4 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Program
@@ -135,27 +117,8 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 3 }}>
-          <Stack gap='xs'>
-            <Text size='sm' fw={500}>
-              Search
-            </Text>
-            <Group grow>
-              <TextInput
-                placeholder='Search by name, candidate no, phone...'
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.currentTarget.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              />
-              <Button onClick={handleSearch} style={{ flexShrink: 0 }}>
-                Search
-              </Button>
-            </Group>
-          </Stack>
-        </Grid.Col>
-
         <Grid.Col
-          span={{ base: 12, md: 3 }}
+          span={{ base: 12, md: 4 }}
           style={{ display: 'flex', alignItems: 'flex-end' }}
         >
           <Button
