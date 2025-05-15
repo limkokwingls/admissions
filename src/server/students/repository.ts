@@ -187,67 +187,36 @@ export default class StudentRepository extends BaseRepository<
   async getAcceptedByFaculty(params: {
     facultyId?: number;
     programId?: number;
-    programIds?: number[];
     page: number;
     size?: number;
   }) {
-    const { facultyId, programId, programIds, page = 1, size = 20 } = params;
+    const { facultyId, programId, page = 1, size = 20 } = params;
     const conditions: SQL[] = [];
 
-    // Add condition to only return accepted students
     conditions.push(eq(students.accepted, true));
 
-    // Add program filter if programIds are provided
-    if (programIds && programIds.length > 0) {
-      conditions.push(inArray(students.programId, programIds));
-    }
-
-    // Add program filter if a single programId is provided
     if (programId) {
       conditions.push(eq(students.programId, programId));
     }
 
-    // If facultyId is provided, we need to join with programs table
     if (facultyId) {
-      return db.transaction(async (tx) => {
-        // First get all programs for this faculty
-        const facultyPrograms = await tx.query.programs.findMany({
-          where: eq(programs.facultyId, facultyId),
-          columns: { id: true },
-        });
-
-        const facultyProgramIds = facultyPrograms.map((p) => p.id);
-
-        // Add condition to filter by these program IDs
-        if (facultyProgramIds.length > 0) {
-          conditions.push(inArray(students.programId, facultyProgramIds));
-        } else {
-          // If no programs found for faculty, return empty result
-          return this.createPaginatedResult([], {
-            limit: size,
-            where: and(...conditions),
-          });
-        }
-
-        // Query with all conditions
-        const criteria = this.buildQueryCriteria({
-          filter: and(...conditions),
-          page,
-          size,
-        });
-
-        const data = await tx.query.students.findMany({
-          ...criteria,
-          with: {
-            program: true,
-          },
-        });
-
-        return this.createPaginatedResult(data, criteria);
+      const facultyPrograms = await db.query.programs.findMany({
+        where: eq(programs.facultyId, facultyId),
+        columns: { id: true },
       });
+
+      const facultyProgramIds = facultyPrograms.map((p) => p.id);
+
+      if (facultyProgramIds.length > 0) {
+        conditions.push(inArray(students.programId, facultyProgramIds));
+      } else {
+        return this.createPaginatedResult([], {
+          limit: size,
+          where: and(...conditions),
+        });
+      }
     }
 
-    // If no facultyId, just use the standard query method with program relation
     const criteria = this.buildQueryCriteria({
       filter: and(...conditions),
       page,
