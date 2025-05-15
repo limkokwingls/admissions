@@ -17,7 +17,9 @@ export default function Layout({ children }: PropsWithChildren) {
         <ListItem
           id={it.id}
           label={formatNames(`${it.surname} ${it.names}`)}
-          rightSection={it.accepted ? <IconCheck size={'1rem'} /> : undefined}
+          rightSection={
+            it.accepted ? <IconCheck size={'1rem'} color='green' /> : undefined
+          }
         />
       )}
     >

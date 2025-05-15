@@ -16,14 +16,15 @@ import {
   Alert,
   Title,
   Divider,
+  Anchor,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { formatNames } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
+import { students } from '@/db/schema';
 
-type Student = NonNullable<
-  Awaited<ReturnType<typeof getAcceptedStudentsByFaculty>>
->['items'][0];
+type StudentStatus = (typeof students.$inferSelect)['status'];
 
 export default function CollectionsTable() {
   const [facultyId] = useQueryState('facultyId');
@@ -34,31 +35,26 @@ export default function CollectionsTable() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['acceptedStudents', facultyId, programId, page, search],
     queryFn: async () => {
-      if (!facultyId) return { items: [], totalPages: 1, totalItems: 0 };
-
       return getAcceptedStudentsByFaculty(
         facultyId ? Number(facultyId) : undefined,
         programId ? Number(programId) : undefined,
         Number(page),
       );
     },
-    enabled: !!facultyId,
   });
 
   const handlePageChange = (newPage: number) => {
     setPage(String(newPage));
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status.toUpperCase()) {
-      case 'ACCEPTED':
+  const getStatusColor = (status: StudentStatus) => {
+    switch (status) {
+      case 'Admitted':
         return 'green';
-      case 'PENDING':
+      case 'Wait Listed':
         return 'yellow';
-      case 'REJECTED':
-        return 'red';
       case 'DQ':
-        return 'gray';
+        return 'red';
       default:
         return 'blue';
     }
@@ -100,10 +96,8 @@ export default function CollectionsTable() {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>No</Table.Th>
-                <Table.Th>Surname</Table.Th>
                 <Table.Th>Names</Table.Th>
-                <Table.Th>Candidate No</Table.Th>
-                <Table.Th>Phone Number</Table.Th>
+                <Table.Th>Program</Table.Th>
                 <Table.Th>Status</Table.Th>
                 <Table.Th>Receipt No</Table.Th>
               </Table.Tr>
@@ -112,12 +106,23 @@ export default function CollectionsTable() {
               {data?.items.map((student) => (
                 <Table.Tr key={student.id}>
                   <Table.Td>{student.no}</Table.Td>
-                  <Table.Td>{formatNames(student.surname)}</Table.Td>
-                  <Table.Td>{formatNames(student.names)}</Table.Td>
-                  <Table.Td>{student.candidateNo || '-'}</Table.Td>
-                  <Table.Td>{student.phoneNumber || '-'}</Table.Td>
                   <Table.Td>
-                    <Badge color={getStatusColor(student.status)}>
+                    <Anchor
+                      size='sm'
+                      component={Link}
+                      href={`/admin/students/${student.id}`}
+                    >
+                      {formatNames(student.surname)}{' '}
+                      {formatNames(student.names)}
+                    </Anchor>
+                  </Table.Td>
+                  <Table.Td>{student.program.name || '-'}</Table.Td>
+                  <Table.Td>
+                    <Badge
+                      variant='light'
+                      size='xs'
+                      color={getStatusColor(student.status)}
+                    >
                       {student.status}
                     </Badge>
                   </Table.Td>
@@ -128,13 +133,16 @@ export default function CollectionsTable() {
           </Table>
 
           {data?.totalPages && data.totalPages > 1 && (
-            <Group justify='center' mt='xl'>
-              <Pagination
-                total={data.totalPages}
-                value={Number(page)}
-                onChange={handlePageChange}
-              />
-            </Group>
+            <Paper withBorder mt='xl' p='xs'>
+              <Group justify='center'>
+                <Pagination
+                  total={data.totalPages}
+                  value={Number(page)}
+                  size={'sm'}
+                  onChange={handlePageChange}
+                />
+              </Group>
+            </Paper>
           )}
         </>
       )}
