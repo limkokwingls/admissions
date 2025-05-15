@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
-import { parseAsInteger, useQueryState } from 'nuqs';
-import { useQuery } from '@tanstack/react-query';
 import { getFaculties } from '@/server/faculties/actions';
 import {
   getAllPrograms,
   getProgramsForFaculty,
 } from '@/server/programs/actions';
-import { Paper, Grid, Select, Button, Stack, Text } from '@mantine/core';
+import { Button, Grid, Paper, Select, Stack, Text } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
+import { parseAsInteger, useQueryState } from 'nuqs';
+import React from 'react';
 
 type Faculty = NonNullable<
   Awaited<ReturnType<typeof getFaculties>>
@@ -20,17 +20,18 @@ type Program = NonNullable<
 export default function Filters() {
   const [facultyId, setFacultyId] = useQueryState('facultyId');
   const [programId, setProgramId] = useQueryState('programId');
-  const [page, setPage] = useQueryState<number>(
+
+  const [, setPage] = useQueryState<number>(
     'page',
     parseAsInteger.withDefault(1),
   );
 
-  const { data: facultiesData, isLoading: facultiesLoading } = useQuery({
+  const { data: facultiesData } = useQuery({
     queryKey: ['faculties'],
     queryFn: () => getFaculties(1, ''),
   });
 
-  const { data: programsData, isLoading: programsLoading } = useQuery({
+  const { data: programsData } = useQuery({
     queryKey: ['programs', facultyId],
     queryFn: () =>
       facultyId ? getProgramsForFaculty(Number(facultyId)) : getAllPrograms(),
