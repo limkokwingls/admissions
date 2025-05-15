@@ -148,7 +148,7 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
         </PDFText>
 
         <PDFText style={styles.paragraph}>
-          As an upgrading student, you are required to observe and avail
+          As a first-year student, you are required to observe and avail
           yourself of the following:
         </PDFText>
 
