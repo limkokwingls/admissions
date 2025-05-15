@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useQueryState } from 'nuqs';
 import { getAcceptedStudentsByFaculty } from '@/server/students/actions';
 import {
@@ -15,60 +15,40 @@ import {
   Stack,
   Alert,
   Title,
-  Divider
+  Divider,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { formatNames } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
 
-type Student = NonNullable<Awaited<ReturnType<typeof getAcceptedStudentsByFaculty>>>['data'][0];
+type Student = NonNullable<
+  Awaited<ReturnType<typeof getAcceptedStudentsByFaculty>>
+>['items'][0];
 
 export default function CollectionsTable() {
   const [facultyId] = useQueryState('facultyId');
   const [programId] = useQueryState('programId');
   const [search] = useQueryState('search', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
-  
-  const [students, setStudents] = useState<Student[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (!facultyId) return;
-      
-      setLoading(true);
-      setError(null);
-      
-      try {
-        const result = await getAcceptedStudentsByFaculty(
-          Number(facultyId),
-          programId ? Number(programId) : undefined,
-          Number(page),
-          search || ''
-        );
-        
-        setStudents(result.data || []);
-        setTotalPages(result.meta.totalPages);
-        setTotalRecords(result.meta.total);
-      } catch (err) {
-        console.error('Error fetching students:', err);
-        setError('Failed to load students. Please try again.');
-        setStudents([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchStudents();
-  }, [facultyId, programId, page, search]);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['acceptedStudents', facultyId, programId, page, search],
+    queryFn: async () => {
+      if (!facultyId) return { items: [], totalPages: 1, totalItems: 0 };
+
+      return getAcceptedStudentsByFaculty(
+        facultyId ? Number(facultyId) : undefined,
+        programId ? Number(programId) : undefined,
+        Number(page),
+      );
+    },
+    enabled: !!facultyId,
+  });
 
   const handlePageChange = (newPage: number) => {
     setPage(String(newPage));
   };
 
-  // Status badge color based on status
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case 'ACCEPTED':
@@ -86,33 +66,33 @@ export default function CollectionsTable() {
 
   if (error) {
     return (
-      <Alert icon={<IconAlertCircle size={16} />} title="Error" color="red">
-        {error}
+      <Alert icon={<IconAlertCircle size={16} />} title='Error' color='red'>
+        Failed to load students. Please try again.
       </Alert>
     );
   }
 
   return (
-    <Paper shadow="xs" p="md">
-      <Group justify="space-between" mb="md">
+    <Paper shadow='xs' p='md'>
+      <Group justify='space-between' mb='md'>
         <Title order={4}>Accepted Students</Title>
-        <Text size="sm" fw={500}>
-          Total Records: {totalRecords}
+        <Text size='sm' fw={500}>
+          Total Records: {data?.totalItems || 0}
         </Text>
       </Group>
-      <Divider mb="md" />
+      <Divider mb='md' />
 
-      {loading ? (
+      {isLoading ? (
         <Stack>
-          <Skeleton height={40} radius="sm" />
-          <Skeleton height={40} radius="sm" />
-          <Skeleton height={40} radius="sm" />
-          <Skeleton height={40} radius="sm" />
-          <Skeleton height={40} radius="sm" />
+          <Skeleton height={40} radius='sm' />
+          <Skeleton height={40} radius='sm' />
+          <Skeleton height={40} radius='sm' />
+          <Skeleton height={40} radius='sm' />
+          <Skeleton height={40} radius='sm' />
         </Stack>
-      ) : students.length === 0 ? (
-        <Center p="xl">
-          <Text c="dimmed">No students found matching the criteria.</Text>
+      ) : data?.items.length === 0 ? (
+        <Center p='xl'>
+          <Text c='dimmed'>No students found matching the criteria.</Text>
         </Center>
       ) : (
         <>
@@ -129,7 +109,7 @@ export default function CollectionsTable() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {students.map((student) => (
+              {data?.items.map((student) => (
                 <Table.Tr key={student.id}>
                   <Table.Td>{student.no}</Table.Td>
                   <Table.Td>{formatNames(student.surname)}</Table.Td>
@@ -147,12 +127,12 @@ export default function CollectionsTable() {
             </Table.Tbody>
           </Table>
 
-          {totalPages > 1 && (
-            <Group justify="center" mt="xl">
-              <Pagination 
-                total={totalPages} 
-                value={Number(page)} 
-                onChange={handlePageChange} 
+          {data?.totalPages && data.totalPages > 1 && (
+            <Group justify='center' mt='xl'>
+              <Pagination
+                total={data.totalPages}
+                value={Number(page)}
+                onChange={handlePageChange}
               />
             </Group>
           )}

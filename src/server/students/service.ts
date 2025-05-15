@@ -2,6 +2,8 @@ import { students } from '@/db/schema';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import StudentRepository from './repository';
+import { and, eq, inArray, SQL } from 'drizzle-orm';
+import { getProgramsForFaculty } from '../programs/actions';
 
 type Student = typeof students.$inferInsert;
 
@@ -35,9 +37,23 @@ class StudentService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
-  
-  async getAcceptedByFaculty(params: { facultyId: number; programId?: number; page: number; search: string }) {
-    return withAuth(async () => this.repository.getAcceptedByFaculty(params), ['all']);
+
+  async getAcceptedByFaculty(params: {
+    facultyId?: number;
+    programId?: number;
+    page: number;
+    size?: number;
+  }) {
+    const { facultyId, programId, page = 1, size = 20 } = params;
+    return withAuth(
+      async () => this.repository.getAcceptedByFaculty({
+        facultyId,
+        programId,
+        page,
+        size,
+      }),
+      ['all'],
+    );
   }
 }
 

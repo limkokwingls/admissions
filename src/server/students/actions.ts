@@ -52,10 +52,18 @@ export async function updateStudentNames(
 }
 
 export async function getAcceptedStudentsByFaculty(
-  facultyId: number,
+  facultyId?: number,
   programId?: number,
   page: number = 1,
-  search: string = ''
 ) {
-  return service.getAcceptedByFaculty({ facultyId, programId, page, search });
+  const data = await service.getAcceptedByFaculty({
+    facultyId,
+    programId,
+    page,
+  });
+  return {
+    items: data.items,
+    totalPages: data.totalPages,
+    totalItems: data.totalItems,
+  };
 }
