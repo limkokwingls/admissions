@@ -1,74 +1,62 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useQueryState } from 'nuqs';
+import React from 'react';
+import { parseAsInteger, useQueryState } from 'nuqs';
+import { useQuery } from '@tanstack/react-query';
 import { getFaculties } from '@/server/faculties/actions';
-import { getProgramsForFaculty } from '@/server/programs/actions';
+import {
+  getAllPrograms,
+  getProgramsForFaculty,
+} from '@/server/programs/actions';
 import { Paper, Grid, Select, Button, Stack, Text } from '@mantine/core';
 
-type Faculty = {
-  id: number;
-  code: string;
-  name: string;
-};
-
-type Program = {
-  id: number;
-  facultyId: number;
-  code: string;
-  name: string;
-};
+type Faculty = NonNullable<
+  Awaited<ReturnType<typeof getFaculties>>
+>['items'][number];
+type Program = NonNullable<
+  Awaited<ReturnType<typeof getProgramsForFaculty>>
+>['items'][number];
 
 export default function Filters() {
   const [facultyId, setFacultyId] = useQueryState('facultyId');
   const [programId, setProgramId] = useQueryState('programId');
-  const [page, setPage] = useQueryState('page', { defaultValue: '1' });
+  const [page, setPage] = useQueryState<number>(
+    'page',
+    parseAsInteger.withDefault(1),
+  );
 
-  const [faculties, setFaculties] = React.useState<Faculty[]>([]);
-  const [programs, setPrograms] = React.useState<Program[]>([]);
+  const { data: facultiesData, isLoading: facultiesLoading } = useQuery({
+    queryKey: ['faculties'],
+    queryFn: () => getFaculties(1, ''),
+  });
 
-  useEffect(() => {
-    const loadFaculties = async () => {
-      const result = await getFaculties(1, '');
-      if (result && result.items) {
-        setFaculties(result.items);
-      }
-    };
+  const { data: programsData, isLoading: programsLoading } = useQuery({
+    queryKey: ['programs', facultyId],
+    queryFn: () =>
+      facultyId ? getProgramsForFaculty(Number(facultyId)) : getAllPrograms(),
+    enabled: !!facultyId,
+  });
 
-    loadFaculties();
-  }, []);
-
-  useEffect(() => {
-    const loadPrograms = async () => {
-      if (facultyId) {
-        const result = await getProgramsForFaculty(Number(facultyId));
-        if (result && result.items) {
-          setPrograms(result.items);
-          setProgramId(null);
-        }
-      } else {
-        setPrograms([]);
-        setProgramId(null);
-      }
-    };
-
-    loadPrograms();
+  React.useEffect(() => {
+    if (!facultyId) {
+      setProgramId(null);
+    }
   }, [facultyId, setProgramId]);
 
   const handleFacultyChange = (value: string | null) => {
     setFacultyId(value);
-    setPage('1');
+    setPage(1);
   };
 
   const handleProgramChange = (value: string | null) => {
     setProgramId(value);
-    setPage('1');
+    setPage(1);
   };
 
   const handleClearFilters = () => {
     setFacultyId(null);
     setProgramId(null);
-    setPage('1');
+    setPage(1);
   };
 
   return (
@@ -83,10 +71,12 @@ export default function Filters() {
               placeholder='Select Faculty'
               data={[
                 { value: '', label: 'All Faculties' },
-                ...faculties.map((faculty) => ({
-                  value: String(faculty.id),
-                  label: faculty.name,
-                })),
+                ...((facultiesData?.items ?? []) as Faculty[]).map(
+                  (faculty) => ({
+                    value: String(faculty.id),
+                    label: faculty.name,
+                  }),
+                ),
               ]}
               value={facultyId || ''}
               onChange={handleFacultyChange}
@@ -104,10 +94,12 @@ export default function Filters() {
               placeholder='All Programs'
               data={[
                 { value: '', label: 'All Programs' },
-                ...programs.map((program) => ({
-                  value: String(program.id),
-                  label: program.name,
-                })),
+                ...((programsData?.items ?? []) as Program[]).map(
+                  (program) => ({
+                    value: String(program.id),
+                    label: program.name,
+                  }),
+                ),
               ]}
               value={programId || ''}
               onChange={handleProgramChange}
