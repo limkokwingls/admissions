@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: '#000000',
     fontSize: 12,
+    paddingTop: 6,
   },
   bankRow: {
     flexDirection: 'row',
@@ -195,6 +196,31 @@ const styles = StyleSheet.create({
     marginTop: -5,
     marginBottom: 5,
     width: 150,
+  },
+  paymentPlanTable: {
+    marginTop: 10,
+    marginBottom: 15,
+    fontSize: 10,
+  },
+  paymentPlanHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#f5f5f5',
+    padding: 8,
+    borderBottom: '1pt solid #ddd',
+  },
+  paymentPlanRow: {
+    flexDirection: 'row',
+    padding: 8,
+    borderBottom: '0.5pt solid #eee',
+  },
+  paymentPlanCell: {
+    flex: 1,
+  },
+  paymentPlanTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#000000',
   },
 });
 
@@ -306,6 +332,32 @@ export default function NonSponsoredAcceptanceLetter({
             dates: {acceptanceLetterDate} and {registrationDateTo}.
           </PDFText>
         </PDFText>
+
+        <View style={styles.paymentPlanTable}>
+          <PDFText style={styles.paymentPlanTitle}>Payment Schedule:</PDFText>
+          <View
+            style={[styles.paymentPlanHeader, { borderTop: '1pt solid #ddd' }]}
+          >
+            <PDFText style={[styles.paymentPlanCell, styles.boldText]}>
+              Month
+            </PDFText>
+            <PDFText style={[styles.paymentPlanCell, styles.boldText]}>
+              Amount
+            </PDFText>
+          </View>
+          {PROGRAM_DATA[
+            student.program.level === 'certificate'
+              ? 'diploma'
+              : (student.program.level as 'diploma' | 'degree')
+          ].installments.semester1.map(
+            (item: { month: string; amount: string }, index: number) => (
+              <View key={index} style={styles.paymentPlanRow}>
+                <PDFText style={styles.paymentPlanCell}>{item.month}</PDFText>
+                <PDFText style={styles.paymentPlanCell}>{item.amount}</PDFText>
+              </View>
+            ),
+          )}
+        </View>
 
         <View style={styles.bankDetails}>
           <PDFText style={styles.bankDetailsTitle}>Bank Details:</PDFText>
