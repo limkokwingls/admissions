@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   signatureSection: {
-    marginTop: 480,
+    marginTop: 300,
     paddingTop: 10,
   },
   signatureName: {
@@ -205,13 +205,14 @@ const styles = StyleSheet.create({
   paymentPlanHeader: {
     flexDirection: 'row',
     backgroundColor: '#f5f5f5',
-    padding: 8,
+    padding: 2,
     borderBottom: '1pt solid #ddd',
   },
   paymentPlanRow: {
     flexDirection: 'row',
-    padding: 8,
+    padding: 2,
     borderBottom: '0.5pt solid #eee',
+    marginBottom: 0,
   },
   paymentPlanCell: {
     flex: 1,
@@ -326,7 +327,9 @@ export default function NonSponsoredAcceptanceLetter({
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
           <PDFText>{firstYearFee} 1st year</PDFText>
-          <PDFText>{otherYearsFee} 2nd to {lastYearText} year</PDFText>
+          <PDFText>
+            {otherYearsFee} 2nd to {lastYearText} year
+          </PDFText>
         </View>
 
         <PDFText style={styles.paragraph}>
@@ -337,7 +340,9 @@ export default function NonSponsoredAcceptanceLetter({
         </PDFText>
 
         <View style={styles.paymentPlanTable}>
-          <PDFText style={styles.paymentPlanTitle}>Payment Schedule:</PDFText>
+          <PDFText style={styles.paymentPlanTitle}>
+            First Year Payment Schedule:
+          </PDFText>
           <View
             style={[styles.paymentPlanHeader, { borderTop: '1pt solid #ddd' }]}
           >

@@ -114,7 +114,10 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
 
   const studyDuration = `${PROGRAM_DATA[programType].years} YEARS`;
-  const tuitionFeeText = `${PROGRAM_DATA[programType].firstYearFee} per annum`;
+  const firstYearFee = PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
+  const otherYearsFee = PROGRAM_DATA[programType]?.otherYearsFee || 'M##,###';
+  const programYears = PROGRAM_DATA[programType]?.years || 4;
+  const lastYearText = programYears === 3 ? '3rd' : '4th';
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';
@@ -154,7 +157,8 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
 
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
-          <PDFText>{tuitionFeeText}</PDFText>
+          <PDFText>{firstYearFee}    1st year</PDFText>
+          <PDFText>{otherYearsFee}    2nd to {lastYearText} year</PDFText>
         </View>
 
         <View style={styles.indentSection}>
