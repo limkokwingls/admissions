@@ -37,7 +37,7 @@ Font.register({
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 140,
+    paddingTop: 130,
     paddingBottom: 60,
     paddingHorizontal: 80,
     fontFamily: 'Tahoma',
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   signatureSection: {
-    marginTop: 20,
+    marginTop: 15,
   },
   signatureName: {
     fontWeight: 'bold',
@@ -157,8 +157,10 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
 
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
-          <PDFText>{firstYearFee}    1st year</PDFText>
-          <PDFText>{otherYearsFee}    2nd to {lastYearText} year</PDFText>
+          <PDFText>{firstYearFee} 1st year</PDFText>
+          <PDFText>
+            {otherYearsFee} 2nd to {lastYearText} year
+          </PDFText>
         </View>
 
         <View style={styles.indentSection}>
