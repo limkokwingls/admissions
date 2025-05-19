@@ -2,8 +2,19 @@ import React from 'react';
 import SearchForm from './home/SearchForm';
 import Image from 'next/image';
 import Link from 'next/link';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+
+  if (
+    session?.user &&
+    ['registry', 'admin'].includes(session?.user?.role || '')
+  ) {
+    redirect('/admin');
+  }
+
   return (
     <div className='flex min-h-[80vh] flex-col items-center justify-center px-4 py-12'>
       <div className='mb-12 text-center'>
