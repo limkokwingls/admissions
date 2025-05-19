@@ -119,18 +119,18 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
             </Box>
           </Group>
 
-          {student.status === 'Wait Listed' ||
-            (student.status === 'Private' && (
-              <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
-                <span>
-                  <PrintNonSponsoredAcceptance
-                    key='print-non-sponsored'
-                    student={student}
-                    properties={properties}
-                  />
-                </span>
-              </Tooltip>
-            ))}
+          {(student.status === 'Wait Listed' ||
+            student.status === 'Private') && (
+            <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
+              <span>
+                <PrintNonSponsoredAcceptance
+                  key='print-non-sponsored'
+                  student={student}
+                  properties={properties}
+                />
+              </span>
+            </Tooltip>
+          )}
 
           {student.status == 'Admitted' && (
             <Group>
