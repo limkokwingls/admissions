@@ -246,9 +246,10 @@ export default function NonSponsoredAcceptanceLetter({
   );
 
   const studyDuration = `${PROGRAM_DATA[programType]?.years || '4'} YEARS`;
-  const tuitionFeePerYear =
-    PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
-  const tuitionFeeText = `${tuitionFeePerYear} per annum`;
+  const firstYearFee = PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
+  const otherYearsFee = PROGRAM_DATA[programType]?.otherYearsFee || 'M##,###';
+  const programYears = PROGRAM_DATA[programType]?.years || 4;
+  const lastYearText = programYears === 3 ? '3rd' : '4th';
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';
@@ -324,7 +325,8 @@ export default function NonSponsoredAcceptanceLetter({
 
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
-          <PDFText>{tuitionFeeText}</PDFText>
+          <PDFText>{firstYearFee} 1st year</PDFText>
+          <PDFText>{otherYearsFee} 2nd to {lastYearText} year</PDFText>
         </View>
 
         <PDFText style={styles.paragraph}>
