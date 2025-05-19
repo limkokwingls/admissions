@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   signatureSection: {
-    marginTop: 300,
+    marginTop: 150,
     paddingTop: 10,
   },
   signatureName: {
@@ -341,7 +341,7 @@ export default function NonSponsoredAcceptanceLetter({
 
         <View style={styles.paymentPlanTable}>
           <PDFText style={styles.paymentPlanTitle}>
-            First Year Payment Schedule:
+            First Semester Payment Schedule:
           </PDFText>
           <View
             style={[styles.paymentPlanHeader, { borderTop: '1pt solid #ddd' }]}
@@ -358,6 +358,34 @@ export default function NonSponsoredAcceptanceLetter({
               ? 'diploma'
               : (student.program.level as 'diploma' | 'degree')
           ].installments.semester1.map(
+            (item: { month: string; amount: string }, index: number) => (
+              <View key={index} style={styles.paymentPlanRow}>
+                <PDFText style={styles.paymentPlanCell}>{item.month}</PDFText>
+                <PDFText style={styles.paymentPlanCell}>{item.amount}</PDFText>
+              </View>
+            ),
+          )}
+        </View>
+
+        <View style={styles.paymentPlanTable}>
+          <PDFText style={styles.paymentPlanTitle}>
+            Second Semester Payment Schedule:
+          </PDFText>
+          <View
+            style={[styles.paymentPlanHeader, { borderTop: '1pt solid #ddd' }]}
+          >
+            <PDFText style={[styles.paymentPlanCell, styles.boldText]}>
+              Month
+            </PDFText>
+            <PDFText style={[styles.paymentPlanCell, styles.boldText]}>
+              Amount
+            </PDFText>
+          </View>
+          {PROGRAM_DATA[
+            student.program.level === 'certificate'
+              ? 'diploma'
+              : (student.program.level as 'diploma' | 'degree')
+          ].installments.semester2.map(
             (item: { month: string; amount: string }, index: number) => (
               <View key={index} style={styles.paymentPlanRow}>
                 <PDFText style={styles.paymentPlanCell}>{item.month}</PDFText>
