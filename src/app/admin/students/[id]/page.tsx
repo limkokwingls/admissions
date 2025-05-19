@@ -139,6 +139,8 @@ function getBadgeColor(status: Student['status']) {
       return 'green';
     case 'Wait Listed':
       return 'yellow';
+    case 'Private':
+      return 'lime';
     case 'DQ':
       return 'red';
     default:

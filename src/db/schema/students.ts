@@ -3,7 +3,7 @@ import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';
 import { programs } from './programs';
 
-export const statusEnum = ['Admitted', 'Wait Listed', 'DQ'] as const;
+export const statusEnum = ['Admitted', 'Wait Listed', 'Private', 'DQ'] as const;
 
 export const students = sqliteTable(
   'students',
