@@ -7,7 +7,8 @@ type Installment = {
 
 type ProgramInfo = {
   years: number;
-  yearFee: string;
+  firstYearFee: string;
+  otherYearsFee: string;
   semesterFee: string;
   installments: {
     semester1: Installment[];
@@ -18,35 +19,37 @@ type ProgramInfo = {
 export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
   diploma: {
     years: 3,
-    yearFee: 'M28,250.00',
-    semesterFee: 'M14,125.00',
+    firstYearFee: 'M21,520.00',
+    otherYearsFee: 'M22,087.00',
+    semesterFee: 'M10,760.00',
     installments: {
       semester1: [
         { month: 'August (Upfront)', amount: 'M8,500.00' },
-        { month: 'September-October', amount: 'M2,812.50' },
-        { month: 'November-December', amount: 'M2,812.50' },
+        { month: 'September-October', amount: 'M1,130.00' },
+        { month: 'November-December', amount: 'M1,130.00' },
       ],
       semester2: [
         { month: 'February (Upfront)', amount: 'M8,500.00' },
-        { month: 'March-April', amount: 'M2,812.50' },
-        { month: 'May-June', amount: 'M2,812.50' },
+        { month: 'March-April', amount: 'M1,130.00' },
+        { month: 'May-June', amount: 'M1,130.00' },
       ],
     },
   },
   degree: {
     years: 4,
-    yearFee: 'M42,300.00',
-    semesterFee: 'M21,150.00',
+    firstYearFee: 'M22,087.00',
+    otherYearsFee: 'M28,316.00',
+    semesterFee: 'M11,043.50',
     installments: {
       semester1: [
         { month: 'August (Upfront)', amount: 'M12,000.00' },
-        { month: 'September-October', amount: 'M4,575.00' },
-        { month: 'November-December', amount: 'M4,575.00' },
+        { month: 'September-October', amount: 'M2,521.75' },
+        { month: 'November-December', amount: 'M2,521.75' },
       ],
       semester2: [
         { month: 'February (Upfront)', amount: 'M12,000.00' },
-        { month: 'March-April', amount: 'M4,575.00' },
-        { month: 'May-June', amount: 'M4,575.00' },
+        { month: 'March-April', amount: 'M2,521.75' },
+        { month: 'May-June', amount: 'M2,521.75' },
       ],
     },
   },

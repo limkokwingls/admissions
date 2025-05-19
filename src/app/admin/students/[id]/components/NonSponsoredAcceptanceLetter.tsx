@@ -246,7 +246,8 @@ export default function NonSponsoredAcceptanceLetter({
   );
 
   const studyDuration = `${PROGRAM_DATA[programType]?.years || '4'} YEARS`;
-  const tuitionFeePerYear = PROGRAM_DATA[programType]?.yearFee || 'M##,###';
+  const tuitionFeePerYear =
+    PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
   const tuitionFeeText = `${tuitionFeePerYear} per annum`;
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
