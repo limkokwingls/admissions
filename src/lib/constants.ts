@@ -20,7 +20,7 @@ export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
   diploma: {
     years: 3,
     firstYearFee: 'M21,520.00',
-    otherYearsFee: 'M22,087.00',
+    otherYearsFee: 'M22,088.00',
     semesterFee: 'M10,760.00',
     installments: {
       semester1: [
@@ -37,19 +37,19 @@ export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
   },
   degree: {
     years: 4,
-    firstYearFee: 'M22,087.00',
+    firstYearFee: 'M22,088.00',
     otherYearsFee: 'M28,316.00',
-    semesterFee: 'M11,043.50',
+    semesterFee: 'M11,044.00',
     installments: {
       semester1: [
-        { month: 'August (Upfront)', amount: 'M12,000.00' },
-        { month: 'September-October', amount: 'M2,521.75' },
-        { month: 'November-December', amount: 'M2,521.75' },
+        { month: 'August (Upfront)', amount: 'M8,500.00' },
+        { month: 'September-October', amount: 'M1,272.00' },
+        { month: 'November-December', amount: 'M1,272.00' },
       ],
       semester2: [
-        { month: 'February (Upfront)', amount: 'M12,000.00' },
-        { month: 'March-April', amount: 'M2,521.75' },
-        { month: 'May-June', amount: 'M2,521.75' },
+        { month: 'February (Upfront)', amount: 'M8,500.00' },
+        { month: 'March-April', amount: 'M1,272.00' },
+        { month: 'May-June', amount: 'M1,272.00' },
       ],
     },
   },
