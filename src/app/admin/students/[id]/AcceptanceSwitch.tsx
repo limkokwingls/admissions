@@ -1,6 +1,7 @@
 'use client';
 import { formatNames } from '@/lib/utils';
 import { trackAcceptanceChange } from '@/server/history/actions';
+import { getNameChangeByStudent } from '@/server/name-changes/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
 import { getStudent, updateStudent } from '@/server/students/actions';
 import {
@@ -26,8 +27,9 @@ import {
   IconExclamationCircle,
   IconReceipt,
 } from '@tabler/icons-react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
+import PrintNameChange from '../../name-changes/[id]/components/PrintNameChange';
 import PrintAdmission from './components/PrintAdmission';
 import PrintNonSponsoredAcceptance from './components/PrintNonSponsoredAcceptance';
 
@@ -37,6 +39,10 @@ type Props = {
 };
 
 export default function AcceptanceSwitch({ student, properties }: Props) {
+  const { data: nameChange } = useQuery({
+    queryKey: ['nameChange', student.id],
+    queryFn: () => getNameChangeByStudent(student.id),
+  });
   const theme = useMantineTheme();
   const [isAccepted, setIsAccepted] = useState<boolean>(student.accepted);
   const [tempIsAccepted, setTempIsAccepted] = useState<boolean>(
@@ -133,14 +139,28 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
           )}
 
           {student.status == 'Admitted' && (
-            <Group>
+            <Group gap='xs'>
               {isAccepted ? (
-                <PrintAdmission
-                  key='print'
-                  student={student}
-                  properties={properties}
-                />
+                <Tooltip label='Print Admission Letter'>
+                  <span>
+                    <PrintAdmission
+                      key='print'
+                      student={student}
+                      properties={properties}
+                    />
+                  </span>
+                </Tooltip>
               ) : null}
+              {nameChange && (
+                <Tooltip label='Print Name Change Letter'>
+                  <span>
+                    <PrintNameChange
+                      nameChange={nameChange}
+                      properties={properties}
+                    />
+                  </span>
+                </Tooltip>
+              )}
               <ActionIcon
                 variant='light'
                 color={isAccepted ? 'green' : 'gray'}

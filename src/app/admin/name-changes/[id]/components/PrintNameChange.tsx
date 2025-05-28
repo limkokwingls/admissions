@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { ActionIcon, Text } from '@mantine/core';
-import { IconPrinter } from '@tabler/icons-react';
-import { pdf } from '@react-pdf/renderer';
-import { getNameChange } from '@/server/name-changes/actions';
+import {
+  getNameChange,
+  trackNameChangePrinted,
+} from '@/server/name-changes/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { ActionIcon, Text } from '@mantine/core';
+import { pdf } from '@react-pdf/renderer';
+import { IconIdBadge2 } from '@tabler/icons-react';
+import { useState } from 'react';
 import NameChangeLetterPDF from './NameChangeLetterPdf';
-import { trackNameChangePrinted } from '@/server/name-changes/actions';
 
 type Props = {
   nameChange: NonNullable<Awaited<ReturnType<typeof getNameChange>>>;
@@ -86,12 +88,13 @@ export default function PrintNameChange({ nameChange, properties }: Props) {
 
   return (
     <ActionIcon
-      variant='default'
+      variant='light'
+      color='cyan'
       disabled={isGenerating}
       title='Print Name Change Letter'
       onClick={handlePrint}
     >
-      <IconPrinter size={'1rem'} />
+      <IconIdBadge2 size={'1rem'} />
     </ActionIcon>
   );
 }

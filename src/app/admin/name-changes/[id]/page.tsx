@@ -6,9 +6,10 @@ import {
 } from '@/components/adease';
 import { deleteNameChange, getNameChange } from '@/server/name-changes/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
-import { Tooltip } from '@mantine/core';
+import { Anchor, Tooltip } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import PrintNameChange from './components/PrintNameChange';
+import Link from 'next/link';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -39,7 +40,14 @@ export default async function NameChangeDetails({ params }: Props) {
         ]}
       />
       <DetailsViewBody>
-        <FieldView label='Student'>{nameChange.studentId}</FieldView>
+        <FieldView label='Student'>
+          <Anchor
+            component={Link}
+            href={`/admin/students/${nameChange.studentId}`}
+          >
+            {nameChange.studentId}
+          </Anchor>
+        </FieldView>
         <FieldView label='Old Name'>{nameChange.oldName}</FieldView>
         <FieldView label='New Name'>{nameChange.newName}</FieldView>
       </DetailsViewBody>

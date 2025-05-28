@@ -8,6 +8,13 @@ type NameChange = typeof nameChanges.$inferInsert;
 class NameChangeService {
   constructor(private readonly repository = new NameChangeRepository()) {}
 
+  async getByStudent(studentId: string) {
+    return withAuth(
+      async () => this.repository.findByStudent(studentId),
+      ['registry'],
+    );
+  }
+
   async first() {
     return withAuth(async () => this.repository.findFirst(), ['registry']);
   }
