@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   signatureSection: {
-    marginTop: 150,
+    marginTop: 100,
     paddingTop: 10,
   },
   signatureName: {
