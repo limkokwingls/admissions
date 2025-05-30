@@ -5,6 +5,8 @@ import { programs } from './programs';
 
 export const statusEnum = ['Admitted', 'Wait Listed', 'Private', 'DQ'] as const;
 
+export const sponsors = ['Higher Life', 'Other'] as const;
+
 export const students = sqliteTable(
   'students',
   {
@@ -16,6 +18,7 @@ export const students = sqliteTable(
     names: text().notNull(),
     candidateNo: text(),
     receiptNo: text(),
+    sponsor: text({ enum: sponsors }),
     phoneNumber: text().notNull(),
     status: text({ enum: statusEnum }).notNull(),
     accepted: integer({ mode: 'boolean' }).notNull().default(false),

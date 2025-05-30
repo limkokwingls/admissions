@@ -9,6 +9,8 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
+  Flex,
   Group,
   Modal,
   NumberInput,
@@ -50,18 +52,20 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
   );
   const [receiptNo, setReceiptNo] = useState<string>(student.receiptNo || '');
   const [receiptError, setReceiptError] = useState<string>('');
+  const [isSponsored, setIsSponsored] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
 
   const statusColor = isAccepted ? theme.colors.green[6] : theme.colors.gray[6];
-
   function update() {
     const status = tempIsAccepted;
     const previousStatus = isAccepted;
 
-    if (status && !receiptNo.trim()) {
-      setReceiptError('Receipt number is required when accepting a student');
+    if (status && !receiptNo.trim() && !isSponsored) {
+      setReceiptError(
+        'Receipt number is required when accepting a student (unless sponsored by Higher Life Foundation)',
+      );
       return;
     }
 
@@ -73,7 +77,8 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
         await updateStudent(student.id, {
           ...student,
           accepted: status,
-          receiptNo: receiptNo.trim() || null,
+          sponsor: isSponsored ? 'Higher Life' : null,
+          receiptNo: isSponsored ? null : receiptNo.trim(),
         });
 
         await trackAcceptanceChange(student.id, previousStatus, status);
@@ -111,7 +116,7 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
   return (
     <>
       <Card shadow='sm' padding='md' radius='md' withBorder>
-        <Group justify='space-between' wrap='nowrap'>
+        <Flex justify='space-between' wrap='nowrap'>
           <Group gap='xs'>
             {isAccepted ? (
               <IconCircleCheck color={theme.colors.green[6]} />
@@ -124,55 +129,56 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
               </Text>
             </Box>
           </Group>
+          <Group gap='xs'>
+            {(student.status === 'Wait Listed' ||
+              student.status === 'Private') && (
+              <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
+                <span>
+                  <PrintNonSponsoredAcceptance
+                    key='print-non-sponsored'
+                    student={student}
+                    properties={properties}
+                  />
+                </span>
+              </Tooltip>
+            )}
 
-          {(student.status === 'Wait Listed' ||
-            student.status === 'Private') && (
-            <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
-              <span>
-                <PrintNonSponsoredAcceptance
-                  key='print-non-sponsored'
-                  student={student}
-                  properties={properties}
-                />
-              </span>
-            </Tooltip>
-          )}
-
-          {student.status == 'Admitted' && (
-            <Group gap='xs'>
-              {isAccepted ? (
-                <Tooltip label='Print Admission Letter'>
-                  <span>
-                    <PrintAdmission
-                      key='print'
-                      student={student}
-                      properties={properties}
-                    />
-                  </span>
-                </Tooltip>
-              ) : null}
-              {nameChange && (
-                <Tooltip label='Print Name Change Letter'>
-                  <span>
-                    <PrintNameChange
-                      nameChange={nameChange}
-                      properties={properties}
-                    />
-                  </span>
-                </Tooltip>
-              )}
-              <ActionIcon
-                variant='light'
-                color={isAccepted ? 'green' : 'gray'}
-                onClick={open}
-                disabled={isPending}
-                loading={isPending}
-              >
-                <IconEdit size={'1rem'} />
-              </ActionIcon>
-            </Group>
-          )}
-        </Group>
+            {(student.status == 'Admitted' || student.status === 'Private') && (
+              <>
+                {isAccepted ? (
+                  <Tooltip label='Print Admission Letter'>
+                    <span>
+                      <PrintAdmission
+                        key='print'
+                        student={student}
+                        properties={properties}
+                      />
+                    </span>
+                  </Tooltip>
+                ) : null}
+                {nameChange && (
+                  <Tooltip label='Print Name Change Letter'>
+                    <span>
+                      <PrintNameChange
+                        nameChange={nameChange}
+                        properties={properties}
+                      />
+                    </span>
+                  </Tooltip>
+                )}
+                <ActionIcon
+                  variant='light'
+                  color={isAccepted ? 'green' : 'gray'}
+                  onClick={open}
+                  disabled={isPending}
+                  loading={isPending}
+                >
+                  <IconEdit size={'1rem'} />
+                </ActionIcon>
+              </>
+            )}
+          </Group>
+        </Flex>
       </Card>
 
       <Modal
@@ -188,7 +194,6 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
             <Text>{formatNames(`${student.surname} ${student.names}`)}</Text>
           </Paper>
         </Box>
-
         <Switch
           checked={tempIsAccepted}
           onChange={(event) => setTempIsAccepted(event.currentTarget.checked)}
@@ -197,40 +202,56 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
           label={tempIsAccepted ? 'Accepted' : 'Not Accepted'}
           description={`Toggle to mark as ${tempIsAccepted ? 'not accepted' : 'accepted'}`}
           disabled={isPending}
-        />
-
+        />{' '}
         {tempIsAccepted && (
           <Box mt='md'>
-            <NumberInput
-              required
-              label='Receipt Number'
-              placeholder='Receipt Number'
-              value={receiptNo}
-              prefix='SR-'
-              onChange={(value) => {
-                if (value) {
-                  setReceiptNo(`SR-${value}`);
-                } else {
-                  setReceiptNo(value?.toString().replace('SR-', ''));
+            <Checkbox
+              label='This student is sponsored by Higher Life Foundation'
+              checked={isSponsored}
+              onChange={(event) => {
+                setIsSponsored(event.currentTarget.checked);
+                if (event.currentTarget.checked) {
+                  setReceiptNo('');
+                  setReceiptError('');
                 }
-                setReceiptError('');
               }}
-              error={receiptError}
               disabled={isPending}
-              leftSection={<IconReceipt size={16} />}
-              leftSectionPointerEvents='none'
-              data-autofocus
+              mb='md'
             />
+
+            {!isSponsored && (
+              <NumberInput
+                required
+                label='Receipt Number'
+                placeholder='Receipt Number'
+                value={receiptNo}
+                prefix='SR-'
+                onChange={(value) => {
+                  if (value) {
+                    setReceiptNo(`SR-${value}`);
+                  } else {
+                    setReceiptNo(value?.toString().replace('SR-', ''));
+                  }
+                  setReceiptError('');
+                }}
+                error={receiptError}
+                disabled={isPending}
+                leftSection={<IconReceipt size={16} />}
+                leftSectionPointerEvents='none'
+                data-autofocus
+              />
+            )}
           </Box>
         )}
-
         <Group justify='flex-end' mt='lg'>
+          {' '}
           <Button
             variant='default'
             onClick={() => {
               setTempIsAccepted(isAccepted);
               setReceiptNo(student.receiptNo || '');
               setReceiptError('');
+              setIsSponsored(false);
               close();
             }}
             disabled={isPending}
