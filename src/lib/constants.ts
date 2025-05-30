@@ -57,6 +57,10 @@ export const PROGRAM_DATA: Record<Program, ProgramInfo> = {
 
 export const BANK_DETAILS = [
   { label: 'Bank', value: 'Standard Lesotho Bank' },
+  {
+    label: 'Account Holder',
+    value: 'Limkokwing University of Creative Technology',
+  },
   { label: 'Account No', value: '9080003987813' },
   { label: 'Branch', value: 'City Branch (060667)' },
   { label: 'Account Type', value: 'Current Account' },

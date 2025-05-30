@@ -2,7 +2,7 @@
 import { getCurrentProperties } from '@/server/properties/actions';
 import { getStudent } from '@/server/students/actions';
 import { extractReference } from '@/lib/utils';
-import { PROGRAM_DATA } from '@/lib/constants';
+import { PROGRAM_DATA, BANK_DETAILS } from '@/lib/constants';
 import {
   Document,
   Font,
@@ -282,7 +282,6 @@ export default function NonSponsoredAcceptanceLetter({
             <Image src='/images/logo.png' style={styles.logo} />
           </View>
         </View>
-
         <View style={styles.header}>
           <PDFText style={styles.headerText}>
             ACCEPTANCE LETTER (SELF-SPONSORED)
@@ -296,12 +295,10 @@ export default function NonSponsoredAcceptanceLetter({
             }}
           />
         </View>
-
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <PDFText style={styles.date}>Date: {letterDate}</PDFText>
           <PDFText style={styles.reference}>Ref: {referenceNumber}</PDFText>
         </View>
-
         <View style={styles.greeting}>
           <PDFText>
             Dear{' '}
@@ -310,7 +307,6 @@ export default function NonSponsoredAcceptanceLetter({
             </PDFText>
           </PDFText>
         </View>
-
         <PDFText style={styles.paragraph}>
           Congratulations! We are pleased to inform you that you have been
           accepted for enrolment in{' '}
@@ -318,12 +314,10 @@ export default function NonSponsoredAcceptanceLetter({
           University of Creative Technology, Lesotho. The duration of the study
           is <PDFText style={styles.boldText}>{studyDuration}</PDFText>.
         </PDFText>
-
         <PDFText style={styles.paragraph}>
           As a self-sponsored student, you are required to observe and avail
           yourself of the following:
         </PDFText>
-
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
           <PDFText>{firstYearFee} 1st year</PDFText>
@@ -331,14 +325,12 @@ export default function NonSponsoredAcceptanceLetter({
             {otherYearsFee} 2nd to {lastYearText} year
           </PDFText>
         </View>
-
         <PDFText style={styles.paragraph}>
           <PDFText style={styles.boldText}>
             Important: All payments must strictly be made between the following
             dates: {acceptanceLetterDate} and {registrationDateTo}.
           </PDFText>
         </PDFText>
-
         <View style={styles.paymentPlanTable}>
           <PDFText style={styles.paymentPlanTitle}>
             First Semester Payment Schedule:
@@ -366,7 +358,6 @@ export default function NonSponsoredAcceptanceLetter({
             ),
           )}
         </View>
-
         <View style={styles.paymentPlanTable}>
           <PDFText style={styles.paymentPlanTitle}>
             Second Semester Payment Schedule:
@@ -393,41 +384,25 @@ export default function NonSponsoredAcceptanceLetter({
               </View>
             ),
           )}
-        </View>
-
+        </View>{' '}
         <View style={styles.bankDetails}>
           <PDFText style={styles.bankDetailsTitle}>Bank Details:</PDFText>
-          <View style={styles.bankRow}>
-            <PDFText style={styles.bankLabel}>Bank Name:</PDFText>
-            <PDFText style={styles.bankValue}>Standard Lesotho Bank</PDFText>
-          </View>
-          <View style={styles.bankRow}>
-            <PDFText style={styles.bankLabel}>Account Name:</PDFText>
-            <PDFText style={styles.bankValue}>
-              Limkokwing University of Creative Technology
-            </PDFText>
-          </View>
-          <View style={styles.bankRow}>
-            <PDFText style={styles.bankLabel}>Account Number:</PDFText>
-            <PDFText style={styles.bankValue}>0140053555401</PDFText>
-          </View>
-          <View style={styles.bankRow}>
-            <PDFText style={styles.bankLabel}>Branch Code:</PDFText>
-            <PDFText style={styles.bankValue}>060367</PDFText>
-          </View>
+          {BANK_DETAILS.map((detail, index) => (
+            <View key={index} style={styles.bankRow}>
+              <PDFText style={styles.bankLabel}>{detail.label}:</PDFText>
+              <PDFText style={styles.bankValue}>{detail.value}</PDFText>
+            </View>
+          ))}
         </View>
-
         <PDFText style={styles.paragraph}>
           Should you need any further clarification, please do not hesitate to
           contact us at {contactPhoneNumber} or forward your inquiries to{' '}
           {contactEmail}
         </PDFText>
-
         <PDFText style={styles.paragraph}>
           Thank you in advance, and we warmly welcome you to Limkokwing
           University-Lesotho.
         </PDFText>
-
         <View style={styles.signatureSection}>
           <PDFText style={{ zIndex: 100, marginBottom: 10, fontSize: 11 }}>
             Yours sincerely,
