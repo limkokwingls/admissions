@@ -205,19 +205,21 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
         />{' '}
         {tempIsAccepted && (
           <Box mt='md'>
-            <Checkbox
-              label='This student is sponsored by Higher Life Foundation'
-              checked={isSponsored}
-              onChange={(event) => {
-                setIsSponsored(event.currentTarget.checked);
-                if (event.currentTarget.checked) {
-                  setReceiptNo('');
-                  setReceiptError('');
-                }
-              }}
-              disabled={isPending}
-              mb='md'
-            />
+            {student.status === 'Private' && (
+              <Checkbox
+                label='This student is sponsored by Higher Life Foundation'
+                checked={isSponsored}
+                onChange={(event) => {
+                  setIsSponsored(event.currentTarget.checked);
+                  if (event.currentTarget.checked) {
+                    setReceiptNo('');
+                    setReceiptError('');
+                  }
+                }}
+                disabled={isPending}
+                mb='md'
+              />
+            )}
 
             {!isSponsored && (
               <NumberInput
