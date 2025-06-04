@@ -29,3 +29,11 @@ export async function updateCall(id: string, call: Call) {
 export async function deleteCall(id: string) {
   return service.delete(id);
 }
+
+export async function updateCallStatus(id: string, status: CallStatus) {
+  return service.updateCallStatus(id, status);
+}
+
+export async function incrementCallCount(id: string) {
+  return service.incrementCallCount(id);
+}

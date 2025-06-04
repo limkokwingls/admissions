@@ -7,20 +7,28 @@ export default class CallRepository extends BaseRepository<typeof calls, 'id'> {
   constructor() {
     super(calls, 'id');
   }
-
   override async findById(id: string) {
     return db.query.calls.findFirst({
       where: eq(calls.id, id),
-      with: { student: true },
+      with: {
+        student: {
+          with: { program: true },
+        },
+        calledByUser: true,
+      },
     });
   }
-
   override async query(options: QueryOptions<typeof calls>) {
     const criteria = this.buildQueryCriteria(options);
 
     const items = await db.query.calls.findMany({
       ...criteria,
-      with: { student: true },
+      with: {
+        student: {
+          with: { program: true },
+        },
+        calledByUser: true,
+      },
     });
 
     return await this.createPaginatedResult(items, criteria);
