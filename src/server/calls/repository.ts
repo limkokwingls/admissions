@@ -1,4 +1,4 @@
-import BaseRepository from '@/server/base/BaseRepository';
+import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
 import { calls } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
@@ -13,6 +13,17 @@ export default class CallRepository extends BaseRepository<typeof calls, 'id'> {
       where: eq(calls.id, id),
       with: { student: true },
     });
+  }
+
+  override async query(options: QueryOptions<typeof calls>) {
+    const criteria = this.buildQueryCriteria(options);
+
+    const items = await db.query.calls.findMany({
+      ...criteria,
+      with: { student: true },
+    });
+
+    return await this.createPaginatedResult(items, criteria);
   }
 }
 

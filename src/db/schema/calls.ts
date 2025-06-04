@@ -1,11 +1,6 @@
-import {
-  sqliteTable,
-  integer,
-  text,
-  index,
-} from 'drizzle-orm/sqlite-core';
+import { sqliteTable, integer, text, index } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';
-import { sql } from 'drizzle-orm';
+import { sql, relations } from 'drizzle-orm';
 import { students } from './students';
 import { users } from './auth';
 
@@ -34,3 +29,14 @@ export const calls = sqliteTable(
     };
   },
 );
+
+export const callsRelations = relations(calls, ({ one }) => ({
+  student: one(students, {
+    fields: [calls.studentId],
+    references: [students.id],
+  }),
+  calledByUser: one(users, {
+    fields: [calls.calledBy],
+    references: [users.id],
+  }),
+}));

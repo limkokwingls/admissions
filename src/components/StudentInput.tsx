@@ -3,7 +3,8 @@
 import { Select } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { searchStudent } from '@/server/students/actions';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useDebouncedValue } from '@mantine/hooks';
 
 type StudentSelectValue = string | null;
 
@@ -28,12 +29,13 @@ export default function StudentInput({
   disabled,
   description,
 }: StudentSelectProps) {
-  const [searchValue, setSearchValue] = useState('');
+  const [internalSearchValue, setInternalSearchValue] = useState('');
+  const [debouncedSearchValue] = useDebouncedValue(internalSearchValue, 300);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['students', searchValue],
-    queryFn: () => searchStudent(searchValue),
-    enabled: !!searchValue,
+    queryKey: ['students', debouncedSearchValue],
+    queryFn: () => searchStudent(debouncedSearchValue),
+    enabled: !!debouncedSearchValue,
   });
 
   const selectData = [];
@@ -53,6 +55,10 @@ export default function StudentInput({
     }
   };
 
+  const handleSearchChange = useCallback((searchValue: string) => {
+    setInternalSearchValue(searchValue);
+  }, []);
+
   return (
     <Select
       label={label}
@@ -62,15 +68,16 @@ export default function StudentInput({
       onChange={handleChange}
       searchable
       clearable
-      searchValue={searchValue}
-      onSearchChange={setSearchValue}
+      onSearchChange={handleSearchChange}
       name={name}
       error={error}
       required={required}
       disabled={disabled || isLoading}
       description={description}
       nothingFoundMessage={
-        searchValue && !isLoading ? 'No students found' : 'Type to search'
+        debouncedSearchValue && !isLoading
+          ? 'No students found'
+          : 'Type to search'
       }
     />
   );

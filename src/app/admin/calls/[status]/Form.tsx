@@ -3,6 +3,7 @@
 import { Form } from '@/components/adease';
 import StudentInput from '@/components/StudentInput';
 import { calls, CallStatus } from '@/db/schema';
+import { Input, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 
@@ -19,11 +20,7 @@ type Props = {
   title?: string;
 };
 
-export default function CallForm({
-  onSubmit,
-  defaultValues,
-  title,
-}: Props) {
+export default function CallForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
 
   return (
@@ -39,7 +36,7 @@ export default function CallForm({
     >
       {(form) => (
         <>
-          <StudentInput {...form.getInputProps('studentId')} />
+          <TextInput label='Student ID' {...form.getInputProps('studentId')} />
         </>
       )}
     </Form>
