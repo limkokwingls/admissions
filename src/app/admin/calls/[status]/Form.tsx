@@ -1,9 +1,8 @@
 'use client';
 
 import { Form } from '@/components/adease';
-import StudentInput from '@/components/StudentInput';
 import { calls, CallStatus } from '@/db/schema';
-import { Input, TextInput } from '@mantine/core';
+import { TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 

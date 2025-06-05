@@ -112,14 +112,13 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
     'dd MMM yyyy',
   );
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
-
   // Special case for BHRA program which takes 3 years and doesn't have a first year
   const isBHRA = student.program?.code === 'BHRA';
   const programYears = isBHRA ? 3 : PROGRAM_DATA[programType]?.years || 4;
   const studyDuration = `${programYears} YEARS`;
   const firstYearFee = PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
   const otherYearsFee = PROGRAM_DATA[programType]?.otherYearsFee || 'M##,###';
-  const lastYearText = programYears === 3 ? '3rd' : '4th';
+  const lastYearText = isBHRA ? '4th' : programYears === 3 ? '3rd' : '4th';
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';

@@ -8,8 +8,8 @@ import { CallStatus } from '@/db/schema';
 type Props = {
   callId: string;
   currentStatus: CallStatus;
-  onUpdateStatus: (callId: string, status: CallStatus) => Promise<any>;
-  onIncrementCall: (callId: string) => Promise<any>;
+  onUpdateStatus: (callId: string, status: CallStatus) => Promise<void>;
+  onIncrementCall: (callId: string) => Promise<void>;
 };
 
 export default function CallActions({
