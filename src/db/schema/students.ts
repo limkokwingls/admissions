@@ -45,3 +45,66 @@ export const studentsRelations = relations(students, ({ one }) => ({
     references: [programs.id],
   }),
 }));
+
+export const nextOfKinRelationships = [
+  'Father',
+  'Mother',
+  'Brother',
+  'Sister',
+  'Spouse',
+  'Child',
+  'Other',
+] as const;
+
+export const maritalStatuses = [
+  'Single',
+  'Married',
+  'Divorced',
+  'Widowed',
+  'Other',
+] as const;
+
+export const genders = ['Male', 'Female'] as const;
+export const religions = [
+  'Christian',
+  'Muslim',
+  'Hindu',
+  'Buddhist',
+  'Other',
+] as const;
+
+export const studentInfo = sqliteTable(
+  'student_info',
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
+    studentId: text()
+      .notNull()
+      .references(() => students.id, { onDelete: 'cascade' }),
+    nationalId: text().notNull(),
+    reference: text(),
+    name: text().notNull(),
+    email: text().notNull().unique(),
+    phone1: text().notNull(),
+    phone2: text(),
+    religion: text({ enum: religions }).notNull(),
+    dateOfBirth: integer({ mode: 'timestamp' }).notNull(),
+    gender: text({ enum: genders }).notNull(),
+    maritalStatus: text({ enum: maritalStatuses }).notNull(),
+    birthPlace: text().notNull(),
+    homeTown: text().notNull(),
+    highSchool: text().notNull(),
+    nextOfKinName: text().notNull(),
+    nextOfKinPhone: text().notNull(),
+    nextOfKinRelationship: text({ enum: nextOfKinRelationships }).notNull(),
+    paid: integer({ mode: 'boolean' }).notNull().default(false),
+    createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
+    updatedAt: integer({ mode: 'timestamp' }),
+  },
+  (table) => ({
+    emailIdx: index('student_email_idx').on(table.email),
+    nationalIdIdx: index('student_national_id_idx').on(table.nationalId),
+    nameIdx: index('student_name_idx').on(table.name),
+  }),
+);
