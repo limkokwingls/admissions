@@ -1,6 +1,7 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import * as schema from './schema';
+import * as relations from './relations';
 import 'dotenv/config';
 
 const client = process.env.LOCAL_DATABASE_URL
@@ -13,7 +14,7 @@ const client = process.env.LOCAL_DATABASE_URL
     });
 
 const db = drizzle(client, {
-  schema: { ...schema },
+  schema: { ...schema, ...relations },
   casing: 'snake_case',
 });
 
