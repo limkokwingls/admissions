@@ -3,7 +3,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import * as XLSX from 'xlsx';
-import { students } from '../db/schema';
+import { students } from '../src/db/schema';
 import chalk from 'chalk';
 import { confirm } from '@inquirer/prompts';
 import StudentRepository from '@/server/students/repository';
