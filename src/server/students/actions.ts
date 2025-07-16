@@ -3,7 +3,6 @@
 import { students } from '@/db/schema';
 import { createNameChange } from '../name-changes/actions';
 import { studentsService as service } from './service';
-import { parseReference } from '@/lib/utils';
 
 type Student = typeof students.$inferInsert;
 
@@ -11,7 +10,9 @@ export async function getStudent(id: string) {
   return service.get(id);
 }
 
-export async function getStudentByReference(reference: string) {}
+export async function getStudentByReference(reference: string) {
+  return service.getByReference(reference);
+}
 
 export async function searchStudent(q: string) {
   return service.getAll({ page: 1, search: q });

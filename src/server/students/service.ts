@@ -16,6 +16,13 @@ class StudentService {
     return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
+  async getByReference(reference: string) {
+    return withAuth(
+      async () => this.repository.findByReference(reference),
+      ['all'],
+    );
+  }
+
   async getAll(params: QueryOptions<typeof students>) {
     return withAuth(async () => this.repository.query(params), ['all']);
   }

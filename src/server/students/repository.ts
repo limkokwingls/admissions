@@ -23,6 +23,18 @@ export default class StudentRepository extends BaseRepository<
     });
   }
 
+  async findByReference(reference: string) {
+    return db.query.students.findFirst({
+      where: eq(students.reference, reference),
+      with: {
+        program: {
+          with: { faculty: true },
+        },
+        studentInfo: true,
+      },
+    });
+  }
+
   async findByUniqueIdentifiers(student: typeof students.$inferInsert) {
     if (student.candidateNo) {
       const found = await db.query.students.findFirst({
