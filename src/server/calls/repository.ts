@@ -7,6 +7,16 @@ export default class CallRepository extends BaseRepository<typeof calls, 'id'> {
   constructor() {
     super(calls, 'id');
   }
+
+  async findByStudentId(studentId: string) {
+    return db.query.calls.findMany({
+      where: eq(calls.studentId, studentId),
+      with: {
+        calledByUser: true,
+      },
+    });
+  }
+
   override async findById(id: string) {
     return db.query.calls.findFirst({
       where: eq(calls.id, id),

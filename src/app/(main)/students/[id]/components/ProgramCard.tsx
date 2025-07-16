@@ -1,17 +1,20 @@
 import { Card } from '@/components/ui/card';
 import { getStudent } from '@/server/students/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
 import { GraduationCap } from 'lucide-react';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default function ProgramCard({ student }: Props) {
+export default function ProgramCard({ student, calls }: Props) {
   const { program } = student;
-  const isAdmitted = student.status === 'Admitted';
+  const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
+  const isAdmitted = student.status === 'Admitted' || hasAcceptedCall;
   const isWaitlisted = student.status === 'Wait Listed';
 
-  const isProgramAdmitted = isAdmitted || isWaitlisted;
+  const isProgramAdmitted = isAdmitted || (isWaitlisted && !hasAcceptedCall);
 
   return (
     <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
@@ -39,7 +42,7 @@ export default function ProgramCard({ student }: Props) {
               </span>{' '}
               You have been admitted to study {program?.name} at Limkokwing
               University of Creative Technology Lesotho.{' '}
-              {isWaitlisted
+              {isWaitlisted && !hasAcceptedCall
                 ? 'Unfortunately, you have not secured NMDS sponsorship.'
                 : 'Your education will be fully sponsored by NMDS.'}
             </p>

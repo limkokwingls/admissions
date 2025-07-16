@@ -10,6 +10,10 @@ export async function getCall(id: string) {
   return service.get(id);
 }
 
+export async function getCallsByStudentId(studentId: string) {
+  return service.getByStudentId(studentId);
+}
+
 export async function getCalls(
   status: CallStatus,
   page: number = 1,

@@ -14,7 +14,14 @@ class CallService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), ['registry']);
+    return withAuth(async () => this.repository.findById(id), ['all']);
+  }
+
+  async getByStudentId(studentId: string) {
+    return withAuth(
+      async () => this.repository.findByStudentId(studentId),
+      ['all'],
+    );
   }
 
   async getAll(params: QueryOptions<typeof calls>) {

@@ -1,5 +1,6 @@
 import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
 import { incrementPageVisit } from '@/server/analytics/actions';
 import { Container } from '@/components/ui/container';
 import { notFound } from 'next/navigation';
@@ -35,6 +36,7 @@ export default async function StudentPage({ params }: Props) {
   const { id } = await params;
   const student = await getStudent(id);
   const properties = await getCurrentProperties();
+  const calls = await getCallsByStudentId(id);
 
   if (!student) {
     return notFound();
@@ -42,7 +44,8 @@ export default async function StudentPage({ params }: Props) {
 
   await incrementPageVisit(student.id);
 
-  const isAdmitted = student.status === 'Admitted';
+  const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
+  const isAdmitted = student.status === 'Admitted' || hasAcceptedCall;
   const isWaitlisted = student.status === 'Wait Listed';
 
   if (!properties) {
@@ -51,16 +54,20 @@ export default async function StudentPage({ params }: Props) {
 
   return (
     <div className='min-h-screen bg-neutral-50 dark:bg-neutral-950'>
-      <Header student={student} />
+      <Header student={student} calls={calls} />
       <Container width='xl'>
         <div className='mx-auto max-w-4xl py-8 pb-12'>
-          <ProgramCard student={student} />
+          <ProgramCard student={student} calls={calls} />
           <div className='mt-6 flex flex-col gap-2'>
-            {isWaitlisted && (
+            {isWaitlisted && !isAdmitted && (
               <WaitlistedCard student={student} properties={properties} />
             )}
             {isAdmitted && (
-              <SponsoredCard student={student} properties={properties} />
+              <SponsoredCard
+                student={student}
+                properties={properties}
+                calls={calls}
+              />
             )}
 
             <div className='mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50'>

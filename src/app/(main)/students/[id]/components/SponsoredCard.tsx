@@ -5,13 +5,15 @@ import { Suspense } from 'react';
 import { formatDate } from 'date-fns';
 import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
   properties: NonNullable<Awaited<ReturnType<typeof getCurrentProperties>>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default function SponsoredCard({ student, properties }: Props) {
+export default function SponsoredCard({ student, properties, calls }: Props) {
   return (
     <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
       <div className='p-6'>
@@ -119,6 +121,7 @@ export default function SponsoredCard({ student, properties }: Props) {
                   <AcceptanceLetterButton
                     student={student}
                     properties={properties}
+                    calls={calls}
                   />
                 </Suspense>
               </div>

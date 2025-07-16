@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { getStudent } from '@/server/students/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
 import { incrementLetterDownload } from '@/server/analytics/actions';
 import {
   Document,
@@ -139,10 +140,18 @@ const styles = StyleSheet.create({
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
   properties: NonNullable<Awaited<ReturnType<typeof getCurrentProperties>>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default function AcceptanceLetterButton({ student, properties }: Props) {
-  if (!student || student.status !== 'Admitted') {
+export default function AcceptanceLetterButton({
+  student,
+  properties,
+  calls,
+}: Props) {
+  const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
+  const isAdmitted = student.status === 'Admitted' || hasAcceptedCall;
+
+  if (!student || !isAdmitted) {
     return null;
   }
 
@@ -159,7 +168,11 @@ export default function AcceptanceLetterButton({ student, properties }: Props) {
   return (
     <PDFDownloadLink
       document={
-        <AcceptanceLetterPDF student={student} properties={properties} />
+        <AcceptanceLetterPDF
+          student={student}
+          properties={properties}
+          calls={calls}
+        />
       }
       fileName={`acceptance-letter-${student.surname}-${student.names}.pdf`}
       style={{ textDecoration: 'none' }}

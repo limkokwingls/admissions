@@ -16,6 +16,7 @@ export const calls = sqliteTable(
       .primaryKey(),
     studentId: text()
       .notNull()
+      .unique()
       .references(() => students.id, { onDelete: 'cascade' }),
     callCount: integer(),
     calledBy: text().references(() => users.id, { onDelete: 'cascade' }),

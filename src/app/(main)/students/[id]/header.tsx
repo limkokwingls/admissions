@@ -1,5 +1,6 @@
 import React from 'react';
 import { getStudent } from '@/server/students/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Container } from '@/components/ui/container';
@@ -7,10 +8,12 @@ import { CheckCircle, AlertCircle, GraduationCap } from 'lucide-react';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default function header({ student }: Props) {
-  const isAdmitted = student.status === 'Admitted';
+export default function header({ student, calls }: Props) {
+  const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
+  const isAdmitted = student.status === 'Admitted' || hasAcceptedCall;
   const isWaitlisted = student.status === 'Wait Listed';
 
   const isProgramAdmitted = isAdmitted || isWaitlisted;
