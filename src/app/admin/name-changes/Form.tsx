@@ -5,29 +5,33 @@ import { Form } from '@/components/adease';
 import { TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import z from 'zod';
 
 type NameChange = typeof nameChanges.$inferInsert;
-
 
 type Props = {
   onSubmit: (values: NameChange) => Promise<NameChange>;
   defaultValues?: NameChange;
   onSuccess?: (value: NameChange) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
 
-export default function NameChangeForm({ onSubmit, defaultValues, title }: Props) {
+export default function NameChangeForm({
+  onSubmit,
+  defaultValues,
+  title,
+}: Props) {
   const router = useRouter();
-  
+
   return (
-    <Form 
+    <Form
       title={title}
-      action={onSubmit} 
+      action={onSubmit}
       queryKey={['nameChanges']}
-      schema={createInsertSchema(nameChanges)} 
+      schema={createInsertSchema(nameChanges) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/name-changes/${id}`);

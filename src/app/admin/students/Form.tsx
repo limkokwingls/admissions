@@ -6,6 +6,7 @@ import { statusEnum, students } from '@/db/schema';
 import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import z from 'zod';
 
 type Student = typeof students.$inferInsert;
 
@@ -27,7 +28,7 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
       title={title}
       action={onSubmit}
       queryKey={['students']}
-      schema={createInsertSchema(students)}
+      schema={createInsertSchema(students) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/students/${id}`);

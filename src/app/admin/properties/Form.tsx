@@ -6,7 +6,7 @@ import { NumberInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { DateInput, YearPickerInput, DatePickerInput } from '@mantine/dates';
-
+import z from 'zod';
 type Property = typeof properties.$inferInsert;
 
 type Props = {
@@ -31,7 +31,7 @@ export default function PropertyForm({
       title={title}
       action={onSubmit}
       queryKey={['properties']}
-      schema={createInsertSchema(properties)}
+      schema={createInsertSchema(properties) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/properties/${id}`);

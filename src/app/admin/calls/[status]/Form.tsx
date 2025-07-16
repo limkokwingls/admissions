@@ -5,6 +5,7 @@ import { calls, CallStatus } from '@/db/schema';
 import { TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import { z } from 'zod';
 
 type Call = typeof calls.$inferInsert;
 
@@ -27,7 +28,7 @@ export default function CallForm({ onSubmit, defaultValues, title }: Props) {
       title={title}
       action={onSubmit}
       queryKey={['calls']}
-      schema={createInsertSchema(calls)}
+      schema={createInsertSchema(calls) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/calls/pending/${id}`);

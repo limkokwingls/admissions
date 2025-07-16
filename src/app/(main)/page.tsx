@@ -33,7 +33,7 @@ export default async function Page() {
           2025 Student Admissions
         </h2>
         <p className='mx-auto max-w-md text-sm text-background/50'>
-          Search for your admission details below. If you've received an
+          Search for your admission details below. If you&apos;ve received an
           admission letter, you can proceed to registration.
         </p>
       </div>

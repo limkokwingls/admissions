@@ -20,10 +20,9 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
+import { useForm } from '@mantine/form';
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createInsertSchema } from 'drizzle-zod';
 import { useState } from 'react';
 import { capitalCase } from 'change-case';
 
@@ -47,7 +46,13 @@ export default function ProgramsManager({ facultyId }: Props) {
   const programs = programsData?.items || [];
 
   const form = useForm<Program>({
-    validate: zodResolver(createInsertSchema(programsTable)),
+    validate: {
+      id: (value) => (value ? null : 'ID is required'),
+      code: (value) => (value ? null : 'Code is required'),
+      name: (value) => (value ? null : 'Name is required'),
+      level: (value) => (value ? null : 'Level is required'),
+      facultyId: (value) => (value ? null : 'Faculty ID is required'),
+    },
   });
 
   const createMutation = useMutation({

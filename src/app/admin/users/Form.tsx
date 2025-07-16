@@ -5,29 +5,29 @@ import { Form } from '@/components/adease';
 import { TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import z from 'zod';
 
 type User = typeof users.$inferInsert;
-
 
 type Props = {
   onSubmit: (values: User) => Promise<User>;
   defaultValues?: User;
   onSuccess?: (value: User) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
 
 export default function UserForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  
+
   return (
-    <Form 
+    <Form
       title={title}
-      action={onSubmit} 
+      action={onSubmit}
       queryKey={['users']}
-      schema={createInsertSchema(users)} 
+      schema={createInsertSchema(users) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/users/${id}`);

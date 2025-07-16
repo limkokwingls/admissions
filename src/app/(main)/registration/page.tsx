@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { getStudentByReference } from '@/server/students/actions';
 import { IconCircleDot, IconInfoCircle } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import { AlertCircle, BookOpen, GraduationCap } from 'lucide-react';
+import { AlertCircle, BookOpen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

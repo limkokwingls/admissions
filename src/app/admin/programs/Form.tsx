@@ -5,6 +5,7 @@ import { Form } from '@/components/adease';
 import { NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
+import z from 'zod';
 
 type Program = typeof programs.$inferInsert;
 
@@ -26,7 +27,7 @@ export default function ProgramForm({ onSubmit, defaultValues, title }: Props) {
       title={title}
       action={onSubmit}
       queryKey={['programs']}
-      schema={createInsertSchema(programs)}
+      schema={createInsertSchema(programs) as unknown as z.ZodObject}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/programs/${id}`);

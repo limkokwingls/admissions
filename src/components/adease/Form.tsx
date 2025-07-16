@@ -42,6 +42,7 @@ export function Form<T extends Record<string, unknown>, V>({
   const queryClient = useQueryClient();
 
   const form = useForm<T>({
+    // @ts-expect-error zodResolver type incompatibility with generic schema validation
     validate: schema && zodResolver(schema),
     initialValues: defaultValues as T,
   });

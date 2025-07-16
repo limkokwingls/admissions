@@ -1,8 +1,4 @@
-import {
-  DetailsView,
-  DetailsViewBody,
-  DetailsViewHeader,
-} from '@/components/adease';
+import { DetailsView, DetailsViewHeader } from '@/components/adease';
 import { extractReference } from '@/lib/utils';
 import { deleteStudent, getStudent } from '@/server/students/actions';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@mantine/core';
