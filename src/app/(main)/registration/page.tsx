@@ -61,7 +61,7 @@ export default function RegistrationPage() {
 
   const handleConfirm = () => {
     if (student) {
-      router.push(`/students/${student.id}`);
+      router.push(`/registration/${student.id}`);
     }
   };
 
