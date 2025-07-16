@@ -83,18 +83,13 @@ export default function RegistrationPage() {
               </Link>
 
               <div className='mt-8 flex flex-col items-center text-center'>
-                <h2 className='text-base font-medium text-neutral-300'>
-                  Confirm Information
-                </h2>
                 <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
-                  {student.surname} {student.names}
+                  Verify Your Details
                 </h1>
-                <div className='mt-4 flex justify-center'>
-                  <span className='inline-flex items-center gap-1.5 rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-white dark:bg-neutral-800'>
-                    <GraduationCap className='h-3.5 w-3.5' />
-                    {student.candidateNo || 'No Candidate Number'}
-                  </span>
-                </div>
+                <p className='mt-2 text-sm text-neutral-300'>
+                  Please confirm the information below is correct before
+                  continuing
+                </p>
               </div>
             </div>
           </Container>
@@ -104,19 +99,58 @@ export default function RegistrationPage() {
           <div className='mx-auto max-w-4xl py-8 pb-12'>
             <Card className='overflow-hidden border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
               <div className='p-6'>
-                <div className='flex items-center gap-6'>
-                  <div className='hidden h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 md:flex'>
-                    <BookOpen className='h-6 w-6 text-neutral-700 dark:text-neutral-300' />
+                <div className='space-y-6'>
+                  <div>
+                    <h3 className='mb-4 text-lg font-semibold text-neutral-900 dark:text-white'>
+                      Student Information
+                    </h3>
+
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
+                          Full Name
+                        </label>
+                        <div className='rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800'>
+                          <p className='font-medium text-neutral-900 dark:text-white'>
+                            {student.surname} {student.names}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
+                          Candidate Number
+                        </label>
+                        <div className='rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800'>
+                          <p className='font-medium text-neutral-900 dark:text-white'>
+                            {student.candidateNo || 'No Candidate Number'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className='flex-1'>
-                    <h2 className='text-lg font-bold text-neutral-900 dark:text-white'>
-                      {student.program?.name ||
-                        'Program information unavailable'}
-                    </h2>
-                    <p className='mt-1 text-neutral-600 dark:text-neutral-400'>
-                      {student.program?.faculty?.name}
-                    </p>
+                  <div>
+                    <h3 className='mb-4 text-lg font-semibold text-neutral-900 dark:text-white'>
+                      Program of Study
+                    </h3>
+
+                    <div className='rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800 md:p-4'>
+                      <div className='flex items-start gap-3 md:items-center md:gap-4'>
+                        <div className='mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 md:mt-0 md:h-12 md:w-12'>
+                          <BookOpen className='h-5 w-5 text-neutral-700 dark:text-neutral-300 md:h-6 md:w-6' />
+                        </div>
+                        <div className='min-w-0 flex-1'>
+                          <h4 className='font-semibold leading-tight text-neutral-900 dark:text-white'>
+                            {student.program?.name ||
+                              'Program information unavailable'}
+                          </h4>
+                          <p className='mt-1 text-sm text-neutral-600 dark:text-neutral-400'>
+                            {student.program?.faculty?.name}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -147,14 +181,14 @@ export default function RegistrationPage() {
             <div className='mt-6 flex gap-3'>
               <Button
                 onClick={() => setShowConfirmation(false)}
-                variant={student.accepted ? 'outline' : 'default'}
+                variant='outline'
                 className='flex-1'
               >
                 Back
               </Button>
               {student.accepted && (
                 <Button onClick={handleConfirm} className='flex-1'>
-                  Continue
+                  Confirm and Continue
                 </Button>
               )}
             </div>

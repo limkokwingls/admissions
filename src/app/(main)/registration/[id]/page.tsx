@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Container } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { User, Check, AlertCircle, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useQuery } from '@tanstack/react-query';
+import { Card, CardContent } from '@/components/ui/card';
+import { Container } from '@/components/ui/container';
 import { getStudent } from '@/server/students/actions';
-import StudentInfoForm from './StudentInfoForm';
+import { useQuery } from '@tanstack/react-query';
+import { AlertCircle, ArrowLeft, Check } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import StudentInfoForm from './StudentInfoForm';
 
 type Props = {
   params: Promise<{
