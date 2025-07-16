@@ -41,7 +41,7 @@ export default async function Page() {
       <div className='w-full max-w-2xl space-y-6'>
         <div className='text-center'>
           <Link href='/registration'>
-            <Button className='w-full max-w-md'>
+            <Button className='w-full max-w-md rounded-2xl py-5'>
               Proceed to Registration <ArrowRight className='ml-2 size-4' />
             </Button>
           </Link>
