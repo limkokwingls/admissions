@@ -22,6 +22,7 @@ export const students = sqliteTable(
     phoneNumber: text().notNull(),
     status: text({ enum: statusEnum }).notNull(),
     accepted: integer({ mode: 'boolean' }).notNull().default(false),
+    reference: text(),
     programId: integer()
       .notNull()
       .references(() => programs.id, { onDelete: 'cascade' }),
@@ -35,6 +36,7 @@ export const students = sqliteTable(
       candidateNoIdx: index('candidate_no_idx').on(table.candidateNo),
       receiptNoIdx: index('receipt_no_idx').on(table.receiptNo),
       phoneNumberIdx: index('phone_number_idx').on(table.phoneNumber),
+      referenceIdx: index('reference_idx').on(table.reference),
     };
   },
 );
