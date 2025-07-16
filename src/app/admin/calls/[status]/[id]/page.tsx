@@ -141,66 +141,11 @@ export default async function CallDetails({ params }: Props) {
           </FieldView>
         </SimpleGrid>
 
-        <Divider my='md' />
-
-        <Title order={4} size='h5' c='dimmed' mb='md'>
-          Timeline
-        </Title>
-
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
-          <FieldView label='Last Call' underline={false}>
-            <Stack gap={4}>
-              <Group gap='xs'>
-                <IconCalendar size={16} color='gray' />
-                <Text size='sm' fw={500}>
-                  {call.lastCallAt
-                    ? format(call.lastCallAt, 'MMM dd, yyyy')
-                    : 'Never'}
-                </Text>
-              </Group>
-              {call.lastCallAt && (
-                <Group gap='xs' ml={20}>
-                  <IconClock size={14} color='gray' />
-                  <Text size='xs' c='dimmed'>
-                    {formatDistanceToNow(call.lastCallAt, { addSuffix: true })}
-                  </Text>
-                </Group>
-              )}
-            </Stack>
-          </FieldView>
-
-          <FieldView label='Call Created' underline={false}>
-            <Stack gap={4}>
-              <Group gap='xs'>
-                <IconCalendar size={16} color='gray' />
-                <Text size='sm' fw={500}>
-                  {call.createdAt
-                    ? format(call.createdAt, 'MMM dd, yyyy')
-                    : 'Unknown'}
-                </Text>
-              </Group>
-              {call.createdAt && (
-                <Group gap='xs' ml={20}>
-                  <IconClock size={14} color='gray' />
-                  <Text size='xs' c='dimmed'>
-                    {formatDistanceToNow(call.createdAt, { addSuffix: true })}
-                  </Text>
-                </Group>
-              )}
-            </Stack>
-          </FieldView>
-        </SimpleGrid>
-
         <Paper withBorder p='md' radius='md' shadow='xs' mt='xl'>
           <Title order={5} mb='md' c='dimmed' size='sm'>
             Student Details
           </Title>
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing='md'>
-            <FieldView label='Program' underline={false}>
-              <Text size='sm' fw={500}>
-                {call.student.program?.name || 'Not assigned'}
-              </Text>
-            </FieldView>{' '}
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
             <FieldView label='Phone Number' underline={false}>
               {call.student.phoneNumber ? (
                 <Anchor
@@ -217,10 +162,62 @@ export default async function CallDetails({ params }: Props) {
                 </Text>
               )}
             </FieldView>
-            <FieldView label='Candidate No' underline={false}>
+            <FieldView label='Program' underline={false}>
               <Text size='sm' fw={500}>
-                {call.student.candidateNo || 'Not assigned'}
+                {call.student.program?.name || 'Not assigned'}
               </Text>
+            </FieldView>
+          </SimpleGrid>
+
+          <Divider my='md' />
+
+          <Title order={4} size='h5' c='dimmed' mb='md'>
+            Timeline
+          </Title>
+
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
+            <FieldView label='Last Call' underline={false}>
+              <Stack gap={4}>
+                <Group gap='xs'>
+                  <IconCalendar size={16} color='gray' />
+                  <Text size='sm' fw={500}>
+                    {call.lastCallAt
+                      ? format(call.lastCallAt, 'MMM dd, yyyy')
+                      : 'Never'}
+                  </Text>
+                </Group>
+                {call.lastCallAt && (
+                  <Group gap='xs' ml={20}>
+                    <IconClock size={14} color='gray' />
+                    <Text size='xs' c='dimmed'>
+                      {formatDistanceToNow(call.lastCallAt, {
+                        addSuffix: true,
+                      })}
+                    </Text>
+                  </Group>
+                )}
+              </Stack>
+            </FieldView>
+
+            <FieldView label='Call Created' underline={false}>
+              <Stack gap={4}>
+                <Group gap='xs'>
+                  <IconCalendar size={16} color='gray' />
+                  <Text size='sm' fw={500}>
+                    {call.createdAt
+                      ? format(call.createdAt, 'MMM dd, yyyy')
+                      : 'Unknown'}
+                  </Text>
+                </Group>
+                {call.createdAt && (
+                  <Group gap='xs' ml={20}>
+                    <IconClock size={14} color='gray' />
+                    <Text size='xs' c='dimmed'>
+                      {formatDistanceToNow(call.createdAt, { addSuffix: true })}
+                    </Text>
+                  </Group>
+                )}
+              </Stack>
             </FieldView>
           </SimpleGrid>
         </Paper>

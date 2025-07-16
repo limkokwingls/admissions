@@ -10,30 +10,30 @@ class CallService {
   constructor(private readonly repository = new CallRepository()) {}
 
   async first() {
-    return withAuth(async () => this.repository.findFirst(), []);
+    return withAuth(async () => this.repository.findFirst(), ['registry']);
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['registry']);
   }
 
   async getAll(params: QueryOptions<typeof calls>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['registry']);
   }
 
   async create(data: Call) {
-    return withAuth(async () => this.repository.create(data), []);
+    return withAuth(async () => this.repository.create(data), ['registry']);
   }
 
   async update(id: string, data: Call) {
-    return withAuth(async () => this.repository.update(id, data), []);
+    return withAuth(async () => this.repository.update(id, data), ['registry']);
   }
 
   async delete(id: string) {
     return withAuth(async () => this.repository.delete(id), []);
   }
   async count() {
-    return withAuth(async () => this.repository.count(), []);
+    return withAuth(async () => this.repository.count(), ['registry']);
   }
   async updateCallStatus(id: string, status: CallStatus) {
     return withAuth(async () => {
@@ -57,7 +57,7 @@ class CallService {
       };
 
       return this.repository.update(id, updatedData);
-    }, []);
+    }, ['registry']);
   }
 
   async incrementCallCount(id: string) {
@@ -82,7 +82,7 @@ class CallService {
       };
 
       return this.repository.update(id, updatedData);
-    }, []);
+    }, ['registry']);
   }
 }
 
