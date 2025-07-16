@@ -32,6 +32,9 @@ import {
   maritalStatuses,
   nextOfKinRelationships,
 } from '@/db/schema/students';
+import { getStudent } from '@/server/students/actions';
+
+type Student = NonNullable<Awaited<ReturnType<typeof getStudent>>>;
 
 const formSchema = z.object({
   nationalId: z.string().min(1, 'National ID is required'),
@@ -62,36 +65,42 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 type Props = {
-  studentId: string;
+  student: Student;
   onBack: () => void;
 };
 
-export default function StudentInfoForm({ studentId, onBack }: Props) {
+export default function StudentInfoForm({ student, onBack }: Props) {
   const router = useRouter();
+  const { studentInfo: info } = student;
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nationalId: '',
-      name: '',
-      email: '',
-      phone1: '',
-      phone2: '',
-      religion: undefined,
-      dateOfBirth: '',
-      gender: undefined,
-      maritalStatus: undefined,
-      birthPlace: '',
-      homeTown: '',
-      highSchool: '',
-      nextOfKinName: '',
-      nextOfKinPhone: '',
-      nextOfKinRelationship: undefined,
+      nationalId: info?.nationalId || '',
+      name: info?.name || '',
+      email: info?.email || '',
+      phone1: info?.phone1 || '',
+      phone2: info?.phone2 || '',
+      religion: info?.religion || '',
+      dateOfBirth: info?.dateOfBirth || '',
+      gender: info?.gender || '',
+      maritalStatus: info?.maritalStatus || '',
+      birthPlace: info?.birthPlace || '',
+      homeTown: info?.homeTown || '',
+      highSchool: info?.highSchool || '',
+      nextOfKinName: info?.nextOfKinName || '',
+      nextOfKinPhone: info?.nextOfKinPhone || '',
+      nextOfKinRelationship: info?.nextOfKinRelationship || '',
     },
   });
 
   const createMutation = useMutation({
-    mutationFn: createStudentInfo,
+    mutationFn: (data: FormData) => {
+      return createStudentInfo(student.id, {
+        ...data,
+        studentId: student.id,
+      });
+    },
     onSuccess: () => {
       router.push('/registration/success');
     },
@@ -101,11 +110,7 @@ export default function StudentInfoForm({ studentId, onBack }: Props) {
   });
 
   const onSubmit = (data: FormData) => {
-    createMutation.mutate({
-      studentId,
-      ...data,
-      paid: false,
-    });
+    createMutation.mutate(data);
   };
 
   return (

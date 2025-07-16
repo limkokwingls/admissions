@@ -17,11 +17,14 @@ class StudentInfoService {
   }
 
   async getAll(params: QueryOptions<typeof studentInfo>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['registry']);
   }
 
-  async create(data: StudentInfo) {
-    return withAuth(async () => this.repository.create(data), ['all']);
+  async create(studentId: string, data: StudentInfo) {
+    return withAuth(
+      async () => this.repository.upsert(studentId, data),
+      ['all'],
+    );
   }
 
   async update(id: string, data: Partial<StudentInfo>) {

@@ -13,8 +13,11 @@ export async function getStudentInfos(page: number = 1, search = '') {
   return service.getAll({ page, search });
 }
 
-export async function createStudentInfo(studentInfo: StudentInfo) {
-  return service.create(studentInfo);
+export async function createStudentInfo(
+  studentId: string,
+  studentInfo: StudentInfo,
+) {
+  return service.create(studentId, studentInfo);
 }
 
 export async function updateStudentInfo(

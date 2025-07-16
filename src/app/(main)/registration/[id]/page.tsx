@@ -198,7 +198,7 @@ export default function StudentRegistrationPage({ params }: Props) {
         <Container width='xl'>
           <div className='mx-auto max-w-4xl py-8'>
             <StudentInfoForm
-              studentId={studentId}
+              student={student}
               onBack={() => setShowForm(false)}
             />
           </div>
