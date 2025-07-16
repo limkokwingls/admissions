@@ -91,7 +91,7 @@ export const studentInfo = sqliteTable(
     phone1: text().notNull(),
     phone2: text(),
     religion: text({ enum: religions }).notNull(),
-    dateOfBirth: text().notNull(),
+    dateOfBirth: integer({ mode: 'timestamp' }).notNull(),
     gender: text({ enum: genders }).notNull(),
     maritalStatus: text({ enum: maritalStatuses }).notNull(),
     birthPlace: text().notNull(),

@@ -12,6 +12,7 @@ import {
   Stack,
   Paper,
   ThemeIcon,
+  GridCol,
 } from '@mantine/core';
 import {
   IconUser,
@@ -47,7 +48,7 @@ export default async function StudentInfo({ student }: Props) {
   return (
     <Box mt='lg' p='lg'>
       <Grid gutter='md'>
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light'>
@@ -92,9 +93,9 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
 
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light' color='teal'>
@@ -118,9 +119,9 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
 
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light' color='green'>
@@ -140,9 +141,9 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
 
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light' color='violet'>
@@ -158,9 +159,9 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
 
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light' color='orange'>
@@ -186,9 +187,9 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
 
-        <Grid.Col span={{ base: 12, md: 6 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card withBorder p='lg' h='100%'>
             <Group mb='md'>
               <ThemeIcon size='lg' radius='md' variant='light' color='red'>
@@ -228,7 +229,7 @@ export default async function StudentInfo({ student }: Props) {
               </Group>
             </Stack>
           </Card>
-        </Grid.Col>
+        </GridCol>
       </Grid>
     </Box>
   );

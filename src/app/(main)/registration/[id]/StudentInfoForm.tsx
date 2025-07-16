@@ -1,9 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -12,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -19,20 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { User, MapPin, Users, ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { createStudentInfo } from '@/server/student-info/actions';
 import {
-  religions,
   genders,
   maritalStatuses,
   nextOfKinRelationships,
+  religions,
 } from '@/db/schema/students';
+import { createStudentInfo } from '@/server/student-info/actions';
 import { getStudent } from '@/server/students/actions';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { ArrowLeft, MapPin, User, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 type Student = NonNullable<Awaited<ReturnType<typeof getStudent>>>;
 
@@ -82,7 +81,9 @@ export default function StudentInfoForm({ student, onBack }: Props) {
       phone1: info?.phone1 || '',
       phone2: info?.phone2 || '',
       religion: info?.religion || '',
-      dateOfBirth: info?.dateOfBirth || '',
+      dateOfBirth: info?.dateOfBirth
+        ? new Date(info.dateOfBirth).toISOString().split('T')[0]
+        : '',
       gender: info?.gender || '',
       maritalStatus: info?.maritalStatus || '',
       birthPlace: info?.birthPlace || '',
@@ -98,6 +99,7 @@ export default function StudentInfoForm({ student, onBack }: Props) {
     mutationFn: (data: FormData) => {
       return createStudentInfo(student.id, {
         ...data,
+        dateOfBirth: new Date(data.dateOfBirth),
         studentId: student.id,
       });
     },
