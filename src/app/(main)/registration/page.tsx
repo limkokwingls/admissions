@@ -118,37 +118,45 @@ export default function RegistrationPage() {
                       {student.program?.faculty?.name}
                     </p>
                   </div>
-
-                  <div className='flex items-center gap-2'>
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        student.status === 'Admitted'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                          : student.status === 'Wait Listed'
-                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                            : student.status === 'Private'
-                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
-                              : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-                      }`}
-                    >
-                      {student.status}
-                    </span>
-                  </div>
                 </div>
               </div>
             </Card>
 
+            {!student.accepted && (
+              <Card className='mt-6 overflow-hidden border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'>
+                <div className='p-6'>
+                  <div className='flex items-start gap-4'>
+                    <div className='mt-0.5 rounded-full bg-red-200 p-2 text-red-700 dark:bg-red-800 dark:text-red-300'>
+                      <AlertCircle className='size-6' />
+                    </div>
+                    <div className='flex-1'>
+                      <h3 className='text-lg font-semibold text-red-900 dark:text-red-100'>
+                        Registration Not Approved
+                      </h3>
+                      <p className='mt-1 text-sm text-red-700 dark:text-red-300'>
+                        You have not been approved to proceed with registration.
+                        Please consult the Registry Office for further
+                        assistance.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            )}
+
             <div className='mt-6 flex gap-3'>
               <Button
                 onClick={() => setShowConfirmation(false)}
-                variant='outline'
+                variant={student.accepted ? 'outline' : 'default'}
                 className='flex-1'
               >
                 Back
               </Button>
-              <Button onClick={handleConfirm} className='flex-1'>
-                Continue
-              </Button>
+              {student.accepted && (
+                <Button onClick={handleConfirm} className='flex-1'>
+                  Continue
+                </Button>
+              )}
             </div>
           </div>
         </Container>
