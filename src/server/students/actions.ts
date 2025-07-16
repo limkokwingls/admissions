@@ -3,11 +3,41 @@
 import { students } from '@/db/schema';
 import { createNameChange } from '../name-changes/actions';
 import { studentsService as service } from './service';
+import { parseReference } from '@/lib/utils';
 
 type Student = typeof students.$inferInsert;
 
 export async function getStudent(id: string) {
   return service.get(id);
+}
+
+export async function getStudentByReference(reference: string) {
+  try {
+    const { facultyCode, programCode, status, studentNo } =
+      parseReference(reference);
+
+    const result = await service.getAll({
+      page: 1,
+      size: 1000,
+    });
+
+    const student = result.items.find(
+      (student) =>
+        student.program.faculty.code === facultyCode &&
+        student.program.code === programCode &&
+        student.status === status &&
+        student.no === studentNo,
+    );
+
+    if (!student) {
+      return null;
+    }
+
+    return service.get(student.id);
+  } catch (error) {
+    console.error('Error parsing reference:', error);
+    return null;
+  }
 }
 
 export async function searchStudent(q: string) {

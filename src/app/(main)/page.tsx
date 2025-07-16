@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 export default async function Page() {
   const session = await auth();
@@ -36,8 +37,29 @@ export default async function Page() {
         </p>
       </div>
 
-      <div className='w-full max-w-2xl'>
+      <div className='w-full max-w-2xl space-y-6'>
         <SearchForm />
+
+        <div className='flex items-center justify-center'>
+          <div className='flex items-center space-x-4'>
+            <div className='h-px flex-1 bg-neutral-200 dark:bg-neutral-800'></div>
+            <span className='text-sm text-neutral-500 dark:text-neutral-400'>
+              or
+            </span>
+            <div className='h-px flex-1 bg-neutral-200 dark:bg-neutral-800'></div>
+          </div>
+        </div>
+
+        <div className='text-center'>
+          <Link href='/registration'>
+            <Button variant='outline' className='w-full max-w-md'>
+              Enter Reference Number
+            </Button>
+          </Link>
+          <p className='mt-2 text-xs text-neutral-500 dark:text-neutral-400'>
+            Use this if you already have your reference number
+          </p>
+        </div>
       </div>
     </div>
   );
