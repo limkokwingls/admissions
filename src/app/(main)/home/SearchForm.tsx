@@ -14,7 +14,7 @@ export default function SearchForm({ searchQuery }: Props) {
           type='text'
           name='q'
           defaultValue={searchQuery}
-          placeholder='Search by names or phone number'
+          placeholder='Search admissions'
           className='h-12 rounded-full border-2 pr-12 text-base shadow-sm focus-visible:ring-offset-2'
         />
         <Button

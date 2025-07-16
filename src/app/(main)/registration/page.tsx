@@ -1,50 +1,61 @@
 'use client';
 
-import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Container } from '@/components/ui/container';
+import { Input } from '@/components/ui/input';
 import { getStudentByReference } from '@/server/students/actions';
-import { AlertCircle, BookOpen, GraduationCap, Info } from 'lucide-react';
-import Link from 'next/link';
+import { IconCircleDot, IconInfoCircle } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import { AlertCircle, BookOpen, GraduationCap } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 type Student = NonNullable<Awaited<ReturnType<typeof getStudentByReference>>>;
 
 export default function RegistrationPage() {
   const [reference, setReference] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [student, setStudent] = useState<Student | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
+  const {
+    data: student,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Student | null, Error>({
+    queryKey: ['studentByReference', reference.trim().toUpperCase()],
+    queryFn: async () => {
+      if (!reference.trim()) return null;
       const foundStudent = await getStudentByReference(
         reference.trim().toUpperCase(),
       );
       if (!foundStudent) {
-        setError(
+        throw new Error(
           'Reference number not found. Please check your reference number and try again.',
         );
-        return;
       }
+      return foundStudent;
+    },
+    enabled: false,
+    staleTime: Infinity,
+    retry: false,
+  });
 
-      setStudent(foundStudent);
-      setShowConfirmation(true);
-    } catch (error) {
-      setError(
-        'Invalid reference number. Please check the format and try again.',
-      );
-    } finally {
-      setIsLoading(false);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowConfirmation(false);
+    try {
+      const result = await refetch();
+      if (result.isError) {
+        console.error(result.error);
+      } else if (result.data) {
+        setShowConfirmation(true);
+      }
+    } catch (err) {
+      console.error('Error during refetch:', err);
     }
   };
 
@@ -136,7 +147,7 @@ export default function RegistrationPage() {
                 Back
               </Button>
               <Button onClick={handleConfirm} className='flex-1'>
-                Continue to Details
+                Continue
               </Button>
             </div>
           </div>
@@ -162,12 +173,12 @@ export default function RegistrationPage() {
             </Link>
 
             <div className='mt-8 flex flex-col items-center text-center'>
-              <h2 className='text-base font-medium text-neutral-300'>
-                Student Admission Portal
-              </h2>
               <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
-                Enter Reference Number
+                Registration Portal
               </h1>
+              <p className='mt-2 text-sm text-neutral-300'>
+                Enter your reference number to continue
+              </p>
             </div>
           </div>
         </Container>
@@ -197,7 +208,7 @@ export default function RegistrationPage() {
                   {error && (
                     <div className='mt-2 flex items-center gap-2 text-sm text-red-600 dark:text-red-400'>
                       <AlertCircle className='h-4 w-4' />
-                      {error}
+                      {error.message}
                     </div>
                   )}
                 </div>
@@ -205,9 +216,9 @@ export default function RegistrationPage() {
                 <Button
                   type='submit'
                   disabled={isLoading || !reference.trim()}
-                  className='h-12 w-full'
+                  className='w-full'
                 >
-                  {isLoading ? 'Searching...' : 'Find My Information'}
+                  {isLoading ? 'Searching...' : 'Continue'}
                 </Button>
               </form>
             </div>
@@ -217,7 +228,7 @@ export default function RegistrationPage() {
             <div className='p-6'>
               <div className='flex items-start gap-4'>
                 <div className='mt-0.5 hidden rounded-full bg-neutral-200 p-2 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 md:block'>
-                  <Info className='h-5 w-5' />
+                  <IconInfoCircle className='size-5' />
                 </div>
                 <div className='flex-1'>
                   <h3 className='text-lg font-semibold text-neutral-900 dark:text-white'>
@@ -225,27 +236,21 @@ export default function RegistrationPage() {
                   </h3>
                   <div className='mt-3 space-y-3'>
                     <div className='flex items-start gap-2'>
-                      <span className='flex size-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
-                        •
-                      </span>
-                      <span className='text-neutral-700 dark:text-neutral-300'>
-                        Check your admission notification email or SMS
-                      </span>
-                    </div>
-                    <div className='flex items-start gap-2'>
-                      <span className='flex size-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
-                        •
-                      </span>
-                      <span className='text-neutral-700 dark:text-neutral-300'>
-                        Look for any official communication from the university
+                      <IconCircleDot className='size-5 text-neutral-500' />
+                      <span className='text-sm text-neutral-700 dark:text-neutral-300'>
+                        Locate the reference number at the top right corner of
+                        your admission letter (e.g.{' '}
+                        <span className='font-mono font-bold text-neutral-900 dark:text-white'>
+                          FICT/DBIT/P/16
+                        </span>
+                        )
                       </span>
                     </div>
                     <div className='flex items-start gap-2'>
-                      <span className='flex size-5 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200'>
-                        •
-                      </span>
-                      <span className='text-neutral-700 dark:text-neutral-300'>
-                        Contact the admissions office if you cannot locate it
+                      <IconCircleDot className='size-5 text-neutral-500' />
+                      <span className='text-sm text-neutral-700 dark:text-neutral-300'>
+                        Contact the registry office if you cannot locate your
+                        admission letter or reference number
                       </span>
                     </div>
                   </div>

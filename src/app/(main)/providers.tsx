@@ -2,10 +2,13 @@
 
 import { ThemeProvider } from '@/components/theme-provider';
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type Props = {
   children: React.ReactNode;
 };
+
+const queryClient = new QueryClient();
 
 export default function Providers({ children }: Props) {
   const [mounted, setMounted] = React.useState(false);
@@ -19,7 +22,9 @@ export default function Providers({ children }: Props) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
       </ThemeProvider>
     )
   );

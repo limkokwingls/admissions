@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 export default async function Page() {
   const session = await auth();
@@ -32,8 +33,8 @@ export default async function Page() {
           2025 Student Admissions
         </h2>
         <p className='mx-auto max-w-md text-sm text-background/50'>
-          Search by your full names, phone number or candidate number to find
-          your admission details
+          Search for your admission details below. If you've received an
+          admission letter, you can proceed to registration.
         </p>
       </div>
 
@@ -52,13 +53,10 @@ export default async function Page() {
 
         <div className='text-center'>
           <Link href='/registration'>
-            <Button variant='outline' className='w-full max-w-md'>
-              Enter Reference Number
+            <Button className='w-full max-w-md'>
+              Proceed to Registration <ArrowRight className='ml-2 size-4' />
             </Button>
           </Link>
-          <p className='mt-2 text-xs text-neutral-500 dark:text-neutral-400'>
-            Use this if you already have your reference number
-          </p>
         </div>
       </div>
     </div>
