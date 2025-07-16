@@ -13,7 +13,7 @@ class StudentInfoService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
   async getAll(params: QueryOptions<typeof studentInfo>) {
@@ -21,7 +21,7 @@ class StudentInfoService {
   }
 
   async create(data: StudentInfo) {
-    return withAuth(async () => this.repository.create(data), []);
+    return withAuth(async () => this.repository.create(data), ['all']);
   }
 
   async update(id: string, data: Partial<StudentInfo>) {

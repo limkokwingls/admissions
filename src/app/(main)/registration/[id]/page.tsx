@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { getStudent } from '@/server/students/actions';
-import StudentInfoForm from './components/StudentInfoForm';
+import StudentInfoForm from './StudentInfoForm';
 
 type Props = {
   params: Promise<{

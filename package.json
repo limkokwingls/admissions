@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.0",
+    "@hookform/resolvers": "^5.1.1",
     "@inquirer/prompts": "^7.5.0",
     "@libsql/client": "^0.15.4",
     "@mantine/charts": "^8.0.0",
@@ -26,6 +27,8 @@
     "@mantine/modals": "^8.0.0",
     "@mantine/notifications": "^8.0.0",
     "@mantine/tiptap": "^8.0.0",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.2",
     "@radix-ui/react-tabs": "^1.1.11",
     "@react-pdf/renderer": "^4.3.0",
@@ -57,11 +60,12 @@
     "nuqs": "^2.4.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.60.0",
     "recharts": "^2.15.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
     "xlsx": "^0.18.5",
-    "zod": "^3.24.4"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
