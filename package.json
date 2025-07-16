@@ -11,7 +11,8 @@
     "db:generate": "tsx scripts/db-command.ts generate",
     "db:migrate": "tsx scripts/db-command.ts migrate",
     "db:studio": "tsx scripts/db-command.ts studio",
-    "import-students": "tsx src/scripts/import-students.ts"
+    "import-students": "tsx src/scripts/import-students.ts",
+    "migrate:reference": "tsx scripts/add-reference-column.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.0",

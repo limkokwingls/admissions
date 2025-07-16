@@ -9,6 +9,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function extractReference(student: Student) {
+  // Use the reference column if it exists, otherwise calculate it
+  if (student?.reference) {
+    return student.reference;
+  }
+
+  // Fallback to calculation if reference column is not populated
   const status = student?.status == 'DQ' ? 'DQ' : student?.status[0];
   return `${student?.program.faculty.code}/${student?.program.code}/${status}/${student?.no}`;
 }
