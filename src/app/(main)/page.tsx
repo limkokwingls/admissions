@@ -39,8 +39,13 @@ export default async function Page() {
       </div>
 
       <div className='w-full max-w-2xl space-y-6'>
-        <SearchForm />
-
+        <div className='text-center'>
+          <Link href='/registration'>
+            <Button className='w-full max-w-md'>
+              Proceed to Registration <ArrowRight className='ml-2 size-4' />
+            </Button>
+          </Link>
+        </div>
         <div className='flex items-center justify-center'>
           <div className='flex items-center space-x-4'>
             <div className='h-px flex-1 bg-neutral-200 dark:bg-neutral-800'></div>
@@ -51,13 +56,7 @@ export default async function Page() {
           </div>
         </div>
 
-        <div className='text-center'>
-          <Link href='/registration'>
-            <Button className='w-full max-w-md'>
-              Proceed to Registration <ArrowRight className='ml-2 size-4' />
-            </Button>
-          </Link>
-        </div>
+        <SearchForm />
       </div>
     </div>
   );
