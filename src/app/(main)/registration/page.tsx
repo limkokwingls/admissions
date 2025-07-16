@@ -300,15 +300,6 @@ export default function RegistrationPage() {
               </div>
             </div>
           </Card>
-
-          <div className='mt-6 text-center'>
-            <Link
-              href='/'
-              className='text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
-            >
-              ← Back to search by name
-            </Link>
-          </div>
         </div>
       </Container>
     </div>

@@ -27,7 +27,7 @@ export default function RegistrationSuccessPage() {
                 Registration Complete
               </h2>
               <h1 className='mt-2 text-2xl font-bold text-white md:text-3xl'>
-                Thank You for Your Submission
+                Registration Complete
               </h1>
             </div>
           </div>
@@ -43,14 +43,10 @@ export default function RegistrationSuccessPage() {
                   <Check className='h-8 w-8 text-green-600 dark:text-green-400' />
                 </div>
 
-                <h2 className='mb-4 text-2xl font-bold text-neutral-900 dark:text-white'>
-                  Registration Successful!
-                </h2>
-
                 <p className='mb-6 text-neutral-600 dark:text-neutral-400'>
-                  Your student information has been successfully submitted and
-                  is now being processed. You will receive a confirmation email
-                  shortly with further instructions.
+                  Your student information has been successfully submitted. You
+                  need to finish your registration on premises by collecting
+                  your proof of registration and student cards.
                 </p>
 
                 <div className='mb-6 rounded-lg bg-neutral-50 p-6 dark:bg-neutral-900'>
@@ -63,7 +59,8 @@ export default function RegistrationSuccessPage() {
                         1
                       </span>
                       <span>
-                        Your information will be reviewed by our admissions team
+                        <strong>Diploma</strong> students should come on
+                        Wednesday the 23rd of July
                       </span>
                     </li>
                     <li className='flex items-start gap-2'>
@@ -71,7 +68,8 @@ export default function RegistrationSuccessPage() {
                         2
                       </span>
                       <span>
-                        You'll receive an email confirmation within 24 hours
+                        <strong>Degree</strong> students should come on Thursday
+                        the 24th of July
                       </span>
                     </li>
                     <li className='flex items-start gap-2'>
@@ -79,7 +77,17 @@ export default function RegistrationSuccessPage() {
                         3
                       </span>
                       <span>
-                        Further instructions will be provided via email
+                        Students who failed to come on Wednesday or Thursday can
+                        come on Friday the 25th of July
+                      </span>
+                    </li>
+                    <li className='flex items-start gap-2'>
+                      <span className='mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'>
+                        4
+                      </span>
+                      <span>
+                        Allowance may be given to students who are unable to
+                        come on Wednesday to Friday if they have a valid reason.
                       </span>
                     </li>
                   </ul>
