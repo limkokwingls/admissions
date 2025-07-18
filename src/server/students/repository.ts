@@ -320,6 +320,17 @@ export default class StudentRepository extends BaseRepository<
 
     return this.createPaginatedResult(data, criteria);
   }
+
+  async getStudentsWithInfoCount(): Promise<number> {
+    const filter = exists(
+      db
+        .select()
+        .from(studentInfo)
+        .where(eq(studentInfo.studentId, students.id)),
+    );
+
+    return this.count(filter);
+  }
 }
 
 export const studentsRepository = new StudentRepository();

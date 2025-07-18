@@ -10,6 +10,7 @@ import {
   Image,
   Indicator,
   LoadingOverlay,
+  MantineColor,
   NavLink,
   Stack,
   Text,
@@ -30,6 +31,7 @@ import {
   IconUsersGroup,
   IconChartLine,
   IconFileInvoice,
+  IconWritingSign,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { signOut, useSession } from 'next-auth/react';
@@ -37,9 +39,11 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { getCallsCountByStatus } from '@/server/calls/actions';
+import { getStudentsWithInfoCount } from '@/server/students/actions';
 
 type NotificationConfig = {
   queryKey: string[];
+  color?: MantineColor;
   queryFn: () => Promise<number>;
 };
 
@@ -74,8 +78,12 @@ const navigation: NavItem[] = [
   {
     label: 'Registrations',
     href: '/admin/registrations',
-    icon: IconUsersGroup,
+    icon: IconWritingSign,
     roles: ['registry', 'admin'],
+    notificationCount: {
+      queryKey: ['registrations'],
+      queryFn: () => getStudentsWithInfoCount(),
+    },
   },
   {
     label: 'Faculties',
@@ -105,6 +113,7 @@ const navigation: NavItem[] = [
         notificationCount: {
           queryKey: ['calls', 'accepted'],
           queryFn: () => getCallsCountByStatus('accepted'),
+          color: 'gray',
         },
       },
       {
@@ -212,7 +221,7 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
   return (
     <Indicator
       position='middle-end'
-      color='red'
+      color={item.notificationCount?.color ?? 'red'}
       offset={20}
       size={23}
       label={notificationCount}

@@ -23,6 +23,10 @@ export async function getStudentsWithInfo(page: number = 1, search = '') {
   return service.getStudentsWithInfo({ page, search });
 }
 
+export async function getStudentsWithInfoCount() {
+  return service.getStudentsWithInfoCount();
+}
+
 export async function getStudents(page: number = 1, search = '') {
   return service.getAll({ page, search });
 }

@@ -65,7 +65,14 @@ class StudentService {
   async getStudentsWithInfo(params: QueryOptions<typeof students>) {
     return withAuth(
       async () => this.repository.getStudentsWithInfo(params),
-      ['registry'],
+      ['all'],
+    );
+  }
+
+  async getStudentsWithInfoCount() {
+    return withAuth(
+      async () => this.repository.getStudentsWithInfoCount(),
+      ['all'],
     );
   }
 }
