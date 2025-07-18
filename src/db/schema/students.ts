@@ -84,6 +84,7 @@ export const studentInfo = sqliteTable(
     studentId: text()
       .notNull()
       .references(() => students.id, { onDelete: 'cascade' }),
+    stdNo: integer(),
     nationalId: text().notNull(),
     reference: text(),
     name: text().notNull(),

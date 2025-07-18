@@ -3,6 +3,7 @@
 import { students } from '@/db/schema';
 import { createNameChange } from '../name-changes/actions';
 import { studentsService as service } from './service';
+import { isNotNull } from 'drizzle-orm';
 
 type Student = typeof students.$inferInsert;
 
@@ -16,6 +17,10 @@ export async function getStudentByReference(reference: string) {
 
 export async function searchStudent(q: string) {
   return service.getAll({ page: 1, search: q });
+}
+
+export async function getStudentsWithInfo(page: number = 1, search = '') {
+  return service.getStudentsWithInfo({ page, search });
 }
 
 export async function getStudents(page: number = 1, search = '') {

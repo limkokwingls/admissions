@@ -72,6 +72,12 @@ const navigation: NavItem[] = [
     roles: ['registry', 'admin'],
   },
   {
+    label: 'Registrations',
+    href: '/admin/registrations',
+    icon: IconUsersGroup,
+    roles: ['registry', 'admin'],
+  },
+  {
     label: 'Faculties',
     href: '/admin/faculties',
     icon: IconSchool,

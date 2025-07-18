@@ -1,7 +1,7 @@
 import { db } from '@/db';
-import { programs, students } from '@/db/schema';
+import { programs, students, studentInfo } from '@/db/schema';
 import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
-import { and, eq, or, sql, inArray, SQL } from 'drizzle-orm';
+import { and, eq, or, sql, inArray, SQL, isNotNull, exists } from 'drizzle-orm';
 
 export default class StudentRepository extends BaseRepository<
   typeof students,
@@ -240,6 +240,81 @@ export default class StudentRepository extends BaseRepository<
       ...criteria,
       with: {
         program: true,
+      },
+    });
+
+    return this.createPaginatedResult(data, criteria);
+  }
+
+  async getStudentsWithInfo(params: QueryOptions<typeof students>) {
+    // Start with the exists condition for studentInfo
+    let filter = exists(
+      db
+        .select()
+        .from(studentInfo)
+        .where(eq(studentInfo.studentId, students.id)),
+    );
+
+    if (params.search) {
+      const searchTerms = params.search.trim().split(/\s+/);
+
+      const searchConditions = searchTerms.map((term) => {
+        const containsNumber = /\d/.test(term);
+
+        if (containsNumber) {
+          const wildcardTerm = '%' + term + '%';
+
+          return or(
+            sql`${students.candidateNo} LIKE ${wildcardTerm}`,
+            sql`${students.phoneNumber} LIKE ${wildcardTerm}`,
+          );
+        } else {
+          const interleaved = term.split('').join('%');
+          const wildcardTerm = '%' + term + '%';
+
+          const substitutionPatterns = [
+            wildcardTerm,
+            '%' + interleaved + '%',
+            ...this.generateVowelSubstitutions(term),
+            ...this.generateConsonantSubstitutions(term),
+          ];
+
+          const fieldConditions = [
+            ...substitutionPatterns.map(
+              (pattern) =>
+                sql`LOWER(${students.surname}) LIKE LOWER(${pattern})`,
+            ),
+            ...substitutionPatterns.map(
+              (pattern) => sql`LOWER(${students.names}) LIKE LOWER(${pattern})`,
+            ),
+          ];
+
+          return or(...fieldConditions);
+        }
+      });
+
+      if (searchConditions.length > 0) {
+        const searchFilter =
+          searchConditions.length === 1
+            ? searchConditions[0]
+            : and(...searchConditions)!;
+
+        filter = and(filter, searchFilter)!;
+      }
+    }
+
+    const criteria = this.buildQueryCriteria({
+      ...params,
+      filter,
+    });
+
+    const data = await db.query.students.findMany({
+      ...criteria,
+      with: {
+        program: {
+          with: { faculty: true },
+        },
+        studentInfo: true,
       },
     });
 

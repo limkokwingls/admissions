@@ -61,6 +61,13 @@ class StudentService {
       ['all'],
     );
   }
+
+  async getStudentsWithInfo(params: QueryOptions<typeof students>) {
+    return withAuth(
+      async () => this.repository.getStudentsWithInfo(params),
+      ['registry'],
+    );
+  }
 }
 
 export const studentsService = new StudentService();
