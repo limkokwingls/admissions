@@ -105,7 +105,7 @@ export default function RegistrationPage() {
                       Student Information
                     </h3>
 
-                    <div className='grid gap-4 md:grid-cols-2'>
+                    <div className='space-y-4'>
                       <div className='space-y-2'>
                         <label className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
                           Full Name
@@ -113,17 +113,6 @@ export default function RegistrationPage() {
                         <div className='rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800'>
                           <p className='font-medium text-neutral-900 dark:text-white'>
                             {student.surname} {student.names}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className='space-y-2'>
-                        <label className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
-                          Candidate Number
-                        </label>
-                        <div className='rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800'>
-                          <p className='font-medium text-neutral-900 dark:text-white'>
-                            {student.candidateNo || 'No Candidate Number'}
                           </p>
                         </div>
                       </div>
