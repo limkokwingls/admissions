@@ -3,6 +3,7 @@ import CallRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { auth } from '@/auth';
+import { eq } from 'drizzle-orm';
 
 type Call = typeof calls.$inferInsert;
 
@@ -21,6 +22,13 @@ class CallService {
     return withAuth(
       async () => this.repository.findByStudentId(studentId),
       ['all'],
+    );
+  }
+
+  async getCountByStatus(status: CallStatus) {
+    return withAuth(
+      async () => this.repository.count(eq(calls.status, status)),
+      ['registry'],
     );
   }
 

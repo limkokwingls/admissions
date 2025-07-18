@@ -36,6 +36,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import { getCallsCountByStatus } from '@/server/calls/actions';
 
 type NotificationConfig = {
   queryKey: string[];
@@ -95,6 +96,10 @@ const navigation: NavItem[] = [
         label: 'Accepted',
         href: '/admin/calls/accepted',
         icon: IconCircleCheck,
+        notificationCount: {
+          queryKey: ['calls', 'accepted'],
+          queryFn: () => getCallsCountByStatus('accepted'),
+        },
       },
       {
         label: 'Rejected',

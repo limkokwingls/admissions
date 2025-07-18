@@ -22,6 +22,10 @@ export async function getCalls(
   return service.getAll({ page, search, filter: eq(calls.status, status) });
 }
 
+export async function getCallsCountByStatus(status: CallStatus) {
+  return service.getCountByStatus(status);
+}
+
 export async function createCall(call: Call) {
   return service.create(call);
 }
