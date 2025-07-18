@@ -1,7 +1,7 @@
 import { db } from '@/db';
-import { programs, students, studentInfo } from '@/db/schema';
+import { programs, studentInfo, students } from '@/db/schema';
 import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
-import { and, eq, or, sql, inArray, SQL, isNotNull, exists } from 'drizzle-orm';
+import { and, eq, exists, inArray, or, sql, SQL } from 'drizzle-orm';
 
 export default class StudentRepository extends BaseRepository<
   typeof students,
