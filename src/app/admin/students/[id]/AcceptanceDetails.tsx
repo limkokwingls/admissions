@@ -23,21 +23,27 @@ import AcceptanceSwitch from './AcceptanceSwitch';
 import ActivityHistory from './components/ActivityHistory';
 import NamesDisplay from './components/NamesDisplay';
 import ReceptDisplay from './components/ReceptDisplay';
+import { getCallsByStudentId } from '@/server/calls/actions';
 
 type Student = typeof students.$inferSelect;
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default async function AcceptanceDetails({ student }: Props) {
+export default async function AcceptanceDetails({ student, calls }: Props) {
   const pageVisit = await getPageVisitByStudentId(student?.id || '');
   const letterDownload = await getLetterDownloadByStudentId(student?.id || '');
   const properties = await getCurrentProperties();
 
   return (
     <Stack mt='lg'>
-      <AcceptanceSwitch student={student} properties={properties} />
+      <AcceptanceSwitch
+        student={student}
+        properties={properties}
+        calls={calls}
+      />
       <Box mt={'xl'}>
         <Flex justify='space-between' align='center'>
           <NamesDisplay student={student} />

@@ -34,13 +34,19 @@ import { useState, useTransition } from 'react';
 import PrintNameChange from '../../name-changes/[id]/components/PrintNameChange';
 import PrintAdmission from './components/PrintAdmission';
 import PrintNonSponsoredAcceptance from './components/PrintNonSponsoredAcceptance';
+import { getCallsByStudentId } from '@/server/calls/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
   properties: Awaited<ReturnType<typeof getCurrentProperties>>;
+  calls: Awaited<ReturnType<typeof getCallsByStudentId>>;
 };
 
-export default function AcceptanceSwitch({ student, properties }: Props) {
+export default function AcceptanceSwitch({
+  student,
+  properties,
+  calls,
+}: Props) {
   const { data: nameChange } = useQuery({
     queryKey: ['nameChange', student.id],
     queryFn: () => getNameChangeByStudent(student.id),
@@ -56,6 +62,7 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
+  const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
 
   const statusColor = isAccepted ? theme.colors.green[6] : theme.colors.gray[6];
   function update() {
@@ -143,7 +150,9 @@ export default function AcceptanceSwitch({ student, properties }: Props) {
               </Tooltip>
             )}
 
-            {(student.status == 'Admitted' || student.status === 'Private') && (
+            {(student.status == 'Admitted' ||
+              student.status === 'Private' ||
+              hasAcceptedCall) && (
               <>
                 {isAccepted ? (
                   <Tooltip label='Print Admission Letter'>

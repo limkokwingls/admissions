@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import AcceptanceDetails from './AcceptanceDetails';
 import StudentInfo from './StudentInfo';
+import { getCallsByStudentId } from '@/server/calls/actions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -13,6 +14,7 @@ type Props = {
 export default async function StudentDetails({ params }: Props) {
   const { id } = await params;
   const student = await getStudent(id);
+  const calls = await getCallsByStudentId(id);
 
   if (!student) {
     return notFound();
@@ -35,7 +37,7 @@ export default async function StudentDetails({ params }: Props) {
           <TabsTab value='info'>Personal Info</TabsTab>
         </TabsList>
         <TabsPanel value='acceptance'>
-          <AcceptanceDetails student={student} />
+          <AcceptanceDetails student={student} calls={calls} />
         </TabsPanel>
         <TabsPanel value='info'>
           <StudentInfo student={student} />
