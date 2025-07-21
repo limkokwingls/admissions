@@ -1,7 +1,7 @@
 import { ActionType, studentHistory } from '@/db/schema/history';
-import { studentHistoryRepository } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
+import { studentHistoryRepository } from './repository';
 
 type StudentHistory = typeof studentHistory.$inferInsert;
 
@@ -88,6 +88,21 @@ class HistoryService {
       performedBy,
       // Store the name change ID in the newValue field
       newValue: nameChangeId,
+    });
+  }
+
+  async trackStatusChange(
+    studentId: string,
+    oldStatus: string,
+    newStatus: string,
+    performedBy: string,
+  ) {
+    return this.createHistoryEntry({
+      studentId,
+      action: 'status_changed',
+      oldValue: oldStatus,
+      newValue: newStatus,
+      performedBy,
     });
   }
 

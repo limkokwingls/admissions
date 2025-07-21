@@ -1,10 +1,15 @@
 import { relations, sql } from 'drizzle-orm';
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { nanoid } from 'nanoid';
-import { students } from './students';
 import { users } from './auth';
+import { students } from './students';
 
-const actionsEnum = ['acceptance_changed', 'admission_printed', 'name_change_printed'] as const;
+const actionsEnum = [
+  'acceptance_changed',
+  'admission_printed',
+  'name_change_printed',
+  'status_changed',
+] as const;
 export type ActionType = (typeof actionsEnum)[number];
 
 export const studentHistory = sqliteTable(

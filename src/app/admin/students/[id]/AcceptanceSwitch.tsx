@@ -1,6 +1,10 @@
 'use client';
 import { formatNames } from '@/lib/utils';
-import { trackAcceptanceChange } from '@/server/history/actions';
+import { getCallsByStudentId } from '@/server/calls/actions';
+import {
+  trackAcceptanceChange,
+  trackStatusChange,
+} from '@/server/history/actions';
 import { getNameChangeByStudent } from '@/server/name-changes/actions';
 import { getCurrentProperties } from '@/server/properties/actions';
 import { getStudent, updateStudent } from '@/server/students/actions';
@@ -28,13 +32,14 @@ import {
   IconEdit,
   IconExclamationCircle,
   IconReceipt,
+  IconUserCheck,
 } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import PrintNameChange from '../../name-changes/[id]/components/PrintNameChange';
 import PrintAdmission from './components/PrintAdmission';
 import PrintNonSponsoredAcceptance from './components/PrintNonSponsoredAcceptance';
-import { getCallsByStudentId } from '@/server/calls/actions';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -61,8 +66,12 @@ export default function AcceptanceSwitch({
   const [isSponsored, setIsSponsored] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
   const [opened, { open, close }] = useDisclosure(false);
+  const [privateOpened, { open: openPrivate, close: closePrivate }] =
+    useDisclosure(false);
+  const [tempIsPrivate, setTempIsPrivate] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const hasAcceptedCall = calls.some((call) => call.status === 'accepted');
+  const router = useRouter();
 
   const statusColor = isAccepted ? theme.colors.green[6] : theme.colors.gray[6];
   function update() {
@@ -96,6 +105,9 @@ export default function AcceptanceSwitch({
         queryClient.invalidateQueries({
           queryKey: ['student'],
         });
+        queryClient.invalidateQueries({
+          queryKey: ['student', student.id],
+        });
         notifications.show({
           title: status ? 'Accepted' : 'Not Accepted',
           message: `Acceptance status updated to ${status ? 'accepted' : 'not accepted'}`,
@@ -107,11 +119,56 @@ export default function AcceptanceSwitch({
           ),
         });
         close();
+        router.refresh();
       } catch (error) {
         setIsAccepted(student.accepted);
         setTempIsAccepted(student.accepted);
         notifications.show({
           title: 'Error updating acceptance status',
+          message: error instanceof Error ? error.message : 'An error occurred',
+          color: 'red',
+          icon: <IconExclamationCircle size={rem(20)} />,
+        });
+      }
+    });
+  }
+
+  function updateStatus() {
+    const newStatus = tempIsPrivate ? 'Private' : 'Wait Listed';
+    const previousStatus = student.status;
+
+    startTransition(async () => {
+      try {
+        await updateStudent(student.id, {
+          ...student,
+          status: newStatus,
+        });
+
+        await trackStatusChange(student.id, previousStatus, newStatus);
+
+        // Update local student object to reflect the change immediately
+        Object.assign(student, { status: newStatus });
+
+        queryClient.invalidateQueries({
+          queryKey: ['students'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['student'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['student', student.id],
+        });
+        notifications.show({
+          title: 'Status Updated',
+          message: `Student status updated to ${newStatus}`,
+          color: newStatus === 'Private' ? 'lime' : 'yellow',
+          icon: <IconCircleCheck size={rem(20)} />,
+        });
+        closePrivate();
+        router.refresh();
+      } catch (error) {
+        notifications.show({
+          title: 'Error updating status',
           message: error instanceof Error ? error.message : 'An error occurred',
           color: 'red',
           icon: <IconExclamationCircle size={rem(20)} />,
@@ -137,6 +194,23 @@ export default function AcceptanceSwitch({
             </Box>
           </Group>
           <Group gap='xs'>
+            {student.status === 'Wait Listed' && (
+              <Tooltip label='Change to Private Status'>
+                <ActionIcon
+                  variant='light'
+                  color='lime'
+                  onClick={() => {
+                    setTempIsPrivate(true);
+                    openPrivate();
+                  }}
+                  disabled={isPending}
+                  loading={isPending}
+                >
+                  <IconUserCheck size={'1rem'} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+
             {(student.status === 'Wait Listed' ||
               student.status === 'Private') && (
               <Tooltip label='Print Acceptance Letter (Non-Sponsored)'>
@@ -238,13 +312,8 @@ export default function AcceptanceSwitch({
                 label='Receipt Number'
                 placeholder='Receipt Number'
                 value={receiptNo}
-                prefix='SR-'
                 onChange={(value) => {
-                  if (value) {
-                    setReceiptNo(`SR-${value}`);
-                  } else {
-                    setReceiptNo(value?.toString().replace('SR-', ''));
-                  }
+                  setReceiptNo(value.toString());
                   setReceiptError('');
                 }}
                 error={receiptError}
@@ -277,6 +346,33 @@ export default function AcceptanceSwitch({
             loading={isPending}
           >
             Update
+          </Button>
+        </Group>
+      </Modal>
+
+      <Modal
+        opened={privateOpened}
+        onClose={closePrivate}
+        title='Change Status to Private'
+        centered
+        radius='md'
+        size='md'
+      >
+        <Box mb='md'>
+          <Paper withBorder radius='sm' p='sm'>
+            <Text>{formatNames(`${student.surname} ${student.names}`)}</Text>
+          </Paper>
+        </Box>
+        <Text size='sm' mb='md' c='dimmed'>
+          Are you sure you want to change this student&apos;s status from
+          &quot;Wait Listed&quot; to &quot;Private&quot;?
+        </Text>
+        <Group justify='flex-end' mt='lg'>
+          <Button variant='default' onClick={closePrivate} disabled={isPending}>
+            Cancel
+          </Button>
+          <Button onClick={updateStatus} color='lime' loading={isPending}>
+            Change to Private
           </Button>
         </Group>
       </Modal>

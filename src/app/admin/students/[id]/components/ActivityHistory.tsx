@@ -114,6 +114,19 @@ export default function ActivityHistory({ studentId }: Props) {
                     )}
                   </>
                 );
+              } else if (item.action === 'status_changed') {
+                actionDescription = (
+                  <>
+                    changed student status from{' '}
+                    <Text span c='blue'>
+                      {item.oldValue}
+                    </Text>{' '}
+                    to{' '}
+                    <Text span c='blue'>
+                      {item.newValue}
+                    </Text>
+                  </>
+                );
               } else {
                 actionDescription = (
                   <>
@@ -136,7 +149,9 @@ export default function ActivityHistory({ studentId }: Props) {
                         color={
                           item.action === 'acceptance_changed'
                             ? 'blue'
-                            : 'green'
+                            : item.action === 'status_changed'
+                              ? 'lime'
+                              : 'green'
                         }
                       >
                         {item.performedBy?.name?.charAt(0) || '?'}

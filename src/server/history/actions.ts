@@ -1,9 +1,9 @@
 'use server';
 
-import { ActionType, studentHistory } from '@/db/schema/history';
-import { historyService as service } from './service';
-import { QueryOptions } from '../base/BaseRepository';
 import { auth } from '@/auth';
+import { ActionType, studentHistory } from '@/db/schema/history';
+import { QueryOptions } from '../base/BaseRepository';
+import { historyService as service } from './service';
 
 type StudentHistory = typeof studentHistory.$inferInsert;
 
@@ -50,7 +50,24 @@ export async function trackAcceptanceChange(
   return service.trackAcceptanceChange(studentId, oldValue, newValue, userId);
 }
 
-export async function trackAdmissionPrinted(studentId: string, letterType?: string) {
+export async function trackStatusChange(
+  studentId: string,
+  oldStatus: string,
+  newStatus: string,
+) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+
+  return service.trackStatusChange(studentId, oldStatus, newStatus, userId);
+}
+
+export async function trackAdmissionPrinted(
+  studentId: string,
+  letterType?: string,
+) {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
@@ -60,7 +77,10 @@ export async function trackAdmissionPrinted(studentId: string, letterType?: stri
   return service.trackAdmissionPrinted(studentId, userId, letterType);
 }
 
-export async function trackNameChangePrinted(studentId: string, nameChangeId: string) {
+export async function trackNameChangePrinted(
+  studentId: string,
+  nameChangeId: string,
+) {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
