@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { programs, studentInfo, students } from '@/db/schema';
 import BaseRepository, { QueryOptions } from '@/server/base/BaseRepository';
-import { and, eq, exists, inArray, or, sql, SQL } from 'drizzle-orm';
+import { and, eq, exists, inArray, not, or, sql, SQL } from 'drizzle-orm';
 
 export default class StudentRepository extends BaseRepository<
   typeof students,
@@ -200,10 +200,11 @@ export default class StudentRepository extends BaseRepository<
   async getAcceptedByFaculty(params: {
     facultyId?: number;
     programId?: number;
+    registered?: string | null;
     page: number;
     size?: number;
   }) {
-    const { facultyId, programId, page = 1, size = 20 } = params;
+    const { facultyId, programId, registered, page = 1, size = 20 } = params;
     const conditions: SQL[] = [];
 
     conditions.push(eq(students.accepted, true));
@@ -228,6 +229,29 @@ export default class StudentRepository extends BaseRepository<
           where: and(...conditions),
         });
       }
+    }
+
+    // Add registered filter
+    if (registered === 'registered') {
+      conditions.push(
+        exists(
+          db
+            .select()
+            .from(studentInfo)
+            .where(eq(studentInfo.studentId, students.id)),
+        ),
+      );
+    } else if (registered === 'unregistered') {
+      conditions.push(
+        not(
+          exists(
+            db
+              .select()
+              .from(studentInfo)
+              .where(eq(studentInfo.studentId, students.id)),
+          ),
+        ),
+      );
     }
 
     const criteria = this.buildQueryCriteria({

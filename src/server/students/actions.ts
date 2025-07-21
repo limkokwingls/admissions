@@ -66,11 +66,13 @@ export async function updateStudentNames(
 export async function getAcceptedStudentsByFaculty(
   facultyId?: number,
   programId?: number,
+  registered?: string | null,
   page: number = 1,
 ) {
   const data = await service.getAcceptedByFaculty({
     facultyId,
     programId,
+    registered,
     page,
   });
   return {

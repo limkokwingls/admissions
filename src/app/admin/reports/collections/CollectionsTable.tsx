@@ -29,15 +29,24 @@ type StudentStatus = (typeof students.$inferSelect)['status'];
 export default function CollectionsTable() {
   const [facultyId] = useQueryState('facultyId');
   const [programId] = useQueryState('programId');
+  const [registered] = useQueryState('registered');
   const [search] = useQueryState('search', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['acceptedStudents', facultyId, programId, page, search],
+    queryKey: [
+      'acceptedStudents',
+      facultyId,
+      programId,
+      registered,
+      page,
+      search,
+    ],
     queryFn: async () => {
       return getAcceptedStudentsByFaculty(
         facultyId ? Number(facultyId) : undefined,
         programId ? Number(programId) : undefined,
+        registered,
         Number(page),
       );
     },

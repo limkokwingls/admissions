@@ -20,6 +20,7 @@ type Program = NonNullable<
 export default function Filters() {
   const [facultyId, setFacultyId] = useQueryState('facultyId');
   const [programId, setProgramId] = useQueryState('programId');
+  const [registered, setRegistered] = useQueryState('registered');
 
   const [, setPage] = useQueryState<number>(
     'page',
@@ -54,16 +55,22 @@ export default function Filters() {
     setPage(1);
   };
 
+  const handleRegisteredChange = (value: string | null) => {
+    setRegistered(value);
+    setPage(1);
+  };
+
   const handleClearFilters = () => {
     setFacultyId(null);
     setProgramId(null);
+    setRegistered(null);
     setPage(1);
   };
 
   return (
     <Paper shadow='xs' p='md' mb='md'>
       <Grid>
-        <Grid.Col span={{ base: 12, md: 4 }}>
+        <Grid.Col span={{ base: 12, md: 3 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Faculty
@@ -86,7 +93,7 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 4 }}>
+        <Grid.Col span={{ base: 12, md: 3 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Program
@@ -110,8 +117,27 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
+        <Grid.Col span={{ base: 12, md: 3 }}>
+          <Stack gap='xs'>
+            <Text size='sm' fw={500}>
+              Registration Status
+            </Text>
+            <Select
+              placeholder='All Students'
+              data={[
+                { value: '', label: 'All Students' },
+                { value: 'registered', label: 'Registered Only' },
+                { value: 'unregistered', label: 'Unregistered Only' },
+              ]}
+              value={registered || ''}
+              onChange={handleRegisteredChange}
+              clearable
+            />
+          </Stack>
+        </Grid.Col>
+
         <Grid.Col
-          span={{ base: 12, md: 4 }}
+          span={{ base: 12, md: 3 }}
           style={{ display: 'flex', alignItems: 'flex-end' }}
         >
           <Button
