@@ -55,6 +55,22 @@ export function parseReference(reference: string) {
   };
 }
 
+export function generateReference(student: NonNullable<Student>) {
+  if (
+    !student?.program?.faculty?.code ||
+    !student?.program?.code ||
+    !student?.status ||
+    student.no === undefined
+  ) {
+    throw new Error(
+      'Student must have program, faculty, status, and number to generate reference',
+    );
+  }
+
+  const statusCode = student.status === 'DQ' ? 'DQ' : student.status[0];
+  return `${student.program.faculty.code}/${student.program.code}/${statusCode}/${student.no}`;
+}
+
 export function formatNames(name: string): string {
   return name
     .toLowerCase()

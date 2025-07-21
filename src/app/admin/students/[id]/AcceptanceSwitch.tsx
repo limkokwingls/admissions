@@ -17,10 +17,10 @@ import {
   Flex,
   Group,
   Modal,
-  NumberInput,
   Paper,
   Switch,
   Text,
+  TextInput,
   Tooltip,
   rem,
   useMantineTheme,
@@ -139,15 +139,20 @@ export default function AcceptanceSwitch({
 
     startTransition(async () => {
       try {
+        // Calculate new reference with updated status
+        const statusCode = newStatus[0]; // W for Wait Listed, P for Private
+        const newReference = `${student.program.faculty.code}/${student.program.code}/${statusCode}/${student.no}`;
+
         await updateStudent(student.id, {
           ...student,
           status: newStatus,
+          reference: newReference,
         });
 
         await trackStatusChange(student.id, previousStatus, newStatus);
 
         // Update local student object to reflect the change immediately
-        Object.assign(student, { status: newStatus });
+        Object.assign(student, { status: newStatus, reference: newReference });
 
         queryClient.invalidateQueries({
           queryKey: ['students'],
@@ -307,13 +312,13 @@ export default function AcceptanceSwitch({
             )}
 
             {!isSponsored && (
-              <NumberInput
+              <TextInput
                 required
                 label='Receipt Number'
                 placeholder='Receipt Number'
                 value={receiptNo}
-                onChange={(value) => {
-                  setReceiptNo(value.toString());
+                onChange={(event) => {
+                  setReceiptNo(event.currentTarget.value);
                   setReceiptError('');
                 }}
                 error={receiptError}
