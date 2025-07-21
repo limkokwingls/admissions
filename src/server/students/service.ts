@@ -2,6 +2,7 @@ import { students } from '@/db/schema';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import StudentRepository from './repository';
+import { generateReference } from '@/lib/utils';
 
 type Student = typeof students.$inferInsert;
 
@@ -32,7 +33,21 @@ class StudentService {
   }
 
   async update(id: string, data: Student) {
-    return withAuth(async () => this.repository.update(id, data), ['registry']);
+    return withAuth(async () => {
+      const existingStudent = await this.repository.findById(id);
+      if (!existingStudent) {
+        throw new Error('Student not found');
+      }
+
+      const updatedStudentData = { ...existingStudent, ...data };
+      const reference = generateReference(updatedStudentData);
+
+      const student = await this.repository.update(id, { ...data, reference });
+      if (!student) {
+        throw new Error('Student not found');
+      }
+      return student;
+    }, ['registry']);
   }
 
   async delete(id: string) {
