@@ -16,6 +16,7 @@ export const students = sqliteTable(
     no: integer().notNull().default(0),
     surname: text().notNull(),
     names: text().notNull(),
+    stdNo: integer(),
     candidateNo: text(),
     receiptNo: text(),
     sponsor: text({ enum: sponsors }),
@@ -84,7 +85,6 @@ export const studentInfo = sqliteTable(
     studentId: text()
       .notNull()
       .references(() => students.id, { onDelete: 'cascade' }),
-    stdNo: integer(),
     nationalId: text().notNull(),
     reference: text(),
     name: text().notNull(),
