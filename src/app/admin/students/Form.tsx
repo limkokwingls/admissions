@@ -2,7 +2,7 @@
 
 import { Form } from '@/components/adease';
 import ProgramSelect from '@/components/ProgramSelect';
-import { statusEnum, students } from '@/db/schema';
+import { statusEnum, students, semesters } from '@/db/schema';
 import { Group, NumberInput, Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
@@ -63,11 +63,19 @@ export default function StudentForm({ onSubmit, defaultValues, title }: Props) {
               required
             />
 
-            <TextInput
-              label='Phone Numbers'
-              description='Comma Separated'
-              {...form.getInputProps('phoneNumber')}
-            />
+            <Group grow>
+              <TextInput
+                label='Phone Numbers'
+                description='Comma Separated'
+                {...form.getInputProps('phoneNumber')}
+              />
+              <Select
+                label='Semester'
+                {...form.getInputProps('semester')}
+                data={semesters}
+                required
+              />
+            </Group>
             <Select
               label='Status'
               {...form.getInputProps('status')}

@@ -7,6 +7,17 @@ export const statusEnum = ['Admitted', 'Wait Listed', 'Private', 'DQ'] as const;
 
 export const sponsors = ['Higher Life', 'Other'] as const;
 
+export const semesters = [
+  'Year 1 Sem 1',
+  'Year 1 Sem 2',
+  'Year 2 Sem 1',
+  'Year 2 Sem 2',
+  'Year 3 Sem 1',
+  'Year 3 Sem 2',
+  'Year 4 Sem 1',
+  'Year 4 Sem 2',
+] as const;
+
 export const students = sqliteTable(
   'students',
   {
@@ -21,6 +32,7 @@ export const students = sqliteTable(
     receiptNo: text(),
     sponsor: text({ enum: sponsors }),
     phoneNumber: text().notNull(),
+    semester: text({ enum: semesters }).notNull().default('Year 1 Sem 1'),
     status: text({ enum: statusEnum }).notNull(),
     accepted: integer({ mode: 'boolean' }).notNull().default(false),
     reference: text(),

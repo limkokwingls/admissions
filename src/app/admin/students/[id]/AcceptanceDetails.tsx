@@ -38,7 +38,7 @@ export default async function AcceptanceDetails({ student, calls }: Props) {
   const properties = await getCurrentProperties();
 
   return (
-    <Stack mt='lg'>
+    <Stack mt='lg' gap='xl'>
       <AcceptanceSwitch
         student={student}
         properties={properties}
@@ -54,9 +54,10 @@ export default async function AcceptanceDetails({ student, calls }: Props) {
         <Divider mt={5} />
       </Box>
       <FieldView label='Program'>{student.program?.name}</FieldView>
-      <SimpleGrid cols={2}>
+      <SimpleGrid cols={3}>
         <FieldView label='Phone Number'>{student.phoneNumber}</FieldView>
         <FieldView label='Candidate No'>{student.candidateNo}</FieldView>
+        <FieldView label='Semester'>{student.semester}</FieldView>
       </SimpleGrid>
 
       <Paper withBorder p='md' radius='md' shadow='xs' mt='xl'>

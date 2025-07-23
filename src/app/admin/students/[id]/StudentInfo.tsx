@@ -67,6 +67,12 @@ export default async function StudentInfo({ student }: Props) {
                 <Text>{info.reference || 'N/A'}</Text>
               </Group>
               <Group justify='space-between'>
+                <Text fw={500}>Semester:</Text>
+                <Badge variant='light' color='blue'>
+                  {student.semester}
+                </Badge>
+              </Group>
+              <Group justify='space-between'>
                 <Text fw={500}>Gender:</Text>
                 <Badge
                   variant='light'

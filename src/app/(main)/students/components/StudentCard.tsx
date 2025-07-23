@@ -23,9 +23,15 @@ export default function StudentCard({ student }: Props) {
                 <h2 className='text-lg font-semibold'>
                   {student.surname} {student.names}
                 </h2>
-                <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300'>
-                  <span>Candidate No: </span>
-                  <span className='font-medium'>{student.candidateNo}</span>
+                <div className='space-y-1 text-sm text-neutral-600 dark:text-neutral-300'>
+                  <div className='flex items-center gap-2'>
+                    <span>Candidate No: </span>
+                    <span className='font-medium'>{student.candidateNo}</span>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <span>Semester: </span>
+                    <span className='font-medium'>{student.semester}</span>
+                  </div>
                 </div>
               </div>
             </div>

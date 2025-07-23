@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { getStudent } from '@/server/students/actions';
 import { getCallsByStudentId } from '@/server/calls/actions';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Calendar } from 'lucide-react';
 
 type Props = {
   student: NonNullable<Awaited<ReturnType<typeof getStudent>>>;
@@ -31,6 +31,10 @@ export default function ProgramCard({ student, calls }: Props) {
             <p className='mt-1 text-neutral-600 dark:text-neutral-400'>
               {program?.faculty?.name}
             </p>
+            <div className='mt-2 flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
+              <Calendar className='h-4 w-4' />
+              <span>{student.semester}</span>
+            </div>
           </div>
         </div>
 
