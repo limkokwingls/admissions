@@ -20,6 +20,7 @@ export const facultyRelations = relations(faculties, ({ many }) => ({
 //TODO: I should probably make code the primary key sot that BHRA and BHR can have the same id
 export const programs = sqliteTable('programs', {
   id: integer('id').primaryKey(),
+  structureId: integer(),
   code: text().notNull(),
   name: text().notNull(),
   level: text({ enum: programLevels }).notNull(),

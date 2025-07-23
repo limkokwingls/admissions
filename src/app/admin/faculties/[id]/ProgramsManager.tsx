@@ -84,6 +84,7 @@ export default function ProgramsManager({ facultyId }: Props) {
       setEditingProgram(program);
       form.setValues({
         id: program.id,
+        structureId: program.structureId,
         code: program.code,
         name: program.name,
         facultyId: program.facultyId,
@@ -136,6 +137,7 @@ export default function ProgramsManager({ facultyId }: Props) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
+            <Table.Th>Structure ID</Table.Th>
             <Table.Th>Code</Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th>Level</Table.Th>
@@ -145,7 +147,7 @@ export default function ProgramsManager({ facultyId }: Props) {
         <Table.Tbody>
           {programs.length === 0 ? (
             <Table.Tr>
-              <Table.Td colSpan={4} align='center'>
+              <Table.Td colSpan={5} align='center'>
                 <Text c='dimmed'>No programs found</Text>
               </Table.Td>
             </Table.Tr>
@@ -153,6 +155,7 @@ export default function ProgramsManager({ facultyId }: Props) {
             programs.map(
               (program: {
                 id: number;
+                structureId: number | null;
                 code: string;
                 name: string;
                 facultyId: number;
@@ -160,6 +163,7 @@ export default function ProgramsManager({ facultyId }: Props) {
               }) => (
                 <Table.Tr key={program.id}>
                   <Table.Td>{program.id}</Table.Td>
+                  <Table.Td>{program.structureId || '-'}</Table.Td>
                   <Table.Td>{program.code}</Table.Td>
                   <Table.Td>{program.name}</Table.Td>
                   <Table.Td>
@@ -206,6 +210,11 @@ export default function ProgramsManager({ facultyId }: Props) {
               {...form.getInputProps('id')}
               readOnly={!!editingProgram}
               disabled={!!editingProgram}
+            />
+            <NumberInput
+              label='Structure ID'
+              placeholder='Enter structure ID'
+              {...form.getInputProps('structureId')}
             />
             <TextInput
               label='Code'

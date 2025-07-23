@@ -33,6 +33,9 @@ export default async function ProgramDetails({ params }: Props) {
       />
       <DetailsViewBody>
         <FieldView label='Id'>{program.id}</FieldView>
+        <FieldView label='Structure Id'>
+          {program.structureId || 'Not set'}
+        </FieldView>
         <FieldView label='Code'>{program.code}</FieldView>
         <FieldView label='Name'>{program.name}</FieldView>
         <FieldView label='Level'>{program.level}</FieldView>

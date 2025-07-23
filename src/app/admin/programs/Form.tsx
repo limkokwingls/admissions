@@ -36,6 +36,10 @@ export default function ProgramForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => (
         <>
           <NumberInput label='Id' {...form.getInputProps('id')} />
+          <NumberInput
+            label='Structure Id'
+            {...form.getInputProps('structureId')}
+          />
           <TextInput label='Code' {...form.getInputProps('code')} />
           <TextInput label='Name' {...form.getInputProps('name')} />
           <Select
