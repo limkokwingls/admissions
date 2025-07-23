@@ -67,12 +67,14 @@ export async function getAcceptedStudentsByFaculty(
   facultyId?: number,
   programId?: number,
   registered?: string | null,
+  status?: string | null,
   page: number = 1,
 ) {
   const data = await service.getAcceptedByFaculty({
     facultyId,
     programId,
     registered,
+    status,
     page,
   });
   return {

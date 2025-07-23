@@ -30,6 +30,7 @@ export default function CollectionsTable() {
   const [facultyId] = useQueryState('facultyId');
   const [programId] = useQueryState('programId');
   const [registered] = useQueryState('registered');
+  const [status] = useQueryState('status');
   const [search] = useQueryState('search', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
 
@@ -39,6 +40,7 @@ export default function CollectionsTable() {
       facultyId,
       programId,
       registered,
+      status,
       page,
       search,
     ],
@@ -47,6 +49,7 @@ export default function CollectionsTable() {
         facultyId ? Number(facultyId) : undefined,
         programId ? Number(programId) : undefined,
         registered,
+        status,
         Number(page),
       );
     },

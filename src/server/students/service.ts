@@ -62,16 +62,25 @@ class StudentService {
     facultyId?: number;
     programId?: number;
     registered?: string | null;
+    status?: string | null;
     page: number;
     size?: number;
   }) {
-    const { facultyId, programId, registered, page = 1, size = 20 } = params;
+    const {
+      facultyId,
+      programId,
+      registered,
+      status,
+      page = 1,
+      size = 20,
+    } = params;
     return withAuth(
       async () =>
         this.repository.getAcceptedByFaculty({
           facultyId,
           programId,
           registered,
+          status,
           page,
           size,
         }),

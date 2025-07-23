@@ -21,6 +21,7 @@ export default function Filters() {
   const [facultyId, setFacultyId] = useQueryState('facultyId');
   const [programId, setProgramId] = useQueryState('programId');
   const [registered, setRegistered] = useQueryState('registered');
+  const [status, setStatus] = useQueryState('status');
 
   const [, setPage] = useQueryState<number>(
     'page',
@@ -60,17 +61,23 @@ export default function Filters() {
     setPage(1);
   };
 
+  const handleStatusChange = (value: string | null) => {
+    setStatus(value);
+    setPage(1);
+  };
+
   const handleClearFilters = () => {
     setFacultyId(null);
     setProgramId(null);
     setRegistered(null);
+    setStatus(null);
     setPage(1);
   };
 
   return (
     <Paper shadow='xs' p='md' mb='md'>
       <Grid>
-        <Grid.Col span={{ base: 12, md: 3 }}>
+        <Grid.Col span={{ base: 12, md: 2.4 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Faculty
@@ -93,7 +100,7 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 3 }}>
+        <Grid.Col span={{ base: 12, md: 2.4 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Program
@@ -117,7 +124,7 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 3 }}>
+        <Grid.Col span={{ base: 12, md: 2.4 }}>
           <Stack gap='xs'>
             <Text size='sm' fw={500}>
               Registration Status
@@ -136,8 +143,29 @@ export default function Filters() {
           </Stack>
         </Grid.Col>
 
+        <Grid.Col span={{ base: 12, md: 2.4 }}>
+          <Stack gap='xs'>
+            <Text size='sm' fw={500}>
+              Student Status
+            </Text>
+            <Select
+              placeholder='All Statuses'
+              data={[
+                { value: '', label: 'All Statuses' },
+                { value: 'Admitted', label: 'Admitted' },
+                { value: 'Wait Listed', label: 'Wait Listed' },
+                { value: 'Private', label: 'Private' },
+                { value: 'DQ', label: 'DQ' },
+              ]}
+              value={status || ''}
+              onChange={handleStatusChange}
+              clearable
+            />
+          </Stack>
+        </Grid.Col>
+
         <Grid.Col
-          span={{ base: 12, md: 3 }}
+          span={{ base: 12, md: 2.4 }}
           style={{ display: 'flex', alignItems: 'flex-end' }}
         >
           <Button

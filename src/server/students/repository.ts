@@ -201,10 +201,18 @@ export default class StudentRepository extends BaseRepository<
     facultyId?: number;
     programId?: number;
     registered?: string | null;
+    status?: string | null;
     page: number;
     size?: number;
   }) {
-    const { facultyId, programId, registered, page = 1, size = 20 } = params;
+    const {
+      facultyId,
+      programId,
+      registered,
+      status,
+      page = 1,
+      size = 20,
+    } = params;
     const conditions: SQL[] = [];
 
     conditions.push(eq(students.accepted, true));
@@ -251,6 +259,13 @@ export default class StudentRepository extends BaseRepository<
               .where(eq(studentInfo.studentId, students.id)),
           ),
         ),
+      );
+    }
+
+    // Add status filter
+    if (status) {
+      conditions.push(
+        eq(students.status, status as typeof students.$inferSelect.status),
       );
     }
 
