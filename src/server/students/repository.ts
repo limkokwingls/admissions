@@ -264,9 +264,18 @@ export default class StudentRepository extends BaseRepository<
 
     // Add status filter
     if (status) {
-      conditions.push(
-        eq(students.status, status as typeof students.$inferSelect.status),
-      );
+      if (status === 'Sponsored') {
+        conditions.push(
+          or(
+            eq(students.status, 'Admitted'),
+            eq(students.status, 'Wait Listed'),
+          )!,
+        );
+      } else {
+        conditions.push(
+          eq(students.status, status as typeof students.$inferSelect.status),
+        );
+      }
     }
 
     const criteria = this.buildQueryCriteria({

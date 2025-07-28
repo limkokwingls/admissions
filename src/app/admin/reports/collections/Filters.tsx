@@ -154,6 +154,7 @@ export default function Filters() {
                 { value: '', label: 'All Statuses' },
                 { value: 'Admitted', label: 'Admitted' },
                 { value: 'Wait Listed', label: 'Wait Listed' },
+                { value: 'Sponsored', label: 'Sponsored' },
                 { value: 'Private', label: 'Private' },
                 { value: 'DQ', label: 'DQ' },
               ]}

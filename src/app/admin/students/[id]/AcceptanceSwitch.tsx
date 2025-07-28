@@ -254,17 +254,19 @@ export default function AcceptanceSwitch({
                     </span>
                   </Tooltip>
                 )}
-                {student.programId !== 170 && (
-                  <ActionIcon
-                    variant='light'
-                    color={isAccepted ? 'green' : 'gray'}
-                    onClick={open}
-                    disabled={isPending}
-                    loading={isPending}
-                  >
-                    <IconEdit size={'1rem'} />
-                  </ActionIcon>
-                )}
+                {/* {student.programId !== 170 && ( */}
+                <ActionIcon
+                  variant='light'
+                  color={isAccepted ? 'green' : 'gray'}
+                  onClick={open}
+                  disabled={isPending}
+                  loading={isPending}
+                >
+                  <IconEdit size={'1rem'} />
+                </ActionIcon>
+                {/* )}
+                
+                 */}
               </>
             )}
           </Group>
