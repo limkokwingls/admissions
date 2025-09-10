@@ -112,13 +112,23 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
     'dd MMM yyyy',
   );
   const programType = student.program?.level as keyof typeof PROGRAM_DATA;
-  // Special case for BHRA program which takes 3 years and doesn't have a first year
-  const isBHRA = student.program?.code === 'BHRA';
-  const programYears = isBHRA ? 3 : PROGRAM_DATA[programType]?.years || 4;
+
+  // Extract year from student semester (e.g., "Year 2 Sem 1" -> 2)
+  const studentYear = parseInt(
+    student.semester?.match(/Year (\d+)/)?.[1] || '1',
+  );
+  console.log('Student Year:', studentYear);
+  const yearsToDeduct = studentYear - 1;
+
+  // Calculate remaining years and check if first year fee should be shown
+  const totalProgramYears = PROGRAM_DATA[programType]?.years || 4;
+  const programYears = totalProgramYears - yearsToDeduct;
+  const showFirstYearFee = studentYear === 1;
+
   const studyDuration = `${programYears} YEARS`;
   const firstYearFee = PROGRAM_DATA[programType]?.firstYearFee || 'M##,###';
   const otherYearsFee = PROGRAM_DATA[programType]?.otherYearsFee || 'M##,###';
-  const lastYearText = isBHRA ? '4th' : programYears === 3 ? '3rd' : '4th';
+  const lastYearText = totalProgramYears === 3 ? '3rd' : '4th';
   const contactPhoneNumber = '22315767';
   const contactEmail = 'registry@limkokwing.ac.ls';
   const registrarNameText = 'Mateboho Moorosi (Mrs.)';
@@ -152,15 +162,23 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
         </PDFText>
 
         <PDFText style={styles.paragraph}>
-          As a first-year student, you are required to observe and avail
-          yourself of the following:
+          As a{' '}
+          {studentYear === 1
+            ? 'first-year'
+            : `${studentYear}${studentYear === 2 ? 'nd' : studentYear === 3 ? 'rd' : 'th'}-year`}{' '}
+          student, you are required to observe and avail yourself of the
+          following:
         </PDFText>
 
         <View style={styles.indentSection}>
           <PDFText style={styles.boldText}>Tuition Fee</PDFText>
-          {!isBHRA && <PDFText>{firstYearFee} 1st year</PDFText>}
+          {showFirstYearFee && <PDFText>{firstYearFee} 1st year</PDFText>}
           <PDFText>
-            {otherYearsFee} 2nd to {lastYearText} year
+            {otherYearsFee}{' '}
+            {studentYear === 1
+              ? '2nd'
+              : `${studentYear + 1}${studentYear + 1 === 2 ? 'nd' : studentYear + 1 === 3 ? 'rd' : 'th'}`}{' '}
+            to {lastYearText} year
           </PDFText>
         </View>
 
@@ -183,8 +201,11 @@ export default function AdmissionLetterPDF({ student, properties }: Props) {
             <View style={styles.noteListItem}>
               <PDFText style={styles.noteListNumber}>iii)</PDFText>
               <PDFText style={styles.noteListText}>
-                All first-year students{' '}
-                <PDFText style={styles.boldText}>must</PDFText> attend
+                All{' '}
+                {studentYear === 1
+                  ? 'first-year'
+                  : `${studentYear}${studentYear === 2 ? 'nd' : studentYear === 3 ? 'rd' : 'th'}-year`}{' '}
+                students <PDFText style={styles.boldText}>must</PDFText> attend
                 orientation.
               </PDFText>
             </View>
